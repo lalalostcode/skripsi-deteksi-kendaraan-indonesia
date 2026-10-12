@@ -1,0 +1,16 @@
+Class,Scale,Brightness_Group,GT,TP,FN,Recall
+Bus,Small,Bright,6,1,5,0.16666666666666666
+Mobil Penumpang,Small,Dark,1079,696,383,0.6450417052826691
+Mobil Penumpang,Small,Medium,2613,2014,599,0.770761576731726
+Mobil Penumpang,Small,Bright,3236,2704,532,0.8355995055624228
+Pejalan Kaki,Small,Dark,85,19,66,0.2235294117647059
+Pejalan Kaki,Small,Medium,485,260,225,0.5360824742268041
+Pejalan Kaki,Small,Bright,345,176,169,0.5101449275362319
+Sepeda Motor,Small,Dark,2702,836,1866,0.30940044411547
+Sepeda Motor,Small,Medium,7007,3886,3121,0.5545882688739832
+Sepeda Motor,Small,Bright,7608,4986,2622,0.6553627760252366
+Truck,Small,Dark,12,2,10,0.16666666666666666
+Truck,Small,Medium,91,35,56,0.38461538461538464
+Truck,Small,Bright,107,41,66,0.38317757009345793
+Unmotorized,Small,Medium,4,0,4,0.0
+Unmotorized,Small,Bright,13,3,10,0.23076923076923078

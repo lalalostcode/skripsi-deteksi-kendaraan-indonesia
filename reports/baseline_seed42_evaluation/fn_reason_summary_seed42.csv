@@ -1,0 +1,6 @@
+FN Reason,Count,Percentage
+low_confidence,7163,68.21904761904763
+no_candidate,2298,21.885714285714286
+misclassification,559,5.3238095238095235
+localization,478,4.552380952380952
+match_conflict,2,0.01904761904761905

@@ -1,0 +1,44 @@
+[project]
+name = "skripsi"
+version = "0.1.0"
+description = "Modular YOLO26n IndoTraffic research pipeline"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "huggingface-hub==1.32.0",
+    "matplotlib>=3.11.1",
+    "numpy>=2.3,<2.4",
+    "opencv-python>=5.0.0.93",
+    "pandas>=3.0.5",
+    "python-dotenv>=1.2.3",
+    "pillow>=11.0",
+    "pycocotools>=2.0.10",
+    "pyyaml>=6.0.3",
+    "rich>=15.0.0",
+    "roboflow==1.4.0",
+    "scipy==1.17.1",
+    "tqdm>=4.70.0",
+    "thop>=0.1.1",
+    "ultralytics==8.4.155",
+    "wandb==0.28.1",
+]
+
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["skripsi*"]
+
+[tool.pytest.ini_options]
+addopts = "-m 'not slow'"
+markers = ["slow: offline integration checks that run full model evaluation without training"]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.3.0",
+    "jupyter>=1.1.1",
+    "pytest>=9.1.1",
+    "ruff>=0.16.6",
+]

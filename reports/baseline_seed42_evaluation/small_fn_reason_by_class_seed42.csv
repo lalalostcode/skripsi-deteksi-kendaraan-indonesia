@@ -1,0 +1,7 @@
+Class,localization,low_confidence,match_conflict,misclassification,no_candidate
+Bus,0,0,0,2,3
+Mobil Penumpang,33,1090,0,64,327
+Pejalan Kaki,2,207,0,87,164
+Sepeda Motor,422,5380,2,139,1666
+Truck,0,36,0,63,33
+Unmotorized,0,1,0,7,6
