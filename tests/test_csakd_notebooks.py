@@ -17,6 +17,7 @@ import os
 import shutil
 import subprocess
 import sys
+import time
 import types
 import uuid
 from pathlib import Path
@@ -34,6 +35,7 @@ from ultralytics.utils.torch_utils import ModelEMA
 ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK_DIR = ROOT / "notebooks/yolo26-kd-indotraffic/notebooks"
 NOTEBOOKS = [NOTEBOOK_DIR / f"{prefix}_csakd_yolo26{size}.ipynb" for prefix, size in (("08", "s"), ("09", "n"))]
+NOTEBOOKS.append(NOTEBOOK_DIR / "12_csakd_yolo26n_teacher_yolo26s.ipynb")
 TAPS = [4, 6, 10, 16, 19, 22]
 
 
@@ -65,8 +67,10 @@ def definitions(path: Path, cell_indices=(11, 12)):
 
 def notebook_config(path):
     notebook = json.loads(path.read_text(encoding="utf-8"))
-    tree = ast.parse("".join(notebook["cells"][2]["source"]))
-    return {node.targets[0].id: ast.literal_eval(node.value) for node in tree.body if isinstance(node, ast.Assign)}
+    namespace = {}
+    # Config also derives tracking tags from the configured seed and KD weights.
+    exec(compile("".join(notebook["cells"][2]["source"]), str(path), "exec"), namespace)  # noqa: S102
+    return {key: value for key, value in namespace.items() if not key.startswith("__")}
 
 
 @pytest.fixture(scope="module")
@@ -74,6 +78,7 @@ def notebook_module():
     name = "_csakd_notebook_test_definitions"
     module = types.ModuleType(name)
     module.KD_AGKA_WEIGHT = module.KD_CROSS_WEIGHT = 1.0
+    module.KD_CHECKPOINT, module.KD_CHUNK_SIZE = True, 2
     sys.modules[name] = module  # Required to serialize actual notebook-defined classes.
     exec(compile(definitions(NOTEBOOKS[0]), str(NOTEBOOKS[0]), "exec"), module.__dict__)  # noqa: S102 -- Definition AST only.
     yield module
@@ -87,8 +92,8 @@ def network(size, imgsz=64):
     return model
 
 
-def wrapper(module, size="n"):
-    result = module.CSAKDModel(network("m"), network(size))
+def wrapper(module, size="n", teacher_size="m"):
+    result = module.CSAKDModel(network(teacher_size), network(size))
     result.train()
     return result
 
@@ -133,12 +138,14 @@ def populate_features(model, images):
     model.student_model(images)
 
 
-def test_both_notebooks_have_identical_method_and_research_protocol():
-    assert ast.dump(definitions(NOTEBOOKS[0]), include_attributes=False) == ast.dump(definitions(NOTEBOOKS[1]), include_attributes=False)
+def test_all_csakd_notebooks_have_identical_method_and_research_protocol():
+    reference = ast.dump(definitions(NOTEBOOKS[0]), include_attributes=False)
+    assert all(ast.dump(definitions(path), include_attributes=False) == reference for path in NOTEBOOKS[1:])
     for path in NOTEBOOKS:
         config = notebook_config(path)
         assert (config["EPOCHS"], config["IMGSZ"], config["BATCH"], config["SEED"], config["OPTIMIZER"], config["LR"], config["AMP"]) == (100, 640, 16, 42, "AdamW", 0.001, True)
         assert config["KD_AGKA_WEIGHT"] == config["KD_CROSS_WEIGHT"] == 1.0
+        assert config["KD_CHECKPOINT"] is True and config["KD_CHUNK_SIZE"] == 2
         assert config["EVAL_SPLIT"] == "val"
         assert config["DATA"] == "/kaggle/input/datasets/ilhamrafiqin/poltrada-v3-yolo26-clean/data.yaml"
 
@@ -191,32 +198,36 @@ def test_original_teacher_targets_survive_cross_hooks_and_affect_loss(notebook_m
     try:
         populate_features(model, batch()["img"])
         expected = {i: model._teacher_feats[i].detach().clone() for i in TAPS}
+        original_ptrs = {i: model._teacher_feats[i].data_ptr() for i in TAPS}
         observed = []
-        original_loss = notebook_module.csakd_losses
+        original_loss = notebook_module.csakd_loss_terms
 
         def record(s, t, c):
             observed.append(t.detach().clone())
             assert not t.requires_grad
             return original_loss(s, t, c)
 
-        monkeypatch.setattr(notebook_module, "csakd_losses", record)
-        first = model.kd_loss()
+        monkeypatch.setattr(notebook_module, "csakd_loss_terms", record)
+        targets = model.snapshot_teacher_targets()
+        assert model._teacher_feats == {}
+        for index in TAPS:
+            assert targets[index].data_ptr() != original_ptrs[index]
+        first = model.kd_loss(targets)
         for index, target in zip(TAPS, observed):
             torch.testing.assert_close(target, expected[index], rtol=0, atol=0)
-        assert any(not torch.equal(model._teacher_feats[i], expected[i]) for i in TAPS), "Cross-forward should actually exercise the overwriting hook"
+        assert model._teacher_feats == {}, "Cross-forward must suppress teacher feature capture"
         # Same student features and cross modules, different ORIGINAL teacher targets.
-        for index in TAPS:
-            model._teacher_feats[index] = expected[index] + 0.25
-        second = model.kd_loss()
+        shifted = {index: expected[index] + 0.25 for index in TAPS}
+        second = model.kd_loss(shifted)
         assert not torch.allclose(first["kd_agka_loss"], second["kd_agka_loss"], rtol=1e-5, atol=1e-8)
     finally:
         model._remove_feature_hooks()
 
 
-@pytest.mark.parametrize("size", ["s", "n"])
-def test_yolo26_shapes_640_and_isolated_gradients(notebook_module, size):
+@pytest.mark.parametrize(("teacher_size", "size"), [("m", "s"), ("m", "n"), ("s", "n")])
+def test_yolo26_shapes_640_and_isolated_gradients(notebook_module, teacher_size, size):
     torch.manual_seed(42)
-    model = wrapper(notebook_module, size)
+    model = wrapper(notebook_module, size, teacher_size)
     try:
         assert model.feats_idx[:-1] == TAPS
         model.eval()
@@ -226,7 +237,7 @@ def test_yolo26_shapes_640_and_isolated_gradients(notebook_module, size):
             student_predictions = model.student_model(image)
         assert all(torch.isfinite(t).all() for t in tensors((teacher_predictions, student_predictions)))
         spatial = [80, 40, 20, 80, 40, 20]
-        teacher_channels = [512, 512, 512, 256, 512, 512]
+        teacher_channels = [512, 512, 512, 256, 512, 512] if teacher_size == "m" else [256, 256, 512, 128, 256, 512]
         student_channels = [256, 256, 512, 128, 256, 512] if size == "s" else [128, 128, 256, 64, 128, 256]
         for position, index in enumerate(TAPS):
             student_feature, teacher_feature = model._student_feats[index], model._teacher_feats[index]
@@ -258,12 +269,14 @@ def test_yolo26_shapes_640_and_isolated_gradients(notebook_module, size):
             populate_features(model, example["img"])
             parts = model.kd_loss()
             assert all(torch.isfinite(value) for value in parts.values())
+            forward_inputs = tuple(cross_inputs)
+            assert len(forward_inputs) == len(TAPS)
             parts[component].backward()
             assert_gradients(model.student_model.parameters())
             assert_every_gradient(model.projector["input"].parameters())
             assert_every_gradient(model.projector["output"].parameters())
-            assert len(cross_inputs) == len(TAPS)
-            for incoming in cross_inputs:
+            assert len(cross_inputs) > len(forward_inputs), "Checkpoint must recompute cross activations"
+            for incoming in forward_inputs:
                 assert incoming.grad is not None and torch.isfinite(incoming.grad).all()
                 assert torch.count_nonzero(incoming.grad).item() > 0
             assert all(p.grad is None and not p.requires_grad for p in model.teacher_model.parameters())
@@ -325,7 +338,7 @@ def test_hooks_cache_exceptions_validation_and_ema(notebook_module, monkeypatch)
         with pytest.raises((ValueError, RuntimeError, KeyError)):
             model.kd_loss()
 
-        def fail_loss():
+        def fail_loss(targets=None):
             raise RuntimeError("deliberate KD failure")
 
         monkeypatch.setattr(model, "kd_loss", fail_loss)
@@ -361,6 +374,196 @@ def test_oom_batch_retry_cannot_change_research_protocol(notebook_module):
         trainer._build_train_pipeline()
 
 
+@pytest.mark.parametrize("size", ["s", "n"])
+def test_checkpoint_chunking_preserves_combined_loss_all_gradients_and_teacher_state(notebook_module, tmp_path, size):
+    """Uneven B=3 checks weighted chunk reductions and non-reentrant recomputation."""
+    torch.manual_seed(53)
+    direct = wrapper(notebook_module, size)
+    direct.kd_checkpoint, direct.kd_chunk_size = False, 3
+    optimized = copy.deepcopy(direct)
+    optimized.kd_checkpoint, optimized.kd_chunk_size = True, 2
+    example = batch(3)
+    teacher_before = {name: value.clone() for name, value in direct.teacher_model.state_dict().items()}
+    parity = {}
+
+    def compare_gradients(objective, reference, candidate):
+        # Check ALL trainable parameters, including legitimately unused ones.
+        optimized_parameters = dict(candidate.named_parameters())
+        errors, meaningful_relative_errors = {}, []
+        for name, parameter in reference.named_parameters():
+            other = optimized_parameters[name]
+            if not parameter.requires_grad:
+                assert parameter.grad is other.grad is None, name
+                continue
+            assert (parameter.grad is None) == (other.grad is None), name
+            if parameter.grad is None:
+                continue
+            assert torch.isfinite(parameter.grad).all() and torch.isfinite(other.grad).all(), name
+            delta = other.grad - parameter.grad
+            reference_norm = parameter.grad.norm().item()
+            relative_l2 = delta.norm().item() / max(reference_norm, 1e-20)
+            # Cancellation makes some BN bias gradients mathematically near zero.
+            # For these alone, relative error is uninformative; record and bound
+            # the absolute FP32 difference instead. Projectors always use L2 parity.
+            roundoff_only = name.endswith(".bn.bias") and reference_norm < 1e-6
+            if roundoff_only:
+                assert delta.abs().max().item() <= 1e-7, (name, relative_l2)
+            else:
+                meaningful_relative_errors.append(relative_l2)
+                assert relative_l2 < 1e-4, (name, relative_l2)
+            absolute_tolerance = max(1e-7 if roundoff_only else 1e-9, 1e-5 * parameter.grad.abs().max().item())
+            torch.testing.assert_close(other.grad, parameter.grad, rtol=1e-4, atol=absolute_tolerance, msg=name)
+            errors[name] = {"relative_l2": relative_l2, "reference_l2": reference_norm,
+                            "max_absolute_difference": delta.abs().max().item(), "near_zero_bn_roundoff": roundoff_only}
+        assert_every_gradient(candidate.projector.parameters())
+        parity[objective] = {"max_meaningful_relative_l2": max(meaningful_relative_errors), "parameters": errors}
+
+    try:
+        direct_loss, direct_items = direct.loss(example)
+        optimized_loss, optimized_items = optimized.loss(example)
+        torch.testing.assert_close(optimized_loss, direct_loss, rtol=2e-5, atol=1e-7)
+        for key in ("kd_agka_loss", "kd_cross_loss", "dis_loss", "det_total_loss", "kd_to_det_ratio"):
+            torch.testing.assert_close(optimized_items[key], direct_items[key], rtol=2e-5, atol=1e-7)
+        assert direct._teacher_feats == direct._student_feats == {}
+        assert optimized._teacher_feats == optimized._student_feats == {}
+        direct_loss.sum().backward()
+        optimized_loss.sum().backward()
+        compare_gradients("combined_detection_kd", direct, optimized)
+        for component in ("kd_agka_loss", "kd_cross_loss"):
+            parts = []
+            for model in (direct, optimized):
+                model.zero_grad(set_to_none=True)
+                populate_features(model, example["img"])
+                targets = model.snapshot_teacher_targets()
+                parts.append(model.kd_loss(targets))
+                model._student_feats.clear()
+            torch.testing.assert_close(parts[1][component], parts[0][component], rtol=2e-5, atol=1e-7)
+            parts[0][component].backward()
+            parts[1][component].backward()
+            compare_gradients(component, direct, optimized)
+            assert optimized._teacher_feats == optimized._student_feats == {}
+        for name, before in teacher_before.items():
+            torch.testing.assert_close(before, direct.teacher_model.state_dict()[name], rtol=0, atol=0)
+            torch.testing.assert_close(before, optimized.teacher_model.state_dict()[name], rtol=0, atol=0)
+        assert optimized._teacher_feats == optimized._student_feats == {}, "Backward recomputation must not repopulate caches"
+        (tmp_path / f"gradient_parity_{size}.json").write_text(json.dumps(parity, indent=2), encoding="utf-8")
+        # Image capture must work again after the guarded cross calls.
+        with torch.no_grad():
+            optimized.teacher_model(example["img"])
+        assert all(index in optimized._teacher_feats for index in TAPS)
+    finally:
+        for model in (direct, optimized):
+            model._teacher_feats.clear()
+            model._student_feats.clear()
+            model._remove_feature_hooks()
+        del direct, optimized
+        gc.collect()
+
+
+@pytest.mark.parametrize("chunk_size", [1, 2, 3])
+def test_uneven_chunks_keep_global_aawm_gate_value_and_derivative(notebook_module, chunk_size):
+    """Heterogeneous similarities detect replacing sigmoid(mean_B) with chunk gates."""
+    torch.manual_seed(137)
+    s = (torch.rand(5, 4, 3, 2) + 0.2).requires_grad_()
+    c = (torch.rand_like(s) + 0.1).requires_grad_()
+    t = torch.ones_like(s) * torch.tensor([-2.0, -0.2, 0.4, 2.0, 5.0]).view(5, 1, 1, 1)
+    model = object.__new__(notebook_module.CSAKDModel)
+    torch.nn.Module.__init__(model)
+    model.feats_idx = [0, 1]
+    model._teacher_capture = {"enabled": True}
+    model._teacher_feats = {}
+    model._student_feats = {0: s, ("input", 0): c}
+    model.teacher_model = torch.nn.Module()
+    model.teacher_model.model = torch.nn.ModuleList([torch.nn.Identity()])
+    model.projector = torch.nn.ModuleDict({"input": torch.nn.ModuleList([torch.nn.Identity()]),
+                                         "output": torch.nn.ModuleList([torch.nn.Identity()])})
+    model.kd_checkpoint, model.kd_chunk_size = True, chunk_size
+    parts = model.kd_loss({0: t})
+    oracle = official_oracle(s, t, c)
+    # Clear dictionaries BEFORE recomputation to expose any stale cache lookup.
+    model._student_feats.clear()
+    for actual, expected in zip((parts["kd_agka_loss"], parts["kd_cross_loss"]), oracle[:2]):
+        torch.testing.assert_close(actual, expected, rtol=2e-5, atol=1e-7)
+        actual_gradients = torch.autograd.grad(actual, (s, c), retain_graph=True)
+        expected_gradients = torch.autograd.grad(expected, (s, c), retain_graph=True)
+        for actual_gradient, expected_gradient in zip(actual_gradients, expected_gradients):
+            torch.testing.assert_close(actual_gradient, expected_gradient, rtol=2e-5, atol=1e-7)
+    assert model._teacher_capture["enabled"]
+    assert model._teacher_feats == model._student_feats == {}
+
+
+def test_cross_exception_restores_capture_and_snapshot_precedes_student(notebook_module):
+    model = wrapper(notebook_module)
+    checks = []
+
+    def inspect_student(network, inputs):
+        checks.append(model._teacher_feats == {})
+
+    def fail_cross(layer, inputs):
+        if inputs[0].requires_grad:
+            raise RuntimeError("deliberate cross-forward failure")
+
+    student_handle = model.student_model.register_forward_pre_hook(inspect_student)
+    teacher_handle = model.teacher_model.model[TAPS[0]].register_forward_pre_hook(fail_cross)
+    try:
+        with pytest.raises(RuntimeError, match="cross-forward failure"):
+            model.loss(batch())
+        assert checks == [True], "Teacher caches must be released before student activations are allocated"
+        assert model._teacher_feats == model._student_feats == {}
+        assert model._teacher_capture["enabled"]
+        with torch.no_grad():
+            model.teacher_model(batch()["img"])
+        assert all(index in model._teacher_feats and ("input", index) in model._teacher_feats for index in TAPS)
+    finally:
+        student_handle.remove()
+        teacher_handle.remove()
+        model._teacher_feats.clear()
+        model._student_feats.clear()
+        model._remove_feature_hooks()
+
+
+def test_checkpoint_reduces_retained_saved_tensor_storage_cpu_proxy(notebook_module, tmp_path):
+    """Counts unique saved tensor storage for KD only, never claims CUDA peak memory."""
+    torch.manual_seed(91)
+    model = wrapper(notebook_module)
+    images = batch(3, 128)["img"]
+    populate_features(model, images)
+    targets = model.snapshot_teacher_targets()
+    features = {key: value.detach().clone().requires_grad_() for key, value in model._student_feats.items()
+                if key in TAPS or isinstance(key, tuple)}
+    parameter_storages = {p.untyped_storage().data_ptr() for p in model.parameters()}
+    measurements = {}
+    try:
+        for label, checkpoint_enabled, chunk_size in (("direct", False, 3), ("checkpoint_chunk2", True, 2)):
+            model.kd_checkpoint, model.kd_chunk_size = checkpoint_enabled, chunk_size
+            model._student_feats.clear()
+            model._student_feats.update(features)
+            saved_storages = {}
+
+            def pack(tensor, saved=saved_storages):
+                storage = tensor.untyped_storage()
+                pointer = storage.data_ptr()
+                if pointer and pointer not in parameter_storages:
+                    saved[pointer] = storage.nbytes()
+                return tensor
+
+            with torch.autograd.graph.saved_tensors_hooks(pack, lambda tensor: tensor):
+                parts = model.kd_loss(targets)
+            measurements[label] = sum(saved_storages.values())
+            assert all(torch.isfinite(value) for value in parts.values())
+            model._student_feats.clear()
+            del parts
+        assert measurements["direct"] > 0
+        ratio = measurements["checkpoint_chunk2"] / measurements["direct"]
+        assert ratio < 0.7, measurements
+        measurements["optimized_over_direct"] = ratio
+        (tmp_path / "saved_tensor_storage_proxy.json").write_text(json.dumps(measurements, indent=2), encoding="utf-8")
+    finally:
+        model._teacher_feats.clear()
+        model._student_feats.clear()
+        model._remove_feature_hooks()
+
+
 def test_batch_scaling_and_diagnostics_do_not_change_objective(notebook_module):
     class FakeStudent(torch.nn.Module):
         def forward(self, images):
@@ -376,7 +579,10 @@ def test_batch_scaling_and_diagnostics_do_not_change_objective(notebook_module):
             self.teacher_model = FakeStudent()
             self._teacher_feats, self._student_feats = {}, {}
 
-        def kd_loss(self):
+        def snapshot_teacher_targets(self):
+            return {}
+
+        def kd_loss(self, targets=None):
             return {"kd_agka_loss": torch.tensor(0.2, requires_grad=True), "kd_cross_loss": torch.tensor(0.3, requires_grad=True)}
 
     for count in (1, 2, 16):
@@ -580,6 +786,19 @@ def test_actual_poltrada_teacher_v50_cuda_amp_smoke_opt_in(notebook_module, tmp_
     monkeypatch.setattr(callbacks, "add_integration_callbacks", lambda instance: None)
     model = YOLO(os.environ[required[2]])
     observations = {"batches": 0, "steps": 0}
+    profile = {"diagnostic_only": True, "memory_strategy": {"kd_checkpoint": True, "kd_chunk_size": 2},
+               "requested_batch": 16, "imgsz": 640, "student": f"yolo26{size}", "batches": [],
+               "status": "RUNNING", "teacher_provenance": provenance, "device_name": torch.cuda.get_device_name(0)}
+    torch.cuda.synchronize(0)
+    torch.cuda.reset_peak_memory_stats(0)
+
+    def memory_snapshot():
+        free, total = torch.cuda.mem_get_info(0)
+        return {"allocated_bytes": int(torch.cuda.memory_allocated(0)),
+                "reserved_bytes": int(torch.cuda.memory_reserved(0)),
+                "device_free_bytes": int(free), "device_total_bytes": int(total),
+                "peak_allocated_bytes": int(torch.cuda.max_memory_allocated(0)),
+                "peak_reserved_bytes": int(torch.cuda.max_memory_reserved(0))}
 
     def check_before_step(trainer):
         # Called after unscale/clip inside optimizer_step by PyTorch optimizer.
@@ -590,27 +809,53 @@ def test_actual_poltrada_teacher_v50_cuda_amp_smoke_opt_in(notebook_module, tmp_
 
     def setup(trainer):
         assert trainer.amp and trainer.batch_size == 16
+        assert trainer.model.kd_checkpoint and trainer.model.kd_chunk_size == 2
+        profile["effective_batch"], profile["effective_amp"] = int(trainer.batch_size), bool(trainer.amp)
+        profile["setup"] = memory_snapshot()
         trainer.optimizer.register_step_pre_hook(lambda optimizer, args, kwargs: check_before_step(trainer))
+
+    def start_batch(trainer):
+        torch.cuda.synchronize(0)
+        torch.cuda.reset_peak_memory_stats(0)
+        profile["batch_started"] = time.perf_counter()
 
     def check_batch(trainer):
         observations["batches"] += 1
         assert torch.isfinite(trainer.loss).all()
+        torch.cuda.synchronize(0)
+        profile["batches"].append({"batch": observations["batches"],
+                                   "phase": "warmup/setup" if observations["batches"] == 1 else "measured",
+                                   "batch_elapsed_seconds": time.perf_counter() - profile["batch_started"],
+                                   **memory_snapshot()})
 
     model.add_callback("on_train_start", setup)
+    model.add_callback("on_train_batch_start", start_batch)
     model.add_callback("on_train_batch_end", check_batch)
-    result = model.train(trainer=notebook_module.KDTrainer, data=str(subset), distill_model=str(teacher_path), dis=1.0,
-                         epochs=1, imgsz=640, batch=16, device=0, workers=0, optimizer="AdamW", lr0=0.001, seed=42,
-                         amp=True, pretrained=True, project=str(tmp_path / "gpu_runs"), name=f"v50_poltrada_{size}",
-                         plots=False, save=True, val=True, compile=False)
-    assert observations["batches"] == 2 and observations["steps"] > 0
-    assert all(math.isfinite(float(value)) for value in result.results_dict.values())
-    attempt = fresh_process_predict(Path(model.trainer.best), imgsz=640)
-    assert attempt.returncode == 0, attempt.stdout + attempt.stderr
+    try:
+        result = model.train(trainer=notebook_module.KDTrainer, data=str(subset), distill_model=str(teacher_path), dis=1.0,
+                             epochs=1, imgsz=640, batch=16, device=0, workers=0, optimizer="AdamW", lr0=0.001, seed=42,
+                             amp=True, pretrained=True, project=str(tmp_path / "gpu_runs"), name=f"v50_poltrada_{size}",
+                             plots=False, save=True, val=True, compile=False)
+        assert observations["batches"] == 2 and observations["steps"] > 0
+        assert all(math.isfinite(float(value)) for value in result.results_dict.values())
+        attempt = fresh_process_predict(Path(model.trainer.best), imgsz=640)
+        assert attempt.returncode == 0, attempt.stdout + attempt.stderr
+        profile["status"] = "PASS"
+    except BaseException as error:
+        profile["status"], profile["error"] = "FAIL", f"{type(error).__name__}: {error}"
+        raise
+    finally:
+        final_memory = memory_snapshot()
+        profile["final"] = final_memory
+        snapshots = [*profile["batches"], profile.get("setup", final_memory), final_memory]
+        profile["whole_run_peak_allocated_bytes"] = max(entry["peak_allocated_bytes"] for entry in snapshots)
+        profile["whole_run_peak_reserved_bytes"] = max(entry["peak_reserved_bytes"] for entry in snapshots)
+        (tmp_path / "gpu_memory_profile.json").write_text(json.dumps(profile, indent=2), encoding="utf-8")
 
 
 @pytest.mark.slow
-@pytest.mark.parametrize("size", ["s", "n"])
-def test_synthetic_one_epoch_cpu_validation_checkpoint_reload(notebook_module, tmp_path, monkeypatch, size):
+@pytest.mark.parametrize(("teacher_size", "size"), [("m", "s"), ("m", "n"), ("s", "n")])
+def test_synthetic_one_epoch_cpu_validation_checkpoint_reload(notebook_module, tmp_path, monkeypatch, teacher_size, size):
     """Diagnostic only: random weights, synthetic train/val, 64px, two batches."""
     from ultralytics import settings
     from ultralytics.utils import callbacks
@@ -629,7 +874,7 @@ def test_synthetic_one_epoch_cpu_validation_checkpoint_reload(notebook_module, t
     data = dataset / "data.yaml"
     data.write_text(f"path: {dataset.as_posix()}\ntrain: train/images\nval: val/images\nnc: 6\nnames: [class_0, class_1, class_2, class_3, class_4, class_5]\n", encoding="utf-8")
     teacher_path = tmp_path / "synthetic_teacher.pt"
-    torch.save({"model": network("m"), "train_args": {"task": "detect", "imgsz": 64}}, teacher_path)
+    torch.save({"model": network(teacher_size), "train_args": {"task": "detect", "imgsz": 64}}, teacher_path)
     model = YOLO(f"yolo26{size}.yaml")
     observations = {"batches": 0, "saves": 0, "steps": 0}
     initial_student = []

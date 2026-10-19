@@ -30,9 +30,21 @@ def tmp_path():
     return directory
 
 
-@pytest.fixture(params=["08_csakd_yolo26s.ipynb", "09_csakd_yolo26n.ipynb"])
-def teacher_source(request):
-    notebook = json.loads((NOTEBOOKS / request.param).read_text(encoding="utf-8"))
+@pytest.fixture(params=[
+    ("08_csakd_yolo26s.ipynb", "m", "v50", "fux5wdcb", "01_teacher_yolo26m"),
+    ("09_csakd_yolo26n.ipynb", "m", "v50", "fux5wdcb", "01_teacher_yolo26m"),
+    ("12_csakd_yolo26n_teacher_yolo26s.ipynb", "s", "v62", "q5kp9k9d", "02_baseline_yolo26s"),
+])
+def teacher_spec(request):
+    filename, scale, version, run_id, experiment = request.param
+    reference = f"ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/{experiment}-{run_id}-checkpoints:{version}"
+    return {"filename": filename, "scale": scale, "version": version, "run_id": run_id,
+            "reference": reference, "model": f"yolo26{scale}.pt"}
+
+
+@pytest.fixture
+def teacher_source(teacher_spec):
+    notebook = json.loads((NOTEBOOKS / teacher_spec["filename"]).read_text(encoding="utf-8"))
     return "".join(notebook["cells"][8]["source"])
 
 
@@ -47,34 +59,35 @@ def declarations_function(source):
     return namespace[definition.name]
 
 
-def test_teacher_declarations_match_or_remain_explicitly_missing(teacher_source):
+def test_teacher_declarations_match_or_remain_explicitly_missing(teacher_source, teacher_spec):
     verify = declarations_function(teacher_source)
-    datasets, models = verify({"checkpoint": {"data": DATA, "model": "/weights/yolo26m.pt"}})
+    model = "/weights/" + teacher_spec["model"]
+    datasets, models = verify({"checkpoint": {"data": DATA, "model": model}})
     assert datasets == {"checkpoint": DATA}
-    assert models == {"checkpoint": "/weights/yolo26m.pt"}
+    assert models == {"checkpoint": model}
     assert verify({"checkpoint": {}}) == ({}, {})
 
 
 @pytest.mark.parametrize("bad", [
     {"data": "/different/data.yaml", "model": "yolo26m.pt"},
-    {"data": DATA, "model": "yolo26s.pt"},
+    {"data": DATA, "model": "yolo26n.pt"},
 ])
 def test_teacher_declared_mismatches_stop_run(teacher_source, bad):
     with pytest.raises(ValueError):
         declarations_function(teacher_source)({"checkpoint": bad})
 
 
-def provenance_fixture(tmp_path):
+def provenance_fixture(tmp_path, teacher_spec):
     payload = b"mock checkpoint bytes: not a real trained model"
     checkpoint = tmp_path / "best.pt"
     checkpoint.write_bytes(payload)
     entry = SimpleNamespace(size=len(payload), digest=base64.b64encode(hashlib.md5(payload).digest()).decode())
     producer = SimpleNamespace(
-        id="fux5wdcb", name="teacher experiment", path=["entity", "project", "fux5wdcb"],
-        config={"dataset": DATA, "model": "yolo26m.pt", "epoch": 100},
+        id=teacher_spec["run_id"], name="teacher experiment", path=["entity", "project", teacher_spec["run_id"]],
+        config={"dataset": DATA, "model": teacher_spec["model"], "epoch": 100},
     )
     artifact = SimpleNamespace(
-        version="v50", name="01_teacher_yolo26m-fux5wdcb-checkpoints:v50",
+        version=teacher_spec["version"], name=teacher_spec["reference"].rsplit("/", 1)[-1],
         metadata={"epoch": 7, "dataset": DATA}, digest="mock artifact-level digest",
         manifest=SimpleNamespace(entries={"best.pt": entry}),
         logged_by=lambda: producer,
@@ -90,12 +103,13 @@ def provenance_fixture(tmp_path):
         pass
 
     teacher = SimpleNamespace(
-        model=SimpleNamespace(nc=6, names=NAMES, yaml={"scale": "m", "yaml_file": "yolo26m.yaml"}),
-        ckpt={"train_args": {"data": DATA, "model": "yolo26m.pt"}},
+        model=SimpleNamespace(nc=6, names=NAMES,
+                              yaml={"scale": teacher_spec["scale"], "yaml_file": f"yolo26{teacher_spec['scale']}.yaml"}),
+        ckpt={"train_args": {"data": DATA, "model": teacher_spec["model"]}},
     )
     namespace = {
         "Path": Path, "DATA": DATA, "EXPECTED_NC": 6, "DIAGNOSTIC_ONLY": False,
-        "TEACHER_ARTIFACT": REFERENCE, "TEACHER_RUN_ID": "fux5wdcb", "MODEL_WEIGHTS": "yolo26s.pt",
+        "TEACHER_ARTIFACT": teacher_spec["reference"], "TEACHER_RUN_ID": teacher_spec["run_id"], "MODEL_WEIGHTS": "yolo26n.pt",
         "data_info": {"nc": 6, "names": NAMES},
         "class_names": lambda names: [str(value) for value in names],
         "YOLO": lambda path: teacher,
@@ -107,13 +121,14 @@ def provenance_fixture(tmp_path):
     return namespace, artifact, producer, teacher, payload, requests
 
 
-def test_exact_manifest_version_hash_and_epoch_are_recorded(teacher_source, tmp_path):
-    namespace, artifact, _producer, _teacher, payload, requests = provenance_fixture(tmp_path)
+def test_exact_manifest_version_hash_and_epoch_are_recorded(teacher_source, teacher_spec, tmp_path):
+    namespace, artifact, _producer, _teacher, payload, requests = provenance_fixture(tmp_path, teacher_spec)
     exec(compile(teacher_source, "<mock teacher provenance>", "exec"), namespace)
     provenance = namespace["TEACHER_PROVENANCE"]
-    assert requests == [(REFERENCE, {"type": "model"})]
-    assert provenance["requested_artifact"] == REFERENCE
-    assert provenance["version"] == "v50"
+    assert requests == [(teacher_spec["reference"], {"type": "model"})]
+    assert provenance["requested_artifact"] == teacher_spec["reference"]
+    assert provenance["version"] == teacher_spec["version"]
+    assert provenance["architecture_scale"] == teacher_spec["scale"]
     assert provenance["artifact_metadata"]["epoch"] == 7
     assert provenance["best_pt_sha256"] == hashlib.sha256(payload).hexdigest()
     assert provenance["best_pt_manifest_digest"] == artifact.manifest.entries["best.pt"].digest
@@ -125,8 +140,8 @@ def test_exact_manifest_version_hash_and_epoch_are_recorded(teacher_source, tmp_
     "wrong_version", "stale_file_without_manifest", "size_mismatch", "checksum_mismatch",
     "wrong_producer", "wrong_scale", "wrong_family", "wrong_nc", "wrong_names", "wrong_declared_dataset",
 ])
-def test_teacher_provenance_rejects_concrete_mismatches(teacher_source, tmp_path, failure):
-    namespace, artifact, producer, teacher, _payload, _requests = provenance_fixture(tmp_path)
+def test_teacher_provenance_rejects_concrete_mismatches(teacher_source, teacher_spec, tmp_path, failure):
+    namespace, artifact, producer, teacher, _payload, _requests = provenance_fixture(tmp_path, teacher_spec)
     if failure == "wrong_version":
         artifact.version = "v51"
     elif failure == "stale_file_without_manifest":
@@ -151,8 +166,8 @@ def test_teacher_provenance_rejects_concrete_mismatches(teacher_source, tmp_path
         exec(compile(teacher_source, "<mock teacher provenance>", "exec"), namespace)
 
 
-def test_unavailable_metadata_warns_without_claiming_verified(teacher_source, tmp_path):
-    namespace, artifact, _producer, teacher, payload, _requests = provenance_fixture(tmp_path)
+def test_unavailable_metadata_warns_without_claiming_verified(teacher_source, teacher_spec, tmp_path):
+    namespace, artifact, _producer, teacher, payload, _requests = provenance_fixture(tmp_path, teacher_spec)
     artifact.logged_by = lambda: None
     artifact.metadata = {}
     teacher.ckpt = {"train_args": {}}
@@ -165,11 +180,33 @@ def test_unavailable_metadata_warns_without_claiming_verified(teacher_source, tm
     assert provenance["best_pt_sha256"] == hashlib.sha256(payload).hexdigest()
 
 
-def test_missing_provenance_blocks_research(teacher_source, tmp_path):
-    namespace, artifact, _producer, _teacher, _payload, _requests = provenance_fixture(tmp_path)
+def test_missing_provenance_blocks_research(teacher_source, teacher_spec, tmp_path):
+    namespace, artifact, _producer, _teacher, _payload, _requests = provenance_fixture(tmp_path, teacher_spec)
     artifact.logged_by = lambda: None
     with (
         pytest.warns(UserWarning, match="Provenance teacher belum lengkap"),
         pytest.raises(ValueError, match="lengkapi bukti source/dataset"),
     ):
         exec(compile(teacher_source, "<mock teacher provenance>", "exec"), namespace)
+
+
+@pytest.mark.parametrize("failure", ["download", "missing_best"])
+def test_download_or_missing_best_stops_before_student_load(teacher_source, teacher_spec, tmp_path, failure):
+    namespace, artifact, _producer, _teacher, _payload, _requests = provenance_fixture(tmp_path, teacher_spec)
+    model_loads, downloads = [], []
+
+    def download(**kwargs):
+        downloads.append(kwargs)
+        if failure == "download":
+            raise RuntimeError("simulated download failure")
+        return str(tmp_path)
+
+    artifact.download = download
+    if failure == "missing_best":
+        (tmp_path / "best.pt").unlink()
+    namespace["YOLO"] = lambda path: model_loads.append(path)
+    with pytest.raises((RuntimeError, FileNotFoundError)):
+        exec(compile(teacher_source, "<failed download>", "exec"), namespace)
+    assert not model_loads
+    expected_root = f"/kaggle/working/teacher_yolo26{teacher_spec['scale']}_{teacher_spec['version']}"
+    assert downloads == [{"root": expected_root}]
