@@ -9,6 +9,7 @@ Dua belas eksperimen, tiap file `.ipynb` standalone untuk Kaggle dengan 8 sectio
 | `01_teacher_yolo26m.ipynb` | Teacher YOLO26m | `supervised` |
 | `02_baseline_yolo26s.ipynb` | Baseline YOLO26s | `supervised` |
 | `03_baseline_yolo26n.ipynb` | Baseline YOLO26n | `supervised` |
+| `03_baseline_yolo26n_amd_roboflow.ipynb` | Clone baseline YOLO26n, AMD ROCm cloud + Roboflow v3 | `supervised` |
 | `04_native_yolo26s.ipynb` | Native KD m → s, dis1 | `T26m_S26s` |
 | `05_native_yolo26n.ipynb` | Native KD m → n, dis1 | `T26m_S26n` |
 | `06_crosskd_yolo26s.ipynb` | CrossKD m → s | `T26m_S26s` |
@@ -29,6 +30,18 @@ Dua belas eksperimen, tiap file `.ipynb` standalone untuk Kaggle dengan 8 sectio
 6. Untuk perbandingan fair, pertahankan protokol yang sama dan catat konfigurasi efektif. Test tidak dipakai untuk tuning atau pemilihan checkpoint. Pengujian CPU sintetis tidak membuktikan kapasitas atau stabilitas GPU Kaggle pada batch 16/640.
 
 **Catatan:** Teacher untuk KD harus dilatih pada **dataset dan urutan label kelas** yang sama. Poltrada V3 pada konfigurasi ini memiliki enam kelas. CSAKD 12 menyalin objective, enam tap, activation checkpointing, chunk size 2, dan bobot AGKA/Cross 1/1 dari notebook 09; yang diganti adalah teacher dan identitas eksperimen.
+
+## Baseline nano pada AMD cloud
+
+Gunakan **`03_baseline_yolo26n_amd_roboflow.ipynb`** pada Linux cloud dengan image PyTorch ROCm dan torchvision yang sudah kompatibel. Isi `WANDB_API_KEY` dan `ROBOFLOW_API_KEY` langsung pada **Section 1**, periksa konfigurasi Section 2, lalu Run All. Tidak memakai Kaggle Secrets, environment variable untuk key, atau prompt getpass. Penyimpanan kode otomatis W&B dimatikan; key tidak dimasukkan ke metadata/artifact.
+
+Seed default **7 dan 3407** berjalan serial; 42, 123 dan 2024 tersedia sebagai komentar. Protokol baseline tetap 100 epoch, 640px, batch16, AdamW lr0.001 dan AMP True. Runtime harus ROCm dengan `DEVICE=0`; ketidakcocokan GPU, perubahan batch/resolusi/AMP, atau kegagalan training/upload menghentikan antrean. Torch/torchvision image dikunci selama instalasi dependensi penelitian.
+
+Setup AMD memakai **`ultralytics-opencv-headless==8.4.155`** dan **`opencv-python-headless==4.10.0.84`**, sesuai server tanpa display dan pin Roboflow 1.4.0. Installer membersihkan provider desktop/namespace yang bertumpuk lalu memeriksa import, GUI=NONE, PNG dan resize di subprocess. Ini menangani error seperti `ImportError: libxcb.so.1` dari OpenCV desktop tanpa memasang library GUI sistem. Jika paket yang sudah dimuat (termasuk NumPy) berubah, restart kernel dan Run All lagi; tidak perlu mengganti PyTorch ROCm.
+
+Dataset diambil sekali dari `ilham-rafiqin/poltrada-original-raw-2`, versi 3, format `yolo26`, ke `~/skripsi-kd/datasets/poltrada-v3`. Output ada di `~/skripsi-kd/results/03_baseline_yolo26n_amd/`. Run bernama `baseline_yolo26n_amd_seed7` / `baseline_yolo26n_amd_seed3407`, tetap pada project `yolom26-kd-indotraffic`, group `supervised`, dengan tag `amd-rocm` dan `roboflow-v3`.
+
+Identitas Roboflow, hash YAML, kelas dan lingkungan dicatat. Kesetaraan dengan dataset Kaggle bersih belum diverifikasi; tidak ada agregasi hasil lama otomatis. Pengujian lokal memakai mock dan dua training sintetis pendek di CPU, bukan bukti keberhasilan pada AMD cloud atau dataset Poltrada nyata.
 
 ## Multi-seed baseline n, Native s → n, CrossKD s → n
 
