@@ -37,10 +37,12 @@ from ultralytics.data.utils import IMG_FORMATS, check_det_dataset
 from ultralytics.nn.tasks import DetectionModel
 from ultralytics.utils.torch_utils import init_seeds
 
+from scripts.notebook_paths import notebook_path
+
 ROOT = Path(__file__).resolve().parents[1]
-FOLDER = ROOT / "notebooks/yolo26-kd-indotraffic/notebooks"
-TARGET = FOLDER / "03_baseline_yolo26n_amd_roboflow.ipynb"
-ORIGINAL = FOLDER / "03_baseline_yolo26n.ipynb"
+FOLDER = ROOT / "notebooks/kaggle"
+TARGET = notebook_path("amd", "03_baseline_yolo26n_amd_roboflow.ipynb")
+ORIGINAL = notebook_path("kaggle", "03_baseline_yolo26n.ipynb")
 NAMES = ["bus", "car", "motorcycle", "truck", "pickup", "minibus"]
 
 

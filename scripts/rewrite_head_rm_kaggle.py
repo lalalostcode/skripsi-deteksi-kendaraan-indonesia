@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-FOLDER = ROOT / "notebooks/yolo26-kd-indotraffic/notebooks"
+FOLDER = ROOT / "notebooks/kaggle/kd/teacher_s"
 
 ENVIRONMENT = '''import importlib.metadata as metadata
 import subprocess
@@ -363,7 +363,8 @@ CLOSE_MOSAIC = 10
 AMP = True
 EVAL_SPLIT = "val"
 PROJECT = "/kaggle/working/results"
-RUN_FULL_TRAINING = False
+RUN_FULL_TRAINING = True  # Training penelitian sesuai EPOCHS.
+RUN_SMOKE_TEST = False  # True hanya jika ingin smoke test tambahan 1 epoch.
 METHOD_KWARGS = {kwargs!r}
 WANDB_ENTITY = "ilhamrafiqin-brawijaya-university"
 WANDB_PROJECT = "yolom26-kd-indotraffic"
@@ -384,7 +385,7 @@ TEACHER_SHA256 = "5bc3ae61f8da1c9f03916922de10146805c27c64a11e46edd766a00d0f6f18
               "Skor student tetap terhubung ke autograd. Pemilihan kandidat adalah adaptasi untuk YOLO26; tidak ada PFI. "
               "[Paper RM](https://ojs.aaai.org/index.php/AAAI/article/download/20018/19777).")
     parts = [
-        ("markdown", "intro", f"# {title}: YOLO26s → YOLO26n\n\nPoltrada V3 · seed 42 · Kaggle GPU.\n\nTambahkan dataset, aktifkan GPU/Internet, dan secret `WANDB_API_KEY`. Run All dengan default menjalankan smoke test **1 epoch** pada 640/batch 16, termasuk validasi dan checkpoint. Ubah `RUN_FULL_TRAINING=True` untuk training setelah smoke test lulus.\n\n{theory}"),
+        ("markdown", "intro", f"# {title}: YOLO26s → YOLO26n\n\nPoltrada V3 · seed 42 · Kaggle GPU.\n\nTambahkan dataset, aktifkan GPU/Internet, dan secret `WANDB_API_KEY`. Run All langsung menjalankan training **100 epoch** pada 640/batch 16. `RUN_FULL_TRAINING=True`; smoke tambahan dinonaktifkan dengan `RUN_SMOKE_TEST=False`. Audit teacher dan verifikasi numerik tetap berjalan.\n\n{theory}"),
         ("markdown", "config-md", "## 1. Konfigurasi\nUbah parameter penelitian di cell ini."),
         ("code", "config", config),
         ("markdown", "environment-md", "## 2. Persiapan Kaggle\nPyTorch GPU bawaan Kaggle tetap digunakan."),
@@ -397,22 +398,25 @@ TEACHER_SHA256 = "5bc3ae61f8da1c9f03916922de10146805c27c64a11e46edd766a00d0f6f18
         ("code", "trainer", TRAINER),
         ("markdown", "logging-md", "## 6. Logging W&B\nLoss per komponen, mAP, precision/recall, LR, gradien, VRAM, dan durasi dicatat. Snapshot setiap epoch baru dibersihkan setelah upload selesai."),
         ("code", "logging", LOGGING), ("code", "training", TRAINING),
-        ("markdown", "diagnostic-md", "## 7. Smoke test Kaggle — 1 epoch\nSatu epoch pada seluruh split train, lalu validasi dan load ulang student. Jika OOM/AMP/loss gagal, training berhenti tanpa menurunkan batch atau resolusi otomatis."),
+        ("markdown", "diagnostic-md", "## 7. Verifikasi numerik dan smoke test opsional\nDefault `RUN_SMOKE_TEST=False`: tidak ada smoke run tambahan. Jika diaktifkan, satu epoch pada seluruh split train, lalu validasi dan load ulang student. Jika OOM/AMP/loss gagal, training berhenti tanpa menurunkan batch atau resolusi otomatis."),
         ("code", "numerical", oracle),
-        ("code", "diagnostic", "DIAGNOSTIC_RESULT = run_training(diagnostic=True)\nprint(json.dumps(DIAGNOSTIC_RESULT, indent=2))"),
+        ("code", "diagnostic", "DIAGNOSTIC_RESULT = None\nif RUN_SMOKE_TEST:\n    DIAGNOSTIC_RESULT = run_training(diagnostic=True)\n    print(json.dumps(DIAGNOSTIC_RESULT, indent=2))\nelse:\n    print('Smoke test dilewati; konfigurasi langsung training.')"),
         ("markdown", "full-md", "## 8. Training dan hasil\nSatu metode, satu seed, maksimal 100 epoch. Untuk uji satu epoch saja, set `EPOCHS=1`."),
         ("code", "full", '''TRAINING_RESULT = None
 if RUN_FULL_TRAINING:
-    if DIAGNOSTIC_RESULT["status"] != "PASS" or DIAGNOSTIC_RESULT["config"] != experiment_config():
+    if RUN_SMOKE_TEST and (not DIAGNOSTIC_RESULT or DIAGNOSTIC_RESULT["status"] != "PASS" or DIAGNOSTIC_RESULT["config"] != experiment_config()):
         raise RuntimeError("Jalankan ulang smoke test setelah mengubah konfigurasi.")
     TRAINING_RESULT = run_training(diagnostic=False)
 else:
-    print("Smoke test selesai. Full training belum dijalankan.")'''),
+    print("Training dinonaktifkan: RUN_FULL_TRAINING=False.")'''),
         ("code", "results", '''result = TRAINING_RESULT or DIAGNOSTIC_RESULT
-print("Checkpoint student:", result["best_pt"])
-print("Best epoch:", result["best_epoch"])
-print("Validation:", result["metrics"])
-print("Durasi (detik):", round(result["seconds"], 2))'''),
+if result is not None:
+    print("Checkpoint student:", result["best_pt"])
+    print("Best epoch:", result["best_epoch"])
+    print("Validation:", result["metrics"])
+    print("Durasi (detik):", round(result["seconds"], 2))
+else:
+    print("Belum ada hasil training atau smoke test.")'''),
     ]
     notebook["cells"] = [cell(kind, f"{method}-{identifier}", source) for kind, identifier, source in parts]
     notebook["metadata"].pop("head_rm_sources", None)

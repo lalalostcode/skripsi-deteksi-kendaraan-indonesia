@@ -19,7 +19,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK_PATH = (
-    ROOT / "notebooks/yolo26-kd-indotraffic/notebooks/00_eda_poltrada_v3.ipynb"
+    ROOT / "notebooks/kaggle/eda/00_eda_poltrada_v3.ipynb"
 )
 QA_ROOT = ROOT / "outputs/eda_poltrada_v3_validation"
 

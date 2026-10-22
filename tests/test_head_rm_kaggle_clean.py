@@ -26,8 +26,10 @@ from ultralytics.models.yolo.detect import DetectionTrainer
 from ultralytics.nn.tasks import DetectionModel
 from ultralytics.utils.torch_utils import ModelEMA, unwrap_model
 
+from scripts.notebook_paths import notebook_path
+
 ROOT = Path(__file__).resolve().parents[1]
-FOLDER = ROOT / "notebooks/yolo26-kd-indotraffic/notebooks"
+FOLDER = ROOT / "notebooks/kaggle"
 NAMES = ["Bus", "Mobil Penumpang", "Pejalan Kaki", "Sepeda Motor", "Truck", "Unmotorized"]
 
 
@@ -61,7 +63,7 @@ class OfflineRun:
 
 def environment(method):
     number = 13 if method == "head" else 14
-    path = FOLDER / f"{number}_{method}_yolo26n_teacher_yolo26s.ipynb"
+    path = notebook_path("kaggle", f"{number}_{method}_yolo26n_teacher_yolo26s.ipynb")
     notebook = json.loads(path.read_bytes())
     cells = {c["id"]: "".join(c["source"]) for c in notebook["cells"]}
     module = types.ModuleType("clean_kaggle_" + method + uuid.uuid4().hex)
@@ -76,9 +78,26 @@ def environment(method):
 
 
 @pytest.mark.parametrize("method", ["head", "rm"])
-def test_objective_is_preserved_and_default_training_is_off(method):
+@pytest.mark.parametrize("smoke", [False, True])
+def test_run_all_dispatches_only_requested_training_runs(method, smoke):
     module, notebook = environment(method)
-    assert module.RUN_FULL_TRAINING is False
+    calls = []
+    def fake_training(diagnostic=False):
+        calls.append(diagnostic)
+        return {"status": "PASS", "config": module.experiment_config()}
+    module.RUN_SMOKE_TEST = smoke
+    module.run_training = fake_training
+    for suffix in ("diagnostic", "full"):
+        source = next(c for c in notebook["cells"] if c["id"] == method + "-" + suffix)["source"]
+        exec(compile("".join(source), "<dispatch-only>", "exec"), module.__dict__)  # noqa: S102 -- Mock dispatch only; no training.
+    assert calls == ([True, False] if smoke else [False])
+
+
+@pytest.mark.parametrize("method", ["head", "rm"])
+def test_objective_is_preserved_and_default_is_full_training(method):
+    module, notebook = environment(method)
+    assert module.RUN_FULL_TRAINING is True and module.RUN_SMOKE_TEST is False
+    assert module.EPOCHS == 100
     assert module.BATCH == 16 and module.IMGSZ == 640 and module.SEED == 42
     for cell in notebook["cells"]:
         if cell["cell_type"] == "code":

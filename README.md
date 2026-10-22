@@ -1,6 +1,15 @@
-# Eksperimen YOLO26n modular
+# Notebook Penelitian YOLO26: Baseline, KD, dan Pruning
 
-Paket `skripsi` memisahkan arsitektur YOLO26n FPN-PAN, BiFPN, ASFF, dan AFPN dari notebook. Empat notebook baru ada di [`notebooks/modular/`](notebooks/modular/); notebook lama dan EDA tetap tersedia sebagai referensi. Import paket, `preflight()`, dan evaluasi **tidak memulai training**. Training hanya berjalan saat Anda memanggil `run_training()` secara eksplisit.
+Lihat [indeks notebook](notebooks/README.md) untuk seluruh eksperimen berdasarkan platform dan metode:
+[Kaggle](notebooks/kaggle/README.md), [Google Colab](notebooks/colab/README.md),
+[AMD ROCm](notebooks/amd/baseline/), dan [analisis lokal](notebooks/local/).
+Notebook KD dipisahkan menjadi `kd/teacher_m/` dan `kd/teacher_s/`; baseline, teacher, EDA, dan pruning memiliki folder masing-masing.
+
+Paket `skripsi` memisahkan arsitektur YOLO26n FPN-PAN, BiFPN, ASFF, dan AFPN dari notebook. Empat notebook modular ada di [arsip modular](notebooks/archieve/modular/). Import paket, `preflight()`, dan evaluasi **tidak memulai training**. Training hanya berjalan saat Anda memanggil `run_training()` secara eksplisit.
+
+## Paket modular dan eksperimen neck yang diarsipkan
+
+Bagian berikut mendokumentasikan paket modular. Notebook baseline, KD, dan pruning aktif memakai protokol pada indeks platform masing-masing.
 
 Notebook baseline lama masih memakai dataset v1. Untuk perbandingan empat arsitektur, gunakan hanya notebook modular yang mengunci dataset v2.
 

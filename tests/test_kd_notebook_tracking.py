@@ -11,13 +11,15 @@ from unittest.mock import Mock
 import nbformat
 import pytest
 
-FOLDER = Path(__file__).resolve().parents[1] / "notebooks/yolo26-kd-indotraffic/notebooks"
+from scripts.notebook_paths import notebook_path, notebook_paths
+
+FOLDER = Path(__file__).resolve().parents[1] / "notebooks/kaggle"
 # Legacy experiments 01–12 only: later notebook variants use different configuration schemas.
 # PKD and AMD/Roboflow have dedicated protocol/source tests; this suite expects Kaggle DATA.
-EXPERIMENTS = sorted(path for path in FOLDER.glob("*.ipynb")
-                     if path.name[:2].isdigit() and 1 <= int(path.name[:2]) <= 12
+EXPERIMENTS = sorted(path for path in notebook_paths("kaggle")
+                     if path.parent.name != "pruning" and path.name[:2].isdigit() and 1 <= int(path.name[:2]) <= 12
                      and path.name not in {"12_pkd_yolo26n.ipynb", "03_baseline_yolo26n_amd_roboflow.ipynb"})
-NEW_NOTEBOOK = FOLDER / "12_csakd_yolo26n_teacher_yolo26s.ipynb"
+NEW_NOTEBOOK = notebook_path("kaggle", "12_csakd_yolo26n_teacher_yolo26s.ipynb")
 
 
 def configuration(notebook, overrides=None):
@@ -92,7 +94,7 @@ def test_json_python_and_group_tags_reach_wandb_init(path):
     (NEW_NOTEBOOK.name, {"SEED": 7, "KD_AGKA_WEIGHT": 0.5}, {"seed7", "agka0.5"}),
 ])
 def test_tracking_tags_follow_configured_seed_and_weights(filename, overrides, expected):
-    notebook = json.loads((FOLDER / filename).read_bytes())
+    notebook = json.loads((notebook_path("kaggle", filename)).read_bytes())
     env = configuration(notebook, overrides)
     assert expected <= set(env["WANDB_TAGS"])
     assert "seed42" not in env["WANDB_TAGS"]
@@ -100,7 +102,7 @@ def test_tracking_tags_follow_configured_seed_and_weights(filename, overrides, e
 
 def test_csakd_s_to_n_matches_existing_csakd_protocol_and_uses_baseline_v62():
     new = json.loads(NEW_NOTEBOOK.read_bytes())
-    original = json.loads((FOLDER / "09_csakd_yolo26n.ipynb").read_bytes())
+    original = json.loads((notebook_path("kaggle", "09_csakd_yolo26n.ipynb")).read_bytes())
     current, reference = configuration(new), configuration(original)
     keys = ["DATA", "MODEL_WEIGHTS", "EPOCHS", "IMGSZ", "BATCH", "SEED", "DEVICE", "WORKERS",
             "OPTIMIZER", "LR", "PATIENCE", "AMP", "WEIGHT_DECAY", "WARMUP_EPOCHS", "CLOSE_MOSAIC",

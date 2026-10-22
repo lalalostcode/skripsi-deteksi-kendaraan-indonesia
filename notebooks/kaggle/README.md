@@ -1,25 +1,33 @@
-# YOLO26 Knowledge Distillation — 12 standalone experiments + W&B per-epoch artifacts
+# YOLO26 — Panduan Notebook Kaggle
 
-Dua belas eksperimen, tiap file `.ipynb` standalone untuk Kaggle dengan 8 section. Tidak membutuhkan cloning GitHub atau file Python proyek tambahan. Notebook `00_eda_poltrada_v3.ipynb` terpisah untuk eksplorasi dataset.
+## Navigasi kategori
 
-## Notebook
+| Notebook | Kategori |
+|---|---|
+| [00_eda_poltrada_v3.ipynb](eda/00_eda_poltrada_v3.ipynb) | `eda` |
+| [00_results_eda-poltrada.ipynb](eda/00_results_eda-poltrada.ipynb) | `eda` |
+| [01_teacher_yolo26m.ipynb](teacher/01_teacher_yolo26m.ipynb) | `teacher` |
+| [02_baseline_yolo26s.ipynb](baseline/02_baseline_yolo26s.ipynb) | `baseline` |
+| [03_baseline_yolo26n.ipynb](baseline/03_baseline_yolo26n.ipynb) | `baseline` |
+| [03_baseline_yolo26n_scratch.ipynb](baseline/03_baseline_yolo26n_scratch.ipynb) | `baseline` |
+| [04_native_yolo26s.ipynb](kd/teacher_m/04_native_yolo26s.ipynb) | `kd/teacher_m` |
+| [05_native_yolo26n.ipynb](kd/teacher_m/05_native_yolo26n.ipynb) | `kd/teacher_m` |
+| [06_crosskd_yolo26s.ipynb](kd/teacher_m/06_crosskd_yolo26s.ipynb) | `kd/teacher_m` |
+| [07_crosskd_yolo26n.ipynb](kd/teacher_m/07_crosskd_yolo26n.ipynb) | `kd/teacher_m` |
+| [08_csakd_yolo26s.ipynb](kd/teacher_m/08_csakd_yolo26s.ipynb) | `kd/teacher_m` |
+| [09_csakd_yolo26n.ipynb](kd/teacher_m/09_csakd_yolo26n.ipynb) | `kd/teacher_m` |
+| [10_native_yolo26n_teacher_yolo26s.ipynb](kd/teacher_s/10_native_yolo26n_teacher_yolo26s.ipynb) | `kd/teacher_s` |
+| [11_crosskd_yolo26n_teacher_yolo26s.ipynb](kd/teacher_s/11_crosskd_yolo26n_teacher_yolo26s.ipynb) | `kd/teacher_s` |
+| [12_csakd_yolo26n_teacher_yolo26s.ipynb](kd/teacher_s/12_csakd_yolo26n_teacher_yolo26s.ipynb) | `kd/teacher_s` |
+| [12_pkd_yolo26n.ipynb](kd/teacher_s/12_pkd_yolo26n.ipynb) | `kd/teacher_s` |
+| [13_head_yolo26n_teacher_yolo26s.ipynb](kd/teacher_s/13_head_yolo26n_teacher_yolo26s.ipynb) | `kd/teacher_s` |
+| [14_rm_yolo26n_teacher_yolo26s.ipynb](kd/teacher_s/14_rm_yolo26n_teacher_yolo26s.ipynb) | `kd/teacher_s` |
+| [01_lamp_yolo26n_no_recovery.ipynb](pruning/01_lamp_yolo26n_no_recovery.ipynb) | `pruning` |
 
-| File | Kondisi | W&B group |
-|---|---|---|
-| `01_teacher_yolo26m.ipynb` | Teacher YOLO26m | `supervised` |
-| `02_baseline_yolo26s.ipynb` | Baseline YOLO26s | `supervised` |
-| `03_baseline_yolo26n.ipynb` | Baseline YOLO26n | `supervised` |
-| `03_baseline_yolo26n_scratch.ipynb` | Baseline YOLO26n tanpa pretrained, seed 42 | `supervised` |
-| `03_baseline_yolo26n_amd_roboflow.ipynb` | Clone baseline YOLO26n, AMD ROCm cloud + Roboflow v3 | `supervised` |
-| `04_native_yolo26s.ipynb` | Native KD m → s, dis1 | `T26m_S26s` |
-| `05_native_yolo26n.ipynb` | Native KD m → n, dis1 | `T26m_S26n` |
-| `06_crosskd_yolo26s.ipynb` | CrossKD m → s | `T26m_S26s` |
-| `07_crosskd_yolo26n.ipynb` | CrossKD m → n | `T26m_S26n` |
-| `08_csakd_yolo26s.ipynb` | CSAKD m → s | `T26m_S26s` |
-| `09_csakd_yolo26n.ipynb` | CSAKD m → n | `T26m_S26n` |
-| `10_native_yolo26n_teacher_yolo26s.ipynb` | Native KD s → n, dis1 | `T26s_S26n` |
-| `11_crosskd_yolo26n_teacher_yolo26s.ipynb` | CrossKD s → n | `T26s_S26n` |
-| `12_csakd_yolo26n_teacher_yolo26s.ipynb` | CSAKD s → n | `T26s_S26n` |
+Baseline AMD/Roboflow berada di [platform AMD](../amd/baseline/03_baseline_yolo26n_amd_roboflow.ipynb). Sumber checkpoint teacher S tetap [baseline YOLO26s](baseline/02_baseline_yolo26s.ipynb).
+
+
+Notebook Kaggle dikelompokkan per metode. Semuanya standalone; jumlah section mengikuti workflow masing-masing. [Indeks semua platform dan pemetaan path lama](../README.md).
 
 ## Cara menjalankan di Kaggle
 

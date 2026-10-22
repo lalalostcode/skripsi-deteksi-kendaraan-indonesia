@@ -18,10 +18,12 @@ from ultralytics.cfg import get_cfg
 from ultralytics.models.yolo.detect import DetectionTrainer
 from ultralytics.utils import callbacks
 
+from scripts.notebook_paths import notebook_path
+
 ROOT = Path(__file__).resolve().parents[1]
-FOLDER = ROOT / "notebooks/yolo26-kd-indotraffic/notebooks"
-TARGET = FOLDER / "03_baseline_yolo26n_scratch.ipynb"
-BASELINE = FOLDER / "03_baseline_yolo26n.ipynb"
+FOLDER = ROOT / "notebooks/kaggle"
+TARGET = notebook_path("kaggle", "03_baseline_yolo26n_scratch.ipynb")
+BASELINE = notebook_path("kaggle", "03_baseline_yolo26n.ipynb")
 NAMES = ["bus", "car", "motorcycle", "truck", "pickup", "minibus"]
 
 

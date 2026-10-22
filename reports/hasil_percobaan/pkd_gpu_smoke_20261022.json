@@ -1,0 +1,116 @@
+{
+  "status": "INCOMPLETE GPU - NOT PASS ONE EPOCH",
+  "kernel_status": "CANCEL_ACKNOWLEDGED",
+  "method": "pkd",
+  "kernel": "ilhamrafiqin/pkd-gpu-smoke-1ep-20261022-32f96e",
+  "gpu": "Tesla T4",
+  "requested_epochs": 1,
+  "completed_epochs": 0,
+  "last_logged_training_batch": 416,
+  "training_batches_expected": 424,
+  "completion_fraction_from_logged_batch": 0.9811320754716981,
+  "configured_timeout_seconds": 4500,
+  "last_log_time_seconds": 4512.483112576,
+  "termination_assessment": "Cancellation coincides with configured 75-minute timeout; API supplies no failure_message. No manual cancellation was issued.",
+  "last_progress_row": "1/1      3.22G      1.917      2.174   0.003698     0.6639      0.605     0.4095      1.678      1.678      3.466      5.144     0.4818        568        640: 98% ━━━━━━━━━━━╸ 416/424 2.4it/s 43:39<3.3s",
+  "last_displayed_reserved_gib": 3.22,
+  "displayed_running_losses_at_last_logged_batch": {
+    "box_loss": 1.917,
+    "cls_loss": 2.174,
+    "l1_loss": 0.003698,
+    "pkd_P3": 0.6639,
+    "pkd_P4": 0.605,
+    "pkd_P5": 0.4095,
+    "pkd_loss": 1.678,
+    "pkd_weighted_loss": 1.678,
+    "det_total_loss": 3.466,
+    "total_loss": 5.144,
+    "pkd_to_det_ratio": 0.4818
+  },
+  "numerical_reference": {
+    "status": "PASS",
+    "reference_url": "https://raw.githubusercontent.com/open-mmlab/mmrazor/v1.0.0/mmrazor/models/losses/pkd_loss.py",
+    "reference_sha256": "41d342f58c56efdcadb188dfc6d77a492d05e1ec2bee11240cd2cff9230ed68c",
+    "atol": 1e-06,
+    "rtol": 1e-05,
+    "cases": {
+      "random": {
+        "loss": 0.9901576042175293,
+        "absolute_error": 5.960464477539063e-08
+      },
+      "small_variance": {
+        "loss": 0.00010183513222727925,
+        "absolute_error": 0.0
+      },
+      "constant": {
+        "loss": 0.0,
+        "absolute_error": 0.0
+      }
+    },
+    "maximum_absolute_error": 2.384185791015625e-07,
+    "identical_loss": 0.0,
+    "opposite_loss": 1.9843707084655762,
+    "three_level_sum_verified": true
+  },
+  "effective_config": {
+    "effective_args": {
+      "data": "/kaggle/input/datasets/ilhamrafiqin/poltrada-v3-yolo26-clean/data.yaml",
+      "epochs": 1,
+      "imgsz": 640,
+      "batch": 16,
+      "optimizer": "AdamW",
+      "lr0": 0.001,
+      "seed": 42,
+      "device": 0,
+      "workers": 2,
+      "patience": 100,
+      "amp": true,
+      "weight_decay": 0.0005,
+      "warmup_epochs": 3.0,
+      "close_mosaic": 10,
+      "project": "/kaggle/working/results/12_pkd_yolo26n/20261022T024326_651103Z/one_epoch",
+      "name": "training",
+      "exist_ok": false,
+      "plots": false,
+      "pretrained": true,
+      "save": true,
+      "distill_model": "/kaggle/input/datasets/ilhamrafiqin/head-rm-teacher-smoke-20261021-f42278/best.pt",
+      "dis": 1.0,
+      "compile": false,
+      "resume": false
+    },
+    "teacher_artifact": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/02_baseline_yolo26s-q5kp9k9d-checkpoints:v62",
+    "teacher_sha256": "5bc3ae61f8da1c9f03916922de10146805c27c64a11e46edd766a00d0f6f18fd",
+    "dataset_names": [
+      "Bus",
+      "Mobil Penumpang",
+      "Pejalan Kaki",
+      "Sepeda Motor",
+      "Truck",
+      "Unmotorized"
+    ],
+    "dataset_yaml_sha256": "aab6dda729d6dc18c293d2f13a117d73074ae3ebb1cbb8134f46183a4a7a9ae3",
+    "pkd_weight": 1.0,
+    "pkd_epsilon": 1e-06,
+    "environment": {
+      "python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]",
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "ultralytics": "8.4.155",
+      "wandb": "0.28.1",
+      "git_commit": null,
+      "gpu": "Tesla T4"
+    }
+  },
+  "validation_completed": false,
+  "epoch_checkpoint_export_verified": false,
+  "final_teacher_digest_and_hook_cleanup_verified": false,
+  "optimizer_steps_and_peak_memory": "NOT VERIFIED: in-memory monitor was not saved before timeout",
+  "runtime_error_or_oom_in_available_log": false,
+  "log_sha256": "bb3c80e8fff98ed01ad62b2002410a3a80eb3897ac7e445138961abfd8ae68fa",
+  "source_sha256": "2648fed0be7694e43f07f22cfaa7864b317aa87cb5a9c68d5d9ddd54086c000d",
+  "remaining_free_gpu_seconds_after_run": 255.026936,
+  "pay_to_scale": false,
+  "online_wandb": "NOT TESTED - local tracking adapter",
+  "resume_status": "RESUME_NOT_VERIFIED"
+}

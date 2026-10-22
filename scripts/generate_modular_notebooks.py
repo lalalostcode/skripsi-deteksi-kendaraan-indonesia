@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DESTINATION = ROOT / "notebooks" / "modular"
+DESTINATION = ROOT / "notebooks" / "archieve" / "modular"
 REPOSITORY_URL = (
     "https://github.com/lalalostcode/skripsi-deteksi-kendaraan-indonesia.git"
 )

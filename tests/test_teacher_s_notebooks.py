@@ -34,8 +34,10 @@ from ultralytics.nn.distill_model import DistillationModel, FeatureHook
 from ultralytics.nn.tasks import DetectionModel
 from ultralytics.utils.torch_utils import init_seeds, strip_optimizer, unwrap_model
 
+from scripts.notebook_paths import notebook_path
+
 ROOT = Path(__file__).resolve().parents[1]
-NOTEBOOKS = ROOT / "notebooks/yolo26-kd-indotraffic/notebooks"
+NOTEBOOKS = ROOT / "notebooks/kaggle"
 NAMES = ["bus", "car", "motorcycle", "truck", "pickup", "minibus"]
 REFERENCE = "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/02_baseline_yolo26s-q5kp9k9d-checkpoints:v62"
 torch.set_num_threads(2)
@@ -50,7 +52,7 @@ NOTEBOOK_IMPORTS = {
 
 @pytest.fixture(params=["10_native_yolo26n_teacher_yolo26s.ipynb", "11_crosskd_yolo26n_teacher_yolo26s.ipynb"])
 def notebook(request):
-    return json.loads((NOTEBOOKS / request.param).read_bytes())
+    return json.loads((notebook_path("kaggle", request.param)).read_bytes())
 
 
 @pytest.fixture
@@ -111,7 +113,7 @@ def test_notebook_schema_syntax_defaults_and_reference_hashes(notebook):
         assert env["EXPERIMENT_ID"] == "11_crosskd_yolo26n_teacher_yolo26s"
         assert env["WANDB_RUN_NAME"] == "crosskd_T26s_S26n_seed123"
     for name, digest in env["REFERENCE_SHA256"].items():
-        assert hashlib.sha256((NOTEBOOKS / name).read_bytes()).hexdigest() == digest
+        assert hashlib.sha256((notebook_path("kaggle", name)).read_bytes()).hexdigest() == digest
     for cell in notebook["cells"]:
         if cell["cell_type"] == "code":
             compile("".join(cell["source"]), cell["id"], "exec")
@@ -125,8 +127,8 @@ def test_notebook_schema_syntax_defaults_and_reference_hashes(notebook):
 
 
 def test_crosskd_objective_matches_original_exactly():
-    original = json.loads((NOTEBOOKS / "07_crosskd_yolo26n.ipynb").read_bytes())
-    new = json.loads((NOTEBOOKS / "11_crosskd_yolo26n_teacher_yolo26s.ipynb").read_bytes())
+    original = json.loads((notebook_path("kaggle", "07_crosskd_yolo26n.ipynb")).read_bytes())
+    new = json.loads((notebook_path("kaggle", "11_crosskd_yolo26n_teacher_yolo26s.ipynb")).read_bytes())
     original_method = next("".join(cell["source"]) for cell in original["cells"]
                            if cell["cell_type"] == "code" and "class CrossKDModel" in "".join(cell["source"]))
     old_definitions = ast.parse(original_method).body
@@ -143,7 +145,7 @@ def test_crosskd_objective_matches_original_exactly():
     "10_native_yolo26n_teacher_yolo26s.ipynb", "11_crosskd_yolo26n_teacher_yolo26s.ipynb",
 ])
 def test_all_kd_notebooks_forward_dis_one(filename):
-    notebook = json.loads((NOTEBOOKS / filename).read_bytes())
+    notebook = json.loads((notebook_path("kaggle", filename)).read_bytes())
     codes = ["".join(cell["source"]) for cell in notebook["cells"] if cell["cell_type"] == "code"]
     env = {"Path": Path, "teacher_path": Path("/mock/teacher/best.pt")}
     configuration = next(source for source in codes if "EXPERIMENT_ID =" in source)
@@ -162,7 +164,7 @@ def test_effective_training_config_matches_teacher_m_reference(notebook, workdir
     """Compare explicit arguments AND all pinned-engine defaults against experiments 05/07."""
     env = namespace(notebook, workdir)
     reference_name = "05_native_yolo26n.ipynb" if env["METHOD"] == "native" else "07_crosskd_yolo26n.ipynb"
-    reference = json.loads((NOTEBOOKS / reference_name).read_bytes())
+    reference = json.loads((notebook_path("kaggle", reference_name)).read_bytes())
     old = {"Path": Path, "teacher_path": Path("/reference/teacher_yolo26m_v50/best.pt"), "RUN_NAME": "reference_run"}
     codes = ["".join(cell["source"]) for cell in reference["cells"] if cell["cell_type"] == "code"]
     configuration = next(source for source in codes if "EXPERIMENT_ID =" in source)
@@ -261,7 +263,7 @@ def test_global_best_is_not_assumed_from_version(notebook, workdir, failure):
 
 
 def test_native_run_uses_fresh_id_never_resume_and_progress_is_flushed(workdir):
-    notebook = json.loads((NOTEBOOKS / "10_native_yolo26n_teacher_yolo26s.ipynb").read_bytes())
+    notebook = json.loads((notebook_path("kaggle", "10_native_yolo26n_teacher_yolo26s.ipynb")).read_bytes())
     env = namespace(notebook, workdir)
     tree = ast.parse(code(notebook, "training-execute"))
     init = next(node for node in ast.walk(tree) if isinstance(node, ast.Call)
@@ -281,7 +283,7 @@ def test_native_run_uses_fresh_id_never_resume_and_progress_is_flushed(workdir):
 
 
 def test_native_global_best_does_not_fetch_intermediate_manifests(workdir):
-    notebook = json.loads((NOTEBOOKS / "10_native_yolo26n_teacher_yolo26s.ipynb").read_bytes())
+    notebook = json.loads((notebook_path("kaggle", "10_native_yolo26n_teacher_yolo26s.ipynb")).read_bytes())
     env = namespace(notebook, workdir)
     selected, producer, _, history, _ = artifact_fixture(env, workdir)
     requests = []
@@ -454,7 +456,7 @@ def test_artifact_upload_is_synchronous_with_unique_student_snapshots(notebook, 
 
 
 def test_native_metrics_are_sent_before_checkpoint_upload_without_duplicate(workdir, monkeypatch):
-    notebook = json.loads((NOTEBOOKS / "10_native_yolo26n_teacher_yolo26s.ipynb").read_bytes())
+    notebook = json.loads((notebook_path("kaggle", "10_native_yolo26n_teacher_yolo26s.ipynb")).read_bytes())
     env = namespace(notebook, workdir)
     events = []
     def export(source, destination):

@@ -4,7 +4,7 @@ Tanggal: **18 Oktober 2026**, Asia/Jakarta.
 
 ## Hasil dan batas klaim
 
-Notebook baru: `notebooks/yolo26-kd-indotraffic/notebooks/12_pkd_yolo26n.ipynb`.
+Notebook: `notebooks/kaggle/kd/teacher_s/12_pkd_yolo26n.ipynb`.
 Nama persis belum dipakai saat implementasi dimulai. File CSAKD bernomor 12 memiliki nama
 berbeda dan tidak ditimpa. Seluruh **14 notebook yang sudah ada**, termasuk 01–11, EDA dan
 CSAKD, dipertahankan byte-identik terhadap snapshot awal pekerjaan ini.
@@ -128,7 +128,9 @@ q5kp9k9d dan entity/project, manifest/ukuran/checksum, SHA-256, schema tensor ar
 enam kelas dan urutan label, serta deklarasi dataset/model. `v62` bukan nomor epoch; epoch
 dicatat dari metadata. Teacher tidak dilatih ulang dan tidak diganti pretrained sebagai fallback.
 
-Default `RUN_FULL_TRAINING=False` menjalankan 20 batch aktual pada 640/batch16 dengan data
+Default Kaggle kini `RUN_FULL_TRAINING=True`, `RUN_SMOKE_TEST=False`: langsung training
+100 epoch setelah audit teacher dan numerical verification, tanpa run diagnostic tambahan.
+Jika `RUN_SMOKE_TEST=True`, diagnostic menjalankan 20 batch aktual pada 640/batch16 dengan data
 Poltrada. Lima langkah pertama menjadi warmup pengukuran. Diagnostic memakai trainer,
 optimizer, warmup, augmentasi dan GradScaler asli, kemudian validation/checkpoint. Epoch
 diagnostic yang dihentikan setelah 20 batch diberi label **partial diagnostic epoch**.
@@ -140,8 +142,9 @@ layout/bentuk feature dan kesamaan digest teacher termasuk BN. Overflow AMP awal
 ditangani skip/backoff standar; langkah pengukuran terakhir harus memiliki update finite.
 Pertumbuhan allocated melebihi toleransi 256 MiB setelah warmup menggagalkan diagnostic.
 
-Full gate menolak hasil yang belum PASS atau fingerprint kode/protokol/GPU/data/teacher yang
-berubah. Fingerprint kode mencakup bytecode dan konstanta yang stabil. Mengubah flag full saja tetap diperbolehkan;
+Jika smoke opsional diaktifkan, full gate menolak hasil yang belum PASS atau fingerprint kode/protokol/GPU/data/teacher yang
+berubah. Ketika smoke dilewati, hasilnya tetap None dan tidak diberi status PASS; audit teacher,
+numerical verification dan pemeriksaan runtime tetap aktif. Fingerprint kode mencakup bytecode dan konstanta yang stabil. Mengubah flag full saja tetap diperbolehkan;
 path teacher terverifikasi tidak dihapus ketika configuration cell dijalankan ulang.
 
 OOM tidak menyebabkan retry batch8 atau resize512. Fase dicatat dalam `failure.json`:
@@ -180,13 +183,13 @@ terputus sebelum checkpoint epoch selesai diunggah.
 
 1. Upload notebook baru; aktifkan satu GPU dan Internet, pasang dataset pada path konfigurasi,
    serta Secret WANDB_API_KEY dengan akses teacher artifact dan project.
-2. Restart kernel lalu **Run All** dengan `RUN_FULL_TRAINING=False`. Audit/numerical verification
-   dan diagnostic GPU harus sukses; jika gagal, baca traceback serta `failure.json`.
+2. Restart kernel lalu **Run All** dengan default `RUN_FULL_TRAINING=True`,
+   `RUN_SMOKE_TEST=False`, `EPOCHS=100`. Audit/numerical verification diikuti langsung training.
 3. Tinjau rasio PKD/detection, gradien, VRAM, estimasi dan keterbatasan resume. `PKD_WEIGHT=1.0`
    adalah pilot yang belum dianggap optimal. Jangan menyalin bobot Native 6.0.
-4. Setelah diagnostic PASS, set `RUN_FULL_TRAINING=True` pada konfigurasi, jalankan kembali
-   configuration cell dan full-training cell. Gate tetap memeriksa fingerprint. Alternatifnya
-   Run All dengan flag True akan menjalankan diagnostic baru sebelum training.
+4. Untuk diagnostic tambahan saja, set `RUN_SMOKE_TEST=True`, `RUN_FULL_TRAINING=False`.
+   Untuk diagnostic lalu training, set keduanya True. Jika diagnostic diaktifkan, training
+   tetap mensyaratkan diagnostic PASS dengan fingerprint yang cocok.
 5. Full mode memulai student baru dari pretrained yang sama, bukan melanjutkan student diagnostic.
    Evaluasi final hanya val. Test dievaluasi pada tahap penelitian terpisah setelah protokol final.
 
@@ -211,4 +214,18 @@ dipakai untuk mengulang seluruh suite saat ini, termasuk regression test tersebu
 ```
 
 Snapshot SHA-256 sebelum/sesudah implementasi memverifikasi 14 notebook lama tidak berubah.
-Pemeriksaan CUDA nyata tetap **NOT TESTED**; status tersebut tidak digantikan oleh hasil CPU.
+Pada audit awal, pemeriksaan CUDA nyata masih **NOT TESTED**; hasil CPU tidak menggantikannya.
+
+## Pembaruan smoke GPU — 22 Oktober 2026
+
+Pearson/PKD telah dicoba pada Tesla T4 dengan teacher YOLO26s v62 yang sama dan protokol
+640/batch16/AMP. **Belum PASS satu epoch**: batch terakhir yang tercatat 416/424, kemudian
+job berhenti bertepatan dengan batas 75 menit. Validasi dan checkpoint akhir belum selesai.
+Loss finite, memori reserved terakhir 3,22 GiB, dan tidak ditemukan traceback/OOM dalam log.
+Numerical verification terhadap referensi MMRazor lulus di worker GPU (max abs 2,38e-7).
+Rincian serta batas klaim tersedia pada [laporan aktual](../reports/hasil_percobaan/pkd_kaggle_smoke_20261022.md).
+
+Callback diagnostic diperbaiki agar pre-hook fused AdamW mengabaikan update yang ditandai
+`optimizer.found_inf != 0`; AMP dapat memanggil hook walaupun update dilewati. Rumus PKD
+tidak berubah. Suite PKD saat pembaruan ini: **35 tes lulus**, termasuk integrasi CPU dan
+regresi fused AdamW + GradScaler nyata. W&B online, resume dan 100 epoch belum diverifikasi.

@@ -13,7 +13,9 @@ from types import SimpleNamespace
 
 import pytest
 
-NOTEBOOKS = Path(__file__).resolve().parents[1] / "notebooks/yolo26-kd-indotraffic/notebooks"
+from scripts.notebook_paths import notebook_path
+
+NOTEBOOKS = Path(__file__).resolve().parents[1] / "notebooks/kaggle"
 REFERENCE = (
     "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/"
     "01_teacher_yolo26m-fux5wdcb-checkpoints:v50"
@@ -44,7 +46,7 @@ def teacher_spec(request):
 
 @pytest.fixture
 def teacher_source(teacher_spec):
-    notebook = json.loads((NOTEBOOKS / teacher_spec["filename"]).read_text(encoding="utf-8"))
+    notebook = json.loads((notebook_path("kaggle", teacher_spec["filename"])).read_text(encoding="utf-8"))
     return "".join(notebook["cells"][8]["source"])
 
 

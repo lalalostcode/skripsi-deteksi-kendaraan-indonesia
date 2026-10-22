@@ -32,10 +32,12 @@ from ultralytics.cfg import get_cfg
 from ultralytics.nn.tasks import DetectionModel
 from ultralytics.utils.torch_utils import ModelEMA
 
+from scripts.notebook_paths import notebook_path
+
 ROOT = Path(__file__).resolve().parents[1]
-NOTEBOOK_DIR = ROOT / "notebooks/yolo26-kd-indotraffic/notebooks"
-NOTEBOOKS = [NOTEBOOK_DIR / f"{prefix}_csakd_yolo26{size}.ipynb" for prefix, size in (("08", "s"), ("09", "n"))]
-NOTEBOOKS.append(NOTEBOOK_DIR / "12_csakd_yolo26n_teacher_yolo26s.ipynb")
+NOTEBOOK_DIR = ROOT / "notebooks/kaggle"
+NOTEBOOKS = [notebook_path("kaggle", f"{prefix}_csakd_yolo26{size}.ipynb") for prefix, size in (("08", "s"), ("09", "n"))]
+NOTEBOOKS.append(notebook_path("kaggle", "12_csakd_yolo26n_teacher_yolo26s.ipynb"))
 TAPS = [4, 6, 10, 16, 19, 22]
 
 

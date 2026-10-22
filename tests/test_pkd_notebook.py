@@ -27,9 +27,11 @@ from ultralytics.engine.trainer import BaseTrainer
 from ultralytics.nn.distill_model import DistillationModel, FeatureHook
 from ultralytics.nn.tasks import DetectionModel
 
+from scripts.notebook_paths import notebook_path
+
 ROOT = Path(__file__).resolve().parents[1]
-FOLDER = ROOT / "notebooks/yolo26-kd-indotraffic/notebooks"
-TARGET = FOLDER / "12_pkd_yolo26n.ipynb"
+FOLDER = ROOT / "notebooks/kaggle"
+TARGET = notebook_path("kaggle", "12_pkd_yolo26n.ipynb")
 REFERENCE = ROOT / "tests/fixtures/mmrazor_pkd_v1_reference.py.txt"
 NAMES = ["bus", "car", "motorcycle", "truck", "pickup", "minibus"]
 
@@ -102,9 +104,9 @@ def test_schema_defaults_and_no_other_method_in_objective():
     env = {}
     exec(compile(cell(notebook, "config"), "<config>", "exec"), env)
     assert {key: env[key] for key in ("EXPERIMENT_ID", "METHOD", "MODEL_WEIGHTS", "SEED", "EPOCHS", "IMGSZ", "BATCH",
-                                     "PKD_WEIGHT", "RUN_FULL_TRAINING", "DIAGNOSTIC_BATCH", "DIAGNOSTIC_STEPS")} == {
+                                     "PKD_WEIGHT", "RUN_FULL_TRAINING", "RUN_SMOKE_TEST", "DIAGNOSTIC_BATCH", "DIAGNOSTIC_STEPS")} == {
         "EXPERIMENT_ID": "12_pkd_yolo26n", "METHOD": "pkd", "MODEL_WEIGHTS": "yolo26n.pt", "SEED": 42,
-        "EPOCHS": 100, "IMGSZ": 640, "BATCH": 16, "PKD_WEIGHT": 1.0, "RUN_FULL_TRAINING": False,
+        "EPOCHS": 100, "IMGSZ": 640, "BATCH": 16, "PKD_WEIGHT": 1.0, "RUN_FULL_TRAINING": True, "RUN_SMOKE_TEST": False,
         "DIAGNOSTIC_BATCH": 16, "DIAGNOSTIC_STEPS": 20}
     assert env["TEACHER_ARTIFACT"].endswith("02_baseline_yolo26s-q5kp9k9d-checkpoints:v62")
     assert env["WANDB_GROUP"] == "teacher_s_student_n_pkd"
@@ -126,7 +128,7 @@ def test_teacher_source_matches_native_and_crosskd_s_to_n(environment):
     assert environment["TEACHER_ARTIFACT"] == expected
     assert environment["TEACHER_RUN_ID"] == "q5kp9k9d"
     for filename in ("10_native_yolo26n_teacher_yolo26s.ipynb", "11_crosskd_yolo26n_teacher_yolo26s.ipynb"):
-        notebook = json.loads((FOLDER / filename).read_bytes())
+        notebook = json.loads((notebook_path("kaggle", filename)).read_bytes())
         values = {}
         for item in notebook["cells"]:
             if item["cell_type"] != "code":
@@ -261,7 +263,7 @@ def test_feature_exception_always_clears_hooks_cache(environment, monkeypatch):
 
 
 def test_protocol_matches_native_reference_and_blocks_oom_batch_retry(environment):
-    original = json.loads((FOLDER / "05_native_yolo26n.ipynb").read_bytes())
+    original = json.loads((notebook_path("kaggle", "05_native_yolo26n.ipynb")).read_bytes())
     env = {"Path": Path, "teacher_path": Path(environment["TEACHER_CHECKPOINT"]), "RUN_NAME": "old"}
     exec(compile("".join(original["cells"][2]["source"]), "<native config>", "exec"), env)
     for item in original["cells"]:
@@ -349,6 +351,7 @@ def diagnostic_context(environment):
 
 
 def test_full_gate_requires_gpu_diagnostic_matching_code_and_teacher(environment, workdir, monkeypatch):
+    environment["RUN_SMOKE_TEST"] = True
     checkpoint = workdir / "teacher.pt"
     checkpoint.write_bytes(b"teacher")
     environment["TEACHER_PROVENANCE"]["best_pt_sha256"] = environment["file_sha256"](checkpoint)
@@ -370,13 +373,30 @@ def test_full_gate_requires_gpu_diagnostic_matching_code_and_teacher(environment
         environment["require_full_training"](valid)
 
 
+def test_direct_training_dispatch_skips_diagnostic_and_retains_teacher_audit(environment, workdir):
+    env = environment
+    checkpoint = workdir / "teacher.pt"
+    checkpoint.write_bytes(b"audited teacher")
+    env["TEACHER_PROVENANCE"]["best_pt_sha256"] = env["file_sha256"](checkpoint)
+    env["require_cuda"] = lambda: None  # Gate/dispatch fixture only; no training or CUDA claim.
+    calls = []
+    env["run_mode"] = lambda mode: calls.append(mode) or {"status": "PASS"}
+    notebook = json.loads(TARGET.read_bytes())
+    for key in ("diagnostic-execute", "timing", "full-execute"):
+        exec(compile(cell(notebook, key), "<dispatch-only>", "exec"), env)
+    assert calls == ["training"] and env["DIAGNOSTIC_RESULT"] is None
+    checkpoint.write_bytes(b"changed")
+    with pytest.raises(RuntimeError, match="teacher"):
+        env["require_full_training"](None)
+
+
 def test_reexecuting_config_to_enable_full_preserves_audited_teacher(environment, workdir):
     checkpoint = workdir / "teacher.pt"
     checkpoint.write_bytes(b"audited teacher")
     environment["TEACHER_PROVENANCE"]["best_pt_sha256"] = environment["file_sha256"](checkpoint)
     environment["require_cuda"] = lambda: None  # Only a gate test, no training or GPU claim.
     report = environment["diagnostic_assessment"](diagnostic_context(environment))
-    config = cell(json.loads(TARGET.read_bytes()), "config").replace("RUN_FULL_TRAINING = False", "RUN_FULL_TRAINING = True")
+    config = cell(json.loads(TARGET.read_bytes()), "config").replace("RUN_SMOKE_TEST = False", "RUN_SMOKE_TEST = True")
     exec(compile(config, "<edited config>", "exec"), environment)
     assert environment["TEACHER_CHECKPOINT"] == str(checkpoint)
     environment["require_full_training"](report)
@@ -527,6 +547,7 @@ print('PORTABLE_STUDENT_AND_ARCHIVE_PASS')'''
 @pytest.mark.slow
 def test_actual_cpu_upload_failure_preserves_snapshot_and_blocks_full(environment, workdir, monkeypatch):
     env = environment
+    env["RUN_SMOKE_TEST"] = True
     wandb, _events = configure_synthetic_cpu(env, workdir, monkeypatch)
     wandb.fail_stage, wandb.fail_seed = "epoch_upload", 42
     env["DIAGNOSTIC_RESULT"] = {"passed": True, "status": "PASS"}  # Must be invalidated by the new attempt.

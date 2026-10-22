@@ -1,0 +1,525 @@
+{
+  "verified_at_utc": "2026-10-22T10:21:38.227832+00:00",
+  "status": "PASS",
+  "platform_counts": {
+    "kaggle": 19,
+    "colab": 17,
+    "amd": 1,
+    "local": 2,
+    "archieve": 10
+  },
+  "moved_notebooks": 39,
+  "archived_notebooks_unchanged": 10,
+  "total_notebooks": 49,
+  "all_cell_arrays_identical": 49,
+  "whole_files_byte_identical": 32,
+  "colab_changes": "Only metadata.colab_source.notebook path updated; cell source, IDs, outputs, metadata and execution counts preserved.",
+  "colab_manifest_changes": "source and colab fields are relative paths below platform roots; source hashes/experiment IDs/seeds/Drive outputs unchanged.",
+  "existing_test_module_collection_changes": {},
+  "offline_tests": {
+    "tests": 470,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1,
+    "passed": 469,
+    "deselected": 35,
+    "training_gradient_gpu_tests_excluded": [
+      "test_actual_one_epoch_cpu_trainer_validation_and_plain_checkpoint",
+      "test_actual_poltrada_teacher_v50_cuda_amp_smoke_opt_in",
+      "test_batch_scaling_and_diagnostics_do_not_change_objective",
+      "test_checkpoint_chunking_preserves_combined_loss_all_gradients_and_teacher_state",
+      "test_fused_adamw_amp_overflow_is_skipped_before_counting_real_updates",
+      "test_fused_adamw_amp_skipped_update_has_no_valid_gradient_record",
+      "test_graph_taps_640_and_single_teacher_traversal_student_forward",
+      "test_one_epoch_cpu_scratch_has_no_pretrained_transfer",
+      "test_one_epoch_cpu_training_validation_and_epoch_artifacts",
+      "test_pkd_only_backward_student_projector_teacher_bn_and_optimizer",
+      "test_real_cpu_tensor_alignment_kd_gradients_optimizer_and_student_export",
+      "test_standard_gradscaler_handles_scaled_overflow_without_changing_protocol",
+      "test_synthetic_one_epoch_cpu_validation_checkpoint_reload",
+      "test_two_real_synthetic_cpu_trainings_keep_fresh_students_and_checkpoint_uploads",
+      "test_yolo26_shapes_640_and_isolated_gradients"
+    ],
+    "guards": [
+      "YOLO.train",
+      "BaseTrainer.train",
+      "all torch.optim optimizer step methods",
+      "requests.Session.request"
+    ],
+    "blocked_action_attempts": [],
+    "colab_generation": "All 17 generated and compared in memory only; no notebook regeneration on disk.",
+    "two_preexisting_modular_path_failures": "Now pass using notebooks/archieve/modular."
+  },
+  "lint": {
+    "scope": [
+      "scripts/notebook_paths.py",
+      "scripts/generate_colab_notebooks.py",
+      "scripts/generate_modular_notebooks.py",
+      "scripts/rewrite_head_rm_kaggle.py",
+      "tests/test_notebook_layout.py",
+      "tests/test_colab_notebooks.py"
+    ],
+    "status": "PASS",
+    "legacy_note": "Existing S102 findings in trusted exec calls in test_eda_poltrada_v3.py and test_modular_pipeline.py are not introduced by this reorganization."
+  },
+  "known_legacy_limitations": [
+    {
+      "notebook": "notebooks/local/eda/01_eda_dataset.ipynb",
+      "issues": [
+        {
+          "cell_index": 7,
+          "line": 3,
+          "message": "invalid syntax"
+        }
+      ],
+      "action": "Original bytes preserved. Schema/integrity checked; standalone syntax tests cover Kaggle, Colab and AMD."
+    }
+  ],
+  "historical_reports": "Existing report files, hashes and execution paths were not rewritten; notebooks/README.md maps old notebook paths to new locations.",
+  "no_training_or_downloads_or_gpu_experiments": true,
+  "commit_created": false,
+  "pushed": false,
+  "notebooks": [
+    {
+      "old": "notebooks/01_eda_dataset.ipynb",
+      "new": "notebooks/local/eda/01_eda_dataset.ipynb",
+      "sha256_before": "a6f347fc422e936337b3dd87efcce9da5d8b24abd6b20f83aad000ab126d71a9",
+      "sha256_after": "a6f347fc422e936337b3dd87efcce9da5d8b24abd6b20f83aad000ab126d71a9",
+      "cells_sha256": "997e679bc417ed0dfa1da62708bccd0a5ed56c88e9a2ce0b2737d8ae17271ba5",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/03_baseline_seed42_failure_analysis.ipynb",
+      "new": "notebooks/local/analysis/03_baseline_seed42_failure_analysis.ipynb",
+      "sha256_before": "f3a35d4fab0261b0d9b88c439cd5ea2d0cde4abb4e27e6c2fe58a19f2f1b657c",
+      "sha256_after": "f3a35d4fab0261b0d9b88c439cd5ea2d0cde4abb4e27e6c2fe58a19f2f1b657c",
+      "cells_sha256": "2acbe5963253b09949ec832f718bd166663b297358d200a44942a6efb941cfd0",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/archieve/Feature Based Knowledge Distilation/02a_yolo26s_teacher_baseline.ipynb",
+      "new": "notebooks/archieve/Feature Based Knowledge Distilation/02a_yolo26s_teacher_baseline.ipynb",
+      "sha256_before": "a9b308a7285a3ccd854131f28701b3758542d3d5513fed4837c23abe9f7309a7",
+      "sha256_after": "a9b308a7285a3ccd854131f28701b3758542d3d5513fed4837c23abe9f7309a7",
+      "cells_sha256": "5e958beb7b5953d0078d4b161cd80afb08ba316a037f3057b9eb61bc18309c22",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/archieve/Feature Based Knowledge Distilation/02b-yolo26n-student-baseline-seed42-kd-project.ipynb",
+      "new": "notebooks/archieve/Feature Based Knowledge Distilation/02b-yolo26n-student-baseline-seed42-kd-project.ipynb",
+      "sha256_before": "bcdcb38f2b62aea24f3a84dfb6031924a0ca97c01ac6c6bb810e5b9a7b65c55a",
+      "sha256_after": "bcdcb38f2b62aea24f3a84dfb6031924a0ca97c01ac6c6bb810e5b9a7b65c55a",
+      "cells_sha256": "0706da6da3f86cac82a106e97cacfed0ab9154d3ee27ebe9697d5604d5f74b3a",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/archieve/modular/02_yolo26n_baseline.ipynb",
+      "new": "notebooks/archieve/modular/02_yolo26n_baseline.ipynb",
+      "sha256_before": "94fd833f3f993f36cee36896bc413b3126040900085e0fd93aa6e2c00639fc94",
+      "sha256_after": "94fd833f3f993f36cee36896bc413b3126040900085e0fd93aa6e2c00639fc94",
+      "cells_sha256": "77ea77ba5a5f0785b4489540023cb493d492d709dbca074cb06b90df89c48849",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/archieve/modular/03_yolo26n_bifpn.ipynb",
+      "new": "notebooks/archieve/modular/03_yolo26n_bifpn.ipynb",
+      "sha256_before": "717ef37ab072c1a2c9fcb24e863c550ddced5f8aee03bfa69f8fd59c31d8c1d3",
+      "sha256_after": "717ef37ab072c1a2c9fcb24e863c550ddced5f8aee03bfa69f8fd59c31d8c1d3",
+      "cells_sha256": "e4557ff3859dcc16a5ff3c9f2cb9dedc3d5bb730df7de38514c8916457e88517",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/archieve/modular/04_yolo26n_asff.ipynb",
+      "new": "notebooks/archieve/modular/04_yolo26n_asff.ipynb",
+      "sha256_before": "9078c79e28a4894b36abf3ed827aef66040656a74c4581ab81f79e5effabba0a",
+      "sha256_after": "9078c79e28a4894b36abf3ed827aef66040656a74c4581ab81f79e5effabba0a",
+      "cells_sha256": "1e2a81c176633219a03f271cfed714eda40263fae8b9cde58294dae619937dd0",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/archieve/modular/05_yolo26n_afpn.ipynb",
+      "new": "notebooks/archieve/modular/05_yolo26n_afpn.ipynb",
+      "sha256_before": "97587847321297073689492eb72ff20f90249d48e37a41ab5441013d791104ae",
+      "sha256_after": "97587847321297073689492eb72ff20f90249d48e37a41ab5441013d791104ae",
+      "cells_sha256": "43f31151fca03b05d3d9bb78ebbb5d7c20b1dc05160f8a502bf2b42d229c12be",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/archieve/multi_scale_feature_fusion/02_train_yolo26n_baseline_research_final (1).ipynb",
+      "new": "notebooks/archieve/multi_scale_feature_fusion/02_train_yolo26n_baseline_research_final (1).ipynb",
+      "sha256_before": "e00c7f20f77bbaf0f67c011d3dca1dd238b1333870e51bbefa546423aa232f93",
+      "sha256_after": "e00c7f20f77bbaf0f67c011d3dca1dd238b1333870e51bbefa546423aa232f93",
+      "cells_sha256": "0b168cfea6fe67dcc75b3a87e053f06dcff98597e92d3928dd0fd968b01ee4c1",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/archieve/multi_scale_feature_fusion/03_train_yolo26n_bifpn_research_clean_fair.ipynb",
+      "new": "notebooks/archieve/multi_scale_feature_fusion/03_train_yolo26n_bifpn_research_clean_fair.ipynb",
+      "sha256_before": "82d47a63c6951f50e4cda1c2ed4897549fdd1dc923e0ffa77b515d1d119a3c9e",
+      "sha256_after": "82d47a63c6951f50e4cda1c2ed4897549fdd1dc923e0ffa77b515d1d119a3c9e",
+      "cells_sha256": "4eb8e5942c2b282598f8d05ce2f223ae41ee8dc6aa91db056bf0174c32fcc687",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/archieve/multi_scale_feature_fusion/04_train_yolo26n_asff_research_clean_full.ipynb",
+      "new": "notebooks/archieve/multi_scale_feature_fusion/04_train_yolo26n_asff_research_clean_full.ipynb",
+      "sha256_before": "dde3d59ecbc9f888061f492bedb0461416455edbff80ab9c24c8acf9160ceccb",
+      "sha256_after": "dde3d59ecbc9f888061f492bedb0461416455edbff80ab9c24c8acf9160ceccb",
+      "cells_sha256": "163cc2606be178125fcf62e9365ba164dd911e5c2b7100bbed45d8d96f275f0c",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/archieve/multi_scale_feature_fusion/05_train_yolo26n_afpn_research_clean_full.ipynb",
+      "new": "notebooks/archieve/multi_scale_feature_fusion/05_train_yolo26n_afpn_research_clean_full.ipynb",
+      "sha256_before": "c4edee2bc43235a4a05c4c230922ce7a91e744b3f9f6207f05ffb5ef1bf2c0a0",
+      "sha256_after": "c4edee2bc43235a4a05c4c230922ce7a91e744b3f9f6207f05ffb5ef1bf2c0a0",
+      "cells_sha256": "38ff4e9c568c3706a7003406ffabb79b5671947c08483dec19f643362e236d0e",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/pruning/01_lamp_yolo26n_no_recovery.ipynb",
+      "new": "notebooks/kaggle/pruning/01_lamp_yolo26n_no_recovery.ipynb",
+      "sha256_before": "b26ef4f8d2d41add306a1a307849ff252bd96ef649e5389445f664c173bba13a",
+      "sha256_after": "b26ef4f8d2d41add306a1a307849ff252bd96ef649e5389445f664c173bba13a",
+      "cells_sha256": "e804992b695c9716c40e1c89bdace0db9bf8ce63268f846133ca01839bbcb47e",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/colab/00_eda_poltrada_v3.ipynb",
+      "new": "notebooks/colab/eda/00_eda_poltrada_v3.ipynb",
+      "sha256_before": "1c8a74f5ef5d7c49a2f1458be675c807e7d72abb19183086fcd2ff6d959ca0dc",
+      "sha256_after": "2b76ba8beefbc6ecd5d5b410b615f1a2c67698993a5842ff1d505c18b725299c",
+      "cells_sha256": "e38a74616cecf16a18bd236cdccddffcabdb5a1a1a65f3546700acc4cfc32382",
+      "cells_identical": true,
+      "bytes_identical": false
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/colab/01_teacher_yolo26m.ipynb",
+      "new": "notebooks/colab/teacher/01_teacher_yolo26m.ipynb",
+      "sha256_before": "c1f9aa8e5c210c283797ee46d4833796a436713a7b32f27fa2aa5cc63809ae67",
+      "sha256_after": "b834c30708a3f3eb0f1cd111620798ca931a6e807b4e7c280f2e118c4e71c43d",
+      "cells_sha256": "ea3a0d7bf629e6ee6291feed4dcec17ca3891bd747cbc38918383be46fb84026",
+      "cells_identical": true,
+      "bytes_identical": false
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/colab/02_baseline_yolo26s.ipynb",
+      "new": "notebooks/colab/baseline/02_baseline_yolo26s.ipynb",
+      "sha256_before": "a2054f70d005ad0a0738de5dce63e380d47da46e2a1040833d2038cf82d0fe60",
+      "sha256_after": "282789af33d41fc5744fdc00d492d106b53138ea8bed5ebbb7a93b38d075212c",
+      "cells_sha256": "12db548e1b8e38cdb8cdcbc7655aaca0d5c979417f1f2c96d6f32b95849f7aea",
+      "cells_identical": true,
+      "bytes_identical": false
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/colab/03_baseline_yolo26n_pretrained.ipynb",
+      "new": "notebooks/colab/baseline/03_baseline_yolo26n_pretrained.ipynb",
+      "sha256_before": "51c5f0ef8203f7483eaeb4707ad09c662b69d3d3c1ed9a787def7e4b64138164",
+      "sha256_after": "8436623db074bd233469d5222875ecde2526f6dfc28b6f385c8d395cbfce0a55",
+      "cells_sha256": "34430a0629c09c1935d55ea06bf942496511fcf48abdfc561eff920ad53d129f",
+      "cells_identical": true,
+      "bytes_identical": false
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/colab/04_baseline_yolo26n_scratch.ipynb",
+      "new": "notebooks/colab/baseline/04_baseline_yolo26n_scratch.ipynb",
+      "sha256_before": "aaeeee9ddb5216b823f282e346291b0b67b441532282e9203df2e77bae1d4949",
+      "sha256_after": "eedb5528eaffe551d087dab3753e51d94a299e5b6b05f8edbfb8b4efc2dbd201",
+      "cells_sha256": "51f9f6773e7fd9183a3c77305f160da58d077e1bbf7940da31bbd03b159e340e",
+      "cells_identical": true,
+      "bytes_identical": false
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/colab/05_native_yolo26m_to_yolo26s.ipynb",
+      "new": "notebooks/colab/kd/teacher_m/05_native_yolo26m_to_yolo26s.ipynb",
+      "sha256_before": "398f7053218b4729eef69ef99b0234d28fa5575d6d4b2db7215eed3d9f2c464c",
+      "sha256_after": "bf1317ce40e26c255445d3c07018c32d1be1d5a41f40d337f76cdd1f6326a39f",
+      "cells_sha256": "919722cc6b6e6ad1f36861696f7ca7e317a39a76a6a8f66bbf09f4619126896d",
+      "cells_identical": true,
+      "bytes_identical": false
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/colab/06_native_yolo26m_to_yolo26n.ipynb",
+      "new": "notebooks/colab/kd/teacher_m/06_native_yolo26m_to_yolo26n.ipynb",
+      "sha256_before": "855be0e66664a41a5872d80f18ef4b3f66178e3894e2745881a9ff23bd5be198",
+      "sha256_after": "a0124b5a1f42755249f8f1f4ad3679d7961c284d33e91a5579608c2b06549c99",
+      "cells_sha256": "e58e0817ef815c10641bd50740b7990a48d5eea75d0cdfb43e05741afa9e4dbd",
+      "cells_identical": true,
+      "bytes_identical": false
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/colab/07_crosskd_yolo26m_to_yolo26s.ipynb",
+      "new": "notebooks/colab/kd/teacher_m/07_crosskd_yolo26m_to_yolo26s.ipynb",
+      "sha256_before": "4e6fda4756016fe2ab94b3fe8d1c1275fb8768ae5a5d30445362ac3b06eb8585",
+      "sha256_after": "bd04f99e5c472a225ad03ad8f978b2d698993def80cdda4aa8109410c14a664a",
+      "cells_sha256": "6d0ea7caf2b8b6b50208a0e917f9dc36095c21be2e88e4d8f4144f0c88bfa2ad",
+      "cells_identical": true,
+      "bytes_identical": false
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/colab/08_crosskd_yolo26m_to_yolo26n.ipynb",
+      "new": "notebooks/colab/kd/teacher_m/08_crosskd_yolo26m_to_yolo26n.ipynb",
+      "sha256_before": "82ffb9bc5ed5d612501a8b00936f86a4434c61d09a72739a08ed13b80bb437d0",
+      "sha256_after": "afab4fed8af0cb1ee5e4cb73a3a7eaf2fea8999c6385da4a0c14b1478b532d3a",
+      "cells_sha256": "f7c1cfb9afacab866b90a2e3dec030e9ed7801e9469291d5dd2a90335d83f4ab",
+      "cells_identical": true,
+      "bytes_identical": false
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/colab/09_csakd_yolo26m_to_yolo26s.ipynb",
+      "new": "notebooks/colab/kd/teacher_m/09_csakd_yolo26m_to_yolo26s.ipynb",
+      "sha256_before": "2134a99a5b01b2aaf6930cc16f159deb3ca5c8d1754e1df0687fe7b348e1628e",
+      "sha256_after": "d4ee3268381121eca017093e1e650608b66f880c5b4a57f72cd51306c6fe320a",
+      "cells_sha256": "094e9f21cb55f304f8a8b395d3fce51eb9ad83cf1804edafd8974783952cdb22",
+      "cells_identical": true,
+      "bytes_identical": false
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/colab/10_csakd_yolo26m_to_yolo26n.ipynb",
+      "new": "notebooks/colab/kd/teacher_m/10_csakd_yolo26m_to_yolo26n.ipynb",
+      "sha256_before": "d864067fa776f885fda15c9659d5ea5e26a04211d8fd9338464f6eda7d8e866a",
+      "sha256_after": "a8df91e4061366e7b933d18ea58f6eb5929617d4ffa9b7e0ce604d59f926be1b",
+      "cells_sha256": "27edd68f69385a47fab9e25ea2e0fa1de7dd4c1d6d54d3153fb8cd321d06f234",
+      "cells_identical": true,
+      "bytes_identical": false
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/colab/11_native_yolo26s_to_yolo26n.ipynb",
+      "new": "notebooks/colab/kd/teacher_s/11_native_yolo26s_to_yolo26n.ipynb",
+      "sha256_before": "d081885532136e92fc000ff38701cd94ea4d5fb05923cdd6b7f27df367a2d69c",
+      "sha256_after": "abeb7f79384500cb480eeb3f3dd4079f56fb78d04db86b1fb763244b8062868d",
+      "cells_sha256": "7c31c9c216f780194a10e714f8c42ec2bd929e307f3a3184c6b31a2c5db3fdaa",
+      "cells_identical": true,
+      "bytes_identical": false
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/colab/12_crosskd_yolo26s_to_yolo26n.ipynb",
+      "new": "notebooks/colab/kd/teacher_s/12_crosskd_yolo26s_to_yolo26n.ipynb",
+      "sha256_before": "be2c1eab77874dae824facfed1350e152fbd0705f0ea56d7f53ebb901506cf28",
+      "sha256_after": "2c44da5bde5108a209ab05018a061fef47e6a3b3d54ff3abbcf4ea3605e21470",
+      "cells_sha256": "59e01fc90a2f3ea9355ddf069dc8492eb007d9aac2369dc445e89ba0389ea625",
+      "cells_identical": true,
+      "bytes_identical": false
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/colab/13_csakd_yolo26s_to_yolo26n.ipynb",
+      "new": "notebooks/colab/kd/teacher_s/13_csakd_yolo26s_to_yolo26n.ipynb",
+      "sha256_before": "abfb64aed145b0c59888a80b2e8c348aaf727548277675f4e14b162f44388e8c",
+      "sha256_after": "dea470942d0dd1c93d79516fa5144c6b9c37f1e6256a9aaef38f83ee3b3516e0",
+      "cells_sha256": "6de820a808196a9a9d7d513d5438bccdf54ddd2645d7ddf72929feaed68f4281",
+      "cells_identical": true,
+      "bytes_identical": false
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/colab/14_pearson_pkd_yolo26s_to_yolo26n.ipynb",
+      "new": "notebooks/colab/kd/teacher_s/14_pearson_pkd_yolo26s_to_yolo26n.ipynb",
+      "sha256_before": "bd4d443e339dfab5cbff24f027cd84f447ec40a1660ca7e0760a3b4faeb25c25",
+      "sha256_after": "7223f2479330f938bf616f60abfbe9497dc5740f717ba2062bf241f6140ffe2f",
+      "cells_sha256": "6d3ee4e2175b48504b54d916df01bcc2ac0509726dc4de6436235a44d76fa200",
+      "cells_identical": true,
+      "bytes_identical": false
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/colab/15_head_yolo26s_to_yolo26n.ipynb",
+      "new": "notebooks/colab/kd/teacher_s/15_head_yolo26s_to_yolo26n.ipynb",
+      "sha256_before": "9c0d09dde952df04bf121a2a9ac6c6c4b69ea71f813b0114eea9e73a90a92609",
+      "sha256_after": "6f95af7e770183343ba9f99d2327db0decacf05a63579b4244b93f708d3fe1ec",
+      "cells_sha256": "5eff02b82f9a73b7884bd8f7be7a5a2efb2aa96beabd5b9f52e9abc65f41e302",
+      "cells_identical": true,
+      "bytes_identical": false
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/colab/16_rank_mimicking_yolo26s_to_yolo26n.ipynb",
+      "new": "notebooks/colab/kd/teacher_s/16_rank_mimicking_yolo26s_to_yolo26n.ipynb",
+      "sha256_before": "939d421dfafbecd7c8ef806a1038da6b17be549d04978703cfa823f4b1223219",
+      "sha256_after": "bf878197476052dd129c7eae0994afa0e3fd30f6ebe1b2e84e0f3277a3f5ae6a",
+      "cells_sha256": "1df76c143b921f6f20245b4dcb1746ed2ffb717f15ab7a404902ad195122d8b7",
+      "cells_identical": true,
+      "bytes_identical": false
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/notebooks/00_eda_poltrada_v3.ipynb",
+      "new": "notebooks/kaggle/eda/00_eda_poltrada_v3.ipynb",
+      "sha256_before": "b8f1e06e6b947721ddb064bc043008462a6f604ce91fbd0380d815370e90f007",
+      "sha256_after": "b8f1e06e6b947721ddb064bc043008462a6f604ce91fbd0380d815370e90f007",
+      "cells_sha256": "10ac00c70306bf2c978da00584295fc4a7859bdcb8558808a313b98f16d33ad6",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/notebooks/00_results_eda-poltrada.ipynb",
+      "new": "notebooks/kaggle/eda/00_results_eda-poltrada.ipynb",
+      "sha256_before": "874989c377315597d54fbe20a04dd275195e123ac58e042bc209fd6fe815fb00",
+      "sha256_after": "874989c377315597d54fbe20a04dd275195e123ac58e042bc209fd6fe815fb00",
+      "cells_sha256": "961dc32aefdc5bd35a0c354213223b87a641d3b942ce1fbd011130c08a7f5c44",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/notebooks/01_teacher_yolo26m.ipynb",
+      "new": "notebooks/kaggle/teacher/01_teacher_yolo26m.ipynb",
+      "sha256_before": "31c0258e81a247a721bb99671fc4f6f41546089852b4c4259804e15174697e4e",
+      "sha256_after": "31c0258e81a247a721bb99671fc4f6f41546089852b4c4259804e15174697e4e",
+      "cells_sha256": "32306519fe734ab8d7f27b1ede201bbd201465babce6f4d24da6473fab37fe64",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/notebooks/02_baseline_yolo26s.ipynb",
+      "new": "notebooks/kaggle/baseline/02_baseline_yolo26s.ipynb",
+      "sha256_before": "871bf920e413375154e3fbf5181f82dc30ae239c460ed9cbc6fb4f096d2cdb11",
+      "sha256_after": "871bf920e413375154e3fbf5181f82dc30ae239c460ed9cbc6fb4f096d2cdb11",
+      "cells_sha256": "307056db52fcf074da6eb560b35483e16ca94e02490f91e4fcb9fe14b05ac95c",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/notebooks/03_baseline_yolo26n.ipynb",
+      "new": "notebooks/kaggle/baseline/03_baseline_yolo26n.ipynb",
+      "sha256_before": "4f9599bc6068d636434083505f281e14a1f533c14959f3a0d21e3404ae93ccc7",
+      "sha256_after": "4f9599bc6068d636434083505f281e14a1f533c14959f3a0d21e3404ae93ccc7",
+      "cells_sha256": "f672c68944a1c52878c198cbd09a6e4f3e86d1884f66f8ffda6a6d596aef96a0",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/notebooks/03_baseline_yolo26n_amd_roboflow.ipynb",
+      "new": "notebooks/amd/baseline/03_baseline_yolo26n_amd_roboflow.ipynb",
+      "sha256_before": "833f8d265154e9826a7262a82b28af47439399987885181c88ed5b63e890ec27",
+      "sha256_after": "833f8d265154e9826a7262a82b28af47439399987885181c88ed5b63e890ec27",
+      "cells_sha256": "a22d22842c130df8191128d9e23f354be634f0f473ead1a2377c90ba4dca093a",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/notebooks/03_baseline_yolo26n_scratch.ipynb",
+      "new": "notebooks/kaggle/baseline/03_baseline_yolo26n_scratch.ipynb",
+      "sha256_before": "53027a39ac587414d8249384ae051e2470e789d3bc3c193c858a5716ac010d17",
+      "sha256_after": "53027a39ac587414d8249384ae051e2470e789d3bc3c193c858a5716ac010d17",
+      "cells_sha256": "d947760b0fc966990ac63da514745636218074a23ccdb84ab71b65c634c1f218",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/notebooks/04_native_yolo26s.ipynb",
+      "new": "notebooks/kaggle/kd/teacher_m/04_native_yolo26s.ipynb",
+      "sha256_before": "fac95809c93774f84d73d48e57af581827561643d9959f78449fca38dfbb0cf1",
+      "sha256_after": "fac95809c93774f84d73d48e57af581827561643d9959f78449fca38dfbb0cf1",
+      "cells_sha256": "471907bf9fa9af3847783185cd298e0def584d60dc058b026dd49e30a252cd15",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/notebooks/05_native_yolo26n.ipynb",
+      "new": "notebooks/kaggle/kd/teacher_m/05_native_yolo26n.ipynb",
+      "sha256_before": "249cc326c7305ce5cac6069db7e91b5d87336c6e171ba76b1601a2486821962b",
+      "sha256_after": "249cc326c7305ce5cac6069db7e91b5d87336c6e171ba76b1601a2486821962b",
+      "cells_sha256": "acc104330c8f2a415699b8d140e811d7d7731909d4400aed93119e56ab5c393b",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/notebooks/06_crosskd_yolo26s.ipynb",
+      "new": "notebooks/kaggle/kd/teacher_m/06_crosskd_yolo26s.ipynb",
+      "sha256_before": "3c950573e406d335c275f7c5a0224ba80b5fe45ed70097fb3ad452f5b6b8cd37",
+      "sha256_after": "3c950573e406d335c275f7c5a0224ba80b5fe45ed70097fb3ad452f5b6b8cd37",
+      "cells_sha256": "4c2838b2c59241076a296cfe8ab3345c0b90995c57b3d69ecbf36df125ebca0c",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/notebooks/07_crosskd_yolo26n.ipynb",
+      "new": "notebooks/kaggle/kd/teacher_m/07_crosskd_yolo26n.ipynb",
+      "sha256_before": "11ac22c97ec7fb90e58dfe6dfd0f6bad61dc597fdccf034049788574e7d59345",
+      "sha256_after": "11ac22c97ec7fb90e58dfe6dfd0f6bad61dc597fdccf034049788574e7d59345",
+      "cells_sha256": "92fae5cf4f66ccba0b83ae972f4caf176477699a428005f8363fb8b3a3743ed6",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/notebooks/08_csakd_yolo26s.ipynb",
+      "new": "notebooks/kaggle/kd/teacher_m/08_csakd_yolo26s.ipynb",
+      "sha256_before": "809f110738c527c663a5babdc43ac62124cc6202b93e7c020d4b2276db4e7bef",
+      "sha256_after": "809f110738c527c663a5babdc43ac62124cc6202b93e7c020d4b2276db4e7bef",
+      "cells_sha256": "bfc768dd2101efbe80532f5a991dd2a3b9ea710db7c06ebd5ebb4fd59edf116d",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/notebooks/09_csakd_yolo26n.ipynb",
+      "new": "notebooks/kaggle/kd/teacher_m/09_csakd_yolo26n.ipynb",
+      "sha256_before": "6b86b2fa533220f1e05979c0ada4ffabc6d075b8ab7d9e4086208071dc6ea813",
+      "sha256_after": "6b86b2fa533220f1e05979c0ada4ffabc6d075b8ab7d9e4086208071dc6ea813",
+      "cells_sha256": "77ce750a97e815292be56239574989af6eb871b00977fec999eedc8193203e75",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/notebooks/10_native_yolo26n_teacher_yolo26s.ipynb",
+      "new": "notebooks/kaggle/kd/teacher_s/10_native_yolo26n_teacher_yolo26s.ipynb",
+      "sha256_before": "c9315888d9ee314536a8b0ab706f28a0edeaf5ba9986bb458e754cc140cc6ca7",
+      "sha256_after": "c9315888d9ee314536a8b0ab706f28a0edeaf5ba9986bb458e754cc140cc6ca7",
+      "cells_sha256": "3d5f9a8e15ea73f649be91a2a8fa301a95d9ec3ec25c3af047384d9def8ad651",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/notebooks/11_crosskd_yolo26n_teacher_yolo26s.ipynb",
+      "new": "notebooks/kaggle/kd/teacher_s/11_crosskd_yolo26n_teacher_yolo26s.ipynb",
+      "sha256_before": "707ff696b1e471ee55ad7d270bcacf5c7e736fadc4cf7034b1a3b26526a4ec6a",
+      "sha256_after": "707ff696b1e471ee55ad7d270bcacf5c7e736fadc4cf7034b1a3b26526a4ec6a",
+      "cells_sha256": "a06e2b13e9a36110cd9b16eb645011b1f5042739061ad046fb48f21dd48ba193",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/notebooks/12_csakd_yolo26n_teacher_yolo26s.ipynb",
+      "new": "notebooks/kaggle/kd/teacher_s/12_csakd_yolo26n_teacher_yolo26s.ipynb",
+      "sha256_before": "1db823e796f86b5a16ba8e936750523711a9bafa05371d4559260701932ebe5c",
+      "sha256_after": "1db823e796f86b5a16ba8e936750523711a9bafa05371d4559260701932ebe5c",
+      "cells_sha256": "55dcc75cc203acf5a10614e7a70f1e6c62f6ec8b0e86fe8d3323126edcf029ec",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/notebooks/12_pkd_yolo26n.ipynb",
+      "new": "notebooks/kaggle/kd/teacher_s/12_pkd_yolo26n.ipynb",
+      "sha256_before": "bf3a01411c39adbd82e4458ec6a5b73af3023875a856990a2392e70ab01bc69d",
+      "sha256_after": "bf3a01411c39adbd82e4458ec6a5b73af3023875a856990a2392e70ab01bc69d",
+      "cells_sha256": "27a1f8f850bc3c658955dfe293d07ca16704784084c8264f17bfa3fc3e515571",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/notebooks/13_head_yolo26n_teacher_yolo26s.ipynb",
+      "new": "notebooks/kaggle/kd/teacher_s/13_head_yolo26n_teacher_yolo26s.ipynb",
+      "sha256_before": "82e19e68d4d9c266295c342ed60c3db2504daf9a094ff3c4009fe88007fcd854",
+      "sha256_after": "82e19e68d4d9c266295c342ed60c3db2504daf9a094ff3c4009fe88007fcd854",
+      "cells_sha256": "523eda08e957cf772ad5e9de5ef5f89bdeafffeea94ac6a3713bbf756609e033",
+      "cells_identical": true,
+      "bytes_identical": true
+    },
+    {
+      "old": "notebooks/yolo26-kd-indotraffic/notebooks/14_rm_yolo26n_teacher_yolo26s.ipynb",
+      "new": "notebooks/kaggle/kd/teacher_s/14_rm_yolo26n_teacher_yolo26s.ipynb",
+      "sha256_before": "e438fdb89e1d2f36074ef34a5a0e1a926f6cdf4b652c244c3a864348f0b2106f",
+      "sha256_after": "e438fdb89e1d2f36074ef34a5a0e1a926f6cdf4b652c244c3a864348f0b2106f",
+      "cells_sha256": "e77403ffbf6dccf30f9473d3d32fbd617ac91263b08d4547fb4a38abee62cf85",
+      "cells_identical": true,
+      "bytes_identical": true
+    }
+  ]
+}

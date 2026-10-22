@@ -24,15 +24,17 @@ from ultralytics.nn.distill_model import DistillationModel
 from ultralytics.nn.tasks import DetectionModel
 from ultralytics.utils.torch_utils import get_flops, init_seeds
 
+from scripts.notebook_paths import notebook_path
+
 ROOT = Path(__file__).resolve().parents[1]
-FOLDER = ROOT / "notebooks/yolo26-kd-indotraffic/notebooks"
+FOLDER = ROOT / "notebooks/kaggle"
 FILES = ["03_baseline_yolo26n.ipynb", "10_native_yolo26n_teacher_yolo26s.ipynb",
          "11_crosskd_yolo26n_teacher_yolo26s.ipynb"]
 
 
 @pytest.fixture(params=FILES, ids=lambda name: name[:2])
 def notebook(request):
-    return json.loads((FOLDER / request.param).read_bytes())
+    return json.loads((notebook_path("kaggle", request.param)).read_bytes())
 
 
 @pytest.fixture

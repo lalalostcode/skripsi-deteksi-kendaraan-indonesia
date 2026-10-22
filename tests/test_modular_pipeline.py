@@ -173,7 +173,7 @@ def test_model_forward_and_checkpoint_roundtrip(architecture: str, tmp_path: Pat
 
 
 def test_new_notebooks_parse_and_do_not_train_by_default():
-    notebooks = sorted(Path("notebooks/modular").glob("*.ipynb"))
+    notebooks = sorted(Path("notebooks/archieve/modular").glob("*.ipynb"))
     assert len(notebooks) == 4
     for path in notebooks:
         notebook = json.loads(path.read_text(encoding="utf-8"))
@@ -195,7 +195,7 @@ def test_local_notebook_bootstrap(monkeypatch):
     root = Path(__file__).resolve().parents[1]
     monkeypatch.chdir(root)
     notebook = json.loads(
-        (root / "notebooks" / "modular" / "03_yolo26n_bifpn.ipynb").read_text(
+        (root / "notebooks" / "archieve" / "modular" / "03_yolo26n_bifpn.ipynb").read_text(
             encoding="utf-8"
         )
     )
@@ -205,7 +205,7 @@ def test_local_notebook_bootstrap(monkeypatch):
         exec(
             compile(
                 source,
-                str(root / "notebooks" / "modular" / "03_yolo26n_bifpn.ipynb"),
+                str(root / "notebooks" / "archieve" / "modular" / "03_yolo26n_bifpn.ipynb"),
                 "exec",
             ),
             namespace,
