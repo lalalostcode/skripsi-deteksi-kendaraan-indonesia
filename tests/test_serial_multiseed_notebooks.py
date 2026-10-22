@@ -12,6 +12,7 @@ import uuid
 import weakref
 from contextlib import contextmanager
 from datetime import datetime, timezone
+from itertools import pairwise
 from pathlib import Path
 
 import pytest
@@ -167,7 +168,11 @@ def install_fake_teacher(env):
 
 def test_default_seed_queue_metadata_artifacts_and_finish_are_isolated(notebook, workdir):
     env = load_environment(notebook, workdir)
-    assert env["SEEDS_TO_RUN"] == [123, 2024] and 42 not in env["SEEDS_TO_RUN"]
+    baseline = env["METHOD"] == "none"
+    expected_seeds = [7, 3407] if baseline else [123, 2024, 7, 3407]
+    completed_seeds = {42, 123, 2024} if baseline else {42}
+    assert env["SEEDS_TO_RUN"] == expected_seeds
+    assert completed_seeds.isdisjoint(env["SEEDS_TO_RUN"])
     events, states, callbacks = [], [], []
     fake = env["wandb"] = FakeWandb(events)
     install_fake_teacher(env)
@@ -180,25 +185,40 @@ def test_default_seed_queue_metadata_artifacts_and_finish_are_isolated(notebook,
 
     env["run_full_training"], env["evaluate_final_training"] = inspect_training, fake_evaluation(env)
     result = env["run_seed_queue"]()
-    assert [item["seed"] for item in result] == [123, 2024]
-    assert states[0] is not states[1] and callbacks[0] is not callbacks[1]
-    with pytest.raises(RuntimeError, match="Callback"):
-        callbacks[0](None)
+    assert [item["seed"] for item in result] == expected_seeds
+    assert len({id(state) for state in states}) == len(expected_seeds)
+    assert len({id(callback) for callback in callbacks}) == len(expected_seeds)
+    for callback in callbacks:
+        with pytest.raises(RuntimeError, match="Callback"):
+            callback(None)
     assert fake.run is None and all(run.finished for run in fake.runs)
-    assert len({run.id for run in fake.runs}) == 2
-    assert result[0]["seed_directory"] != result[1]["seed_directory"]
-    assert events.index(("finish", 123, 0)) < next(i for i, item in enumerate(events) if item[:2] == ("init", 2024))
-    for seed, run in zip([123, 2024], fake.runs):
-        assert f"seed{seed}" in run.kwargs["tags"]
-        assert f"seed{2024 if seed == 123 else 123}" not in run.kwargs["tags"]
+    assert [run.seed for run in fake.runs] == expected_seeds
+    assert len({run.id for run in fake.runs}) == len(expected_seeds)
+    assert len({item["seed_directory"] for item in result}) == len(expected_seeds)
+    assert len({item["map50_95"] for item in result}) == len(expected_seeds)
+    students = [event for event in events if event[0] == "new_student"]
+    assert [event[1] for event in students] == expected_seeds
+    assert len({id(event[2]) for event in students}) == len(expected_seeds)
+    for previous, following in pairwise(expected_seeds):
+        assert events.index(("finish", previous, 0)) < next(
+            i for i, item in enumerate(events) if item[:2] == ("init", following))
+    artifact_names = []
+    for seed, run in zip(expected_seeds, fake.runs):
+        assert {tag for tag in run.kwargs["tags"] if tag.startswith("seed")} == {f"seed{seed}"}
         assert run.kwargs["name"].endswith(f"seed{seed}")
-        assert run.kwargs["group"] == ("supervised" if env["METHOD"] == "none" else "T26s_S26n")
+        assert run.kwargs["group"] == ("supervised" if baseline else "T26s_S26n")
+        assert run.config["seed"] == seed and run.config["seeds_to_run"] == expected_seeds
+        assert run.config["model"] == "yolo26n.pt" and run.config["epochs"] == 100
         assert [step for _data, step in run.logged] == [1]
+        assert [upload["artifact"].type for upload in run.uploads] == ["model", "results"]
         assert all(upload["artifact"].metadata["seed"] == seed for upload in run.uploads)
+        artifact_names.extend(upload["artifact"].name for upload in run.uploads)
+    assert len(set(artifact_names)) == 2 * len(expected_seeds)
     progress_file = next(Path(env["PROJECT"]).rglob("multiseed_progress.json"))
     progress = json.loads(progress_file.read_bytes())
     assert progress["status"] == "completed" and progress["failed_seed"] is None
-    assert [row["seed"] for row in progress["completed"]] == [123, 2024]
+    assert progress["seeds_to_run"] == expected_seeds
+    assert [row["seed"] for row in progress["completed"]] == expected_seeds
 
 
 @pytest.mark.parametrize("stage", ["training", "epoch_upload", "evaluation", "final_upload", "finish"])
@@ -308,7 +328,9 @@ def test_two_serial_cpu_epochs_use_fresh_student_and_independent_wandb(notebook,
         yaml = dataset / "data.yaml"
         yaml.write_text(f"path: {dataset.as_posix()}\ntrain: train/images\nval: val/images\nnames: [a,b,c,d,e,f]\n")
         env.update(DATA=str(yaml), BATCH=2, IMGSZ=64, DEVICE="cpu", WORKERS=0, AMP=False)
-    env.update(EPOCHS=1, PROJECT=str(workdir / "serial_runs"), ENVIRONMENT_INFO={"synthetic": True}, get_flops=get_flops)
+    # Keep this integration fixture at two seeds, independent of each notebook's default queue.
+    env.update(SEEDS_TO_RUN=[123, 2024], EPOCHS=1, PROJECT=str(workdir / "serial_runs"),
+               ENVIRONMENT_INFO={"synthetic": True}, get_flops=get_flops)
     # Both seeds load the exact same fixed synthetic pretrained checkpoint.
     pretrained = workdir / "fixed_student.pt"
     fixed = DetectionModel("yolo26n.yaml", nc=6, verbose=False)

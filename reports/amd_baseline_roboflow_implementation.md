@@ -29,7 +29,8 @@ yang akan menurunkan batch. Math loss, optimizer dan langkah AMP engine tetap ba
 
 - Roboflow: workspace `ilham-rafiqin`, project `poltrada-original-raw-2`, version 3,
   format `yolo26`, lokasi `~/skripsi-kd/datasets/poltrada-v3`.
-- SDK download dipanggil satu kali sebelum antrean seed. `DATA` berasal dari
+- SDK download dipanggil satu kali sebelum antrean seed jika belum ada cache valid; cache
+  lengkap dengan metadata sumber yang cocok tidak menghubungi API. `DATA` berasal dari
   `Path(dataset.location) / "data.yaml"`. Loader resmi memakai `autodownload=False`,
   termasuk penyelesaian path relatif `../train/images` dan `../valid/images`.
 - Cache tanpa YAML/split, direktori split tanpa gambar, metadata sumber berbeda, atau download
@@ -96,7 +97,7 @@ driver/ROCm/PyTorch yang diubah atau keberhasilan cloud yang diklaim tanpa eksek
 | GPU AMD cloud, dataset Roboflow nyata, W&B online | **NOT TESTED** |
 | Training penelitian 100 epoch dan performa Poltrada | **NOT TESTED** |
 
-Suite khusus AMD dan tracking setelah perbaikan headless: **58 passed**, termasuk satu tes integrasi yang benar-benar
+Suite khusus AMD dan tracking setelah perbaikan headless/proxy-diagnostic/cache: **72 passed**, termasuk satu tes integrasi yang benar-benar
 menjalankan dua training sintetis CPU. Empat warning berasal dari deprecation THOP.
 Harness CPU hanya menonaktifkan pemeriksaan HIP/device dan memakai parameter sintetis eksplisit;
 runtime notebook yang dikirim tetap mewajibkan ROCm, 100 epoch, 640px, batch16, AMP True.
@@ -109,3 +110,39 @@ runtime notebook yang dikirim tetap mewajibkan ROCm, 100 epoch, 640px, batch16, 
 Ruff: **All checks passed**. Varian AMD dikecualikan dari assertion path Kaggle pada suite
 tracking lama dan memiliki pemeriksaan konfigurasi/logging/data sendiri. Tidak ada run cloud
 atau download/upload API nyata yang dilakukan dalam implementasi lokal ini.
+
+## ProxyError Roboflow pada AMD Radeon Cloud / AnRuiCloud
+
+Screenshot menunjukkan notebook dijalankan melalui `jupyter.anruicloud.com`. Error yang
+tersedia adalah `ProxyError`; pesan awal menutupi detail URL sehingga tidak membuktikan apakah
+penyebabnya proxy tidak tersedia, autentikasi proxy, penolakan tunnel, atau koneksi lain.
+Baris `captured.close()` adalah cleanup output SDK, bukan bukti kerusakan buffer atau GPU.
+
+Notebook arsip `02b-yolo26n-student-baseline-seed42-kd-project.ipynb` menggunakan alur SDK
+workspace → project → version → download yang sama, dengan ekspor yolov8. Notebook arsip
+multi-scale juga memiliki reuse snapshot lokal. Tidak ditemukan pengaturan `trust_env`,
+HTTP_PROXY/HTTPS_PROXY/ALL_PROXY khusus pada kode notebook arsip yang diperiksa.
+Versi AMD baru tetap memakai **Roboflow 1.4.0, dataset version 3, format yolo26**;
+format lama, cleaning/resplit dan penghapusan cache otomatis dari arsip tidak disalin.
+
+Perbaikan download mempertahankan tahapan API secara terpisah dan menampilkan JSON diagnostik:
+stage, jenis error, kategori, nama variabel proxy yang hadir, serta `detail_redacted`.
+API key plaintext/URL-encoded, URL bertoken, dan kredensial proxy disamarkan. Kategori
+membedakan tunnel-denied 403, proxy authentication 407, koneksi proxy, timeout dan DNS.
+Proxy environment dan verifikasi TLS tidak diubah. Dokumentasi Requests menjelaskan
+[penggunaan proxy environment](https://requests.readthedocs.io/en/latest/user/advanced/#proxies).
+Kebijakan outbound AnRuiCloud untuk Roboflow belum berhasil dikonfirmasi dari sumber publik.
+
+Cache lokal yang lolos validasi isi split dan metadata workspace/project/version digunakan
+tanpa membuat objek SDK atau melakukan request API. Cache parsial/identitas tidak lengkap
+tetap ditolak. Untuk upload manual, gunakan ekspor versi 3 format yolo26 dan letakkan
+data.yaml langsung di DATASET_DIR. Format yang diminta tetap dicatat, dengan
+`format_evidence=not-recorded-in-cache-yaml` pada cache dan `sdk-request` pada download baru;
+YAML tidak dianggap bukti format ekspor. Jalur ini menghindari request dataset, tetapi
+tidak menggantikan kebutuhan koneksi W&B online atau membuktikan jaringan cloud telah pulih.
+
+Kasus tambahan diuji tanpa jaringan nyata: cache valid tidak memanggil SDK, identitas cache
+wajib lengkap, ProxyError pada kelima tahap API, sanitasi key/proxy, environment proxy tidak
+berubah, dan klasifikasi 403/407/timeout/DNS yang tidak menyamakan semua error dengan key salah.
+Suite tracking lama dibatasi pada notebook 01–12 sesuai skemanya; notebook baru 13/14 dengan
+skema berbeda tidak dimodifikasi atau dianggap tercakup oleh tes Kaggle lama tersebut.

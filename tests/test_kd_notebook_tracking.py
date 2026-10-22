@@ -12,9 +12,10 @@ import nbformat
 import pytest
 
 FOLDER = Path(__file__).resolve().parents[1] / "notebooks/yolo26-kd-indotraffic/notebooks"
+# Legacy experiments 01–12 only: later notebook variants use different configuration schemas.
 # PKD and AMD/Roboflow have dedicated protocol/source tests; this suite expects Kaggle DATA.
 EXPERIMENTS = sorted(path for path in FOLDER.glob("*.ipynb")
-                     if not path.name.startswith("00_")
+                     if path.name[:2].isdigit() and 1 <= int(path.name[:2]) <= 12
                      and path.name not in {"12_pkd_yolo26n.ipynb", "03_baseline_yolo26n_amd_roboflow.ipynb"})
 NEW_NOTEBOOK = FOLDER / "12_csakd_yolo26n_teacher_yolo26s.ipynb"
 

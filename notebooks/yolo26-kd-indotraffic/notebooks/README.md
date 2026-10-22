@@ -9,6 +9,7 @@ Dua belas eksperimen, tiap file `.ipynb` standalone untuk Kaggle dengan 8 sectio
 | `01_teacher_yolo26m.ipynb` | Teacher YOLO26m | `supervised` |
 | `02_baseline_yolo26s.ipynb` | Baseline YOLO26s | `supervised` |
 | `03_baseline_yolo26n.ipynb` | Baseline YOLO26n | `supervised` |
+| `03_baseline_yolo26n_scratch.ipynb` | Baseline YOLO26n tanpa pretrained, seed 42 | `supervised` |
 | `03_baseline_yolo26n_amd_roboflow.ipynb` | Clone baseline YOLO26n, AMD ROCm cloud + Roboflow v3 | `supervised` |
 | `04_native_yolo26s.ipynb` | Native KD m → s, dis1 | `T26m_S26s` |
 | `05_native_yolo26n.ipynb` | Native KD m → n, dis1 | `T26m_S26n` |
@@ -31,6 +32,20 @@ Dua belas eksperimen, tiap file `.ipynb` standalone untuk Kaggle dengan 8 sectio
 
 **Catatan:** Teacher untuk KD harus dilatih pada **dataset dan urutan label kelas** yang sama. Poltrada V3 pada konfigurasi ini memiliki enam kelas. CSAKD 12 menyalin objective, enam tap, activation checkpointing, chunk size 2, dan bobot AGKA/Cross 1/1 dari notebook 09; yang diganti adalah teacher dan identitas eksperimen.
 
+## Baseline nano tanpa pretrained (scratch)
+
+Gunakan **`03_baseline_yolo26n_scratch.ipynb`** di Kaggle untuk membandingkan inisialisasi bobot acak dengan baseline pretrained 03. Notebook lama tidak diubah. Arsitektur dibangun dari `MODEL_WEIGHTS="yolo26n.yaml"` dan training memakai `PRETRAINED=False`; tidak memuat checkpoint awal atau melanjutkan bobot seed sebelumnya.
+
+Default `SEEDS_TO_RUN=[42]`. Seed 123, 2024, 7 dan 3407 tersedia sebagai komentar **belum dijalankan untuk scratch**. Hasil pretrained pada seed tersebut tidak dihitung sebagai hasil scratch. Setiap seed yang diaktifkan mendapat model acak baru, ID W&B baru dengan `resume="never"`, output dan state logging terpisah, lalu menyelesaikan evaluasi/upload/finish sebelum seed berikutnya. Kegagalan menghentikan antrean; hasil seed yang selesai tetap tersimpan.
+
+Dataset Kaggle, versi paket, loss deteksi, semua parameter optimasi/augmentasi/evaluasi dan anggaran training tetap mengikuti baseline: 100 epoch, 640px, batch16, AdamW lr0.001, AMP True, device0, workers2. Tidak ada penyesuaian LR atau penambahan epoch khusus scratch. Validation tetap memilih `best.pt` dan menjadi split evaluasi akhir.
+
+Run bernama `baseline_yolo26n_scratch_seed42`, project `yolom26-kd-indotraffic`, group `supervised`, dengan tag `from-scratch`. Output terpisah di `/kaggle/working/results/03_baseline_yolo26n_scratch/multiseed_<UTC>/seed-42/`. Konfigurasi, hasil dan metadata artifact mencatat `pretrained=False` serta `initialization="random"`.
+
+Bandingkan hasil scratch **seed 42 dengan pretrained seed 42**, memakai split dan protokol yang sama, misalnya `final/map50_95`, precision, recall, dan waktu training. Jika seed lain ditambahkan, bandingkan seed yang sama dan hitung mean ± standar deviasi secara terpisah untuk tiap kondisi; jangan gabungkan hasil dua kondisi inisialisasi. Notebook tidak mengambil atau mengagregasi hasil pretrained secara otomatis.
+
+Pemeriksaan AMP bawaan Ultralytics dipertahankan dan dapat mengunduh model diagnostik pretrained. Bobot diagnostik tersebut tidak mengisi bobot student. Evaluasi memuat `best.pt` hasil training scratch ini. Verifikasi lokal memakai mock serta satu training CPU sintetis singkat; training Poltrada 100 epoch dan W&B nyata belum dijalankan untuk varian ini.
+
 ## Baseline nano pada AMD cloud
 
 Gunakan **`03_baseline_yolo26n_amd_roboflow.ipynb`** pada Linux cloud dengan image PyTorch ROCm dan torchvision yang sudah kompatibel. Isi `WANDB_API_KEY` dan `ROBOFLOW_API_KEY` langsung pada **Section 1**, periksa konfigurasi Section 2, lalu Run All. Tidak memakai Kaggle Secrets, environment variable untuk key, atau prompt getpass. Penyimpanan kode otomatis W&B dimatikan; key tidak dimasukkan ke metadata/artifact.
@@ -41,25 +56,46 @@ Setup AMD memakai **`ultralytics-opencv-headless==8.4.155`** dan **`opencv-pytho
 
 Dataset diambil sekali dari `ilham-rafiqin/poltrada-original-raw-2`, versi 3, format `yolo26`, ke `~/skripsi-kd/datasets/poltrada-v3`. Output ada di `~/skripsi-kd/results/03_baseline_yolo26n_amd/`. Run bernama `baseline_yolo26n_amd_seed7` / `baseline_yolo26n_amd_seed3407`, tetap pada project `yolom26-kd-indotraffic`, group `supervised`, dengan tag `amd-rocm` dan `roboflow-v3`.
 
+Cache lengkap dengan metadata Roboflow workspace/project/version yang cocok digunakan **tanpa request API**, mengikuti pola reuse notebook arsip. Jika `ProxyError` terjadi pada cloud, Section 4 menampilkan tahap request, kategori kegagalan dan `detail_redacted` dengan key serta kredensial proxy disamarkan. Notebook mempertahankan proxy/TLS cloud; tidak melakukan bypass otomatis. Jika akses outbound Roboflow tidak tersedia, ekspor **versi 3, format yolo26** dari project yang sama dapat diunggah dan diekstrak langsung ke `DATASET_DIR`, dengan `data.yaml` di root direktori tersebut. Format cache tidak dibuktikan oleh YAML dan dicatat terpisah; kelas dan identitas sumber tetap divalidasi. W&B tetap memerlukan koneksi online.
+
 Identitas Roboflow, hash YAML, kelas dan lingkungan dicatat. Kesetaraan dengan dataset Kaggle bersih belum diverifikasi; tidak ada agregasi hasil lama otomatis. Pengujian lokal memakai mock dan dua training sintetis pendek di CPU, bukan bukti keberhasilan pada AMD cloud atau dataset Poltrada nyata.
 
 ## Multi-seed baseline n, Native s → n, CrossKD s → n
 
-Notebook **03, 10, dan 11** menjalankan seed secara serial dalam notebook masing-masing:
+Notebook **03, 10, dan 11** menjalankan seed secara serial dalam notebook masing-masing.
+Baseline **03** sudah selesai pada seed 42, 123, dan 2024; jalankan dua sisanya:
 
 ```python
-SEEDS_TO_RUN = [123, 2024]
+SEEDS_TO_RUN = [
+    # 42,    # Sudah selesai
+    # 123,   # Sudah selesai
+    # 2024,  # Sudah selesai
+    7,
+    3407,
+]
 ```
 
-Seed 42 yang sudah selesai tidak ditambahkan otomatis. Tiap seed memakai target **100 epoch**, jadi default dua seed berarti dua training terpisah pada setiap notebook. Student selalu dimuat kembali dari pretrained `yolo26n.pt`; training seed berikutnya tidak melanjutkan bobot seed sebelumnya. Teacher s untuk KD tetap artifact v62.
+Native **10** dan CrossKD **11** baru selesai pada seed 42; jalankan empat sisanya:
+
+```python
+SEEDS_TO_RUN = [
+    # 42,    # Sudah selesai
+    123,
+    2024,
+    7,
+    3407,
+]
+```
+
+Seed yang sudah selesai tersedia sebagai komentar dan tidak ditambahkan otomatis. Tiap seed memakai target **100 epoch**: dua training untuk baseline dan empat training pada masing-masing notebook KD. Student selalu dimuat kembali dari pretrained `yolo26n.pt`; training seed berikutnya tidak melanjutkan bobot seed sebelumnya. Teacher s untuk KD tetap artifact v62.
 
 Satu seed menyelesaikan training, evaluasi, semua upload dan `finish()` sebelum seed berikutnya dimulai. Setiap seed mendapat ID W&B baru (`resume="never"`), nama/tag sesuai seed, penghitung epoch baru, callback terikat pada run tersebut dan direktori output terpisah. Jangan menjalankan ketiga notebook bersamaan pada GPU yang sama.
 
-Nama run: `baseline_yolo26n_seed123`, `native_T26s_S26n_dis1_seed123`, atau `crosskd_T26s_S26n_seed123` (dan seed 2024). Group tetap `supervised` / `T26s_S26n`. Setelah tiga seed awal lengkap, gunakan `[7, 3407]` untuk menuju lima seed total. Untuk satu run saja gunakan `[123]`.
+Nama run: `baseline_yolo26n_seed7`, `native_T26s_S26n_dis1_seed123`, atau `crosskd_T26s_S26n_seed123`; akhiran nama dan tag mengikuti seed aktif. Group tetap `supervised` / `T26s_S26n`. Target akhir kelima seed adalah 42, 123, 2024, 7 dan 3407 untuk ketiga metode. Untuk satu run saja isi daftar dengan satu seed yang belum selesai, misalnya `[7]`.
 
 Hasil berada di `<PROJECT>/<EXPERIMENT_ID>/multiseed_<UTC>/seed-<seed>/`, termasuk checkpoint, `training_result.json`, `metrics.json`, `config.json` dan `seed_result.json`. Direktori antrean menyimpan `multiseed_results.json` serta `multiseed_progress.json`.
 
-Jika training, evaluasi, upload atau penutupan run gagal, antrean berhenti; hasil seed yang selesai tetap tersimpan. Sebelum Run All ulang, isi `SEEDS_TO_RUN` hanya dengan seed yang belum selesai. Tidak ada auto-resume atau auto-skip dari riwayat W&B. Hasil seed 42 yang sudah ada digabung ketika melaporkan mean ± standar deviasi, bukan dianggap sudah diimpor oleh notebook.
+Jika training, evaluasi, upload atau penutupan run gagal, antrean berhenti; hasil seed yang selesai tetap tersimpan. Sebelum Run All ulang, isi `SEEDS_TO_RUN` hanya dengan seed yang belum selesai. Tidak ada auto-resume atau auto-skip dari riwayat W&B. Hasil historis baseline (42, 123, 2024) dan KD (42) digabung secara manual ketika melaporkan mean ± standar deviasi; notebook tidak mengambil atau mengagregasi hasil lama.
 
 ## Group dan tag W&B
 

@@ -395,6 +395,39 @@ def test_diagnostic_rejects_unstable_or_incomplete_result(environment, failure):
         environment["diagnostic_assessment"](context)
 
 
+def test_fused_adamw_amp_skipped_update_has_no_valid_gradient_record(environment):
+    env = environment
+    net = torch.nn.Module()
+    net.student_model = torch.nn.Linear(2, 2)
+    net.projector = torch.nn.Linear(2, 1)
+    net.teacher_model = torch.nn.Linear(2, 1).eval().requires_grad_(False)
+    net.feature_layout = []
+    optimizer = torch.optim.AdamW([p for p in net.parameters() if p.requires_grad], fused=True)
+    scaler = torch.amp.GradScaler("cpu", init_scale=8)
+    context = {"mode": "diagnostic", "batch": env["BATCH"], "run": Mock(config={}), "gradient": None}
+    trainer = types.SimpleNamespace(model=net, optimizer=optimizer, batch_size=env["BATCH"],
+        args=types.SimpleNamespace(imgsz=env["IMGSZ"]), amp=env["AMP"],
+        device=torch.device("cpu"), train_loader=range(env["DIAGNOSTIC_STEPS"]))
+    env["make_callbacks"](context)["on_train_start"](trainer)
+    before = copy.deepcopy(net.student_model.state_dict())
+    try:
+        for multiplier in (float("inf"), 1.0):
+            optimizer.zero_grad()
+            loss = net.projector(net.student_model(torch.ones(1, 2))).sum() * multiplier
+            scaler.scale(loss).backward()
+            scaler.unscale_(optimizer)
+            torch.nn.utils.clip_grad_norm_(net.parameters(), 10)
+            scaler.step(optimizer)
+            scaler.update()
+            if multiplier == float("inf"):
+                assert context["gradient"] is None
+                assert all(torch.equal(before[k], v) for k, v in net.student_model.state_dict().items())
+        assert context["gradient"]["student"] > 0 and context["gradient"]["projector"] > 0
+        assert any(not torch.equal(before[k], v) for k, v in net.student_model.state_dict().items())
+    finally:
+        context["optimizer_hook"].remove()
+
+
 def configure_synthetic_cpu(env, workdir, monkeypatch):
     """Only this fixture changes data/size/device and bypasses CUDA; notebook defaults remain real."""
     from ultralytics.utils import callbacks

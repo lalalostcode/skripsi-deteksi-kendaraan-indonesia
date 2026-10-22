@@ -9,6 +9,7 @@ import io
 import json
 import os
 import platform
+import re
 import subprocess
 import sys
 import time
@@ -21,12 +22,14 @@ from importlib import metadata
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest.mock import MagicMock, Mock
+from urllib.parse import quote, quote_plus, unquote, urlsplit
 
 import cv2
 import nbformat
 import pytest
 import torch
 from PIL import Image
+from requests.exceptions import ProxyError
 from test_serial_multiseed_notebooks import FakeWandb, fake_evaluation, fake_training
 from ultralytics import YOLO, settings
 from ultralytics.cfg import get_cfg
@@ -62,6 +65,7 @@ def workdir():
 @pytest.fixture
 def env(workdir):
     namespace = {"Path": Path, "gc": gc, "hashlib": hashlib, "io": io, "json": json, "os": os, "platform": platform,
+                 "re": re, "quote": quote, "quote_plus": quote_plus, "unquote": unquote, "urlsplit": urlsplit,
                  "subprocess": subprocess, "sys": sys, "time": time, "metadata": metadata, "TemporaryDirectory": TemporaryDirectory,
                  "contextmanager": contextmanager, "redirect_stdout": redirect_stdout, "redirect_stderr": redirect_stderr,
                  "datetime": datetime, "timezone": timezone, "torch": torch, "YOLO": YOLO, "init_seeds": init_seeds,
@@ -316,6 +320,75 @@ def test_download_exact_source_relative_paths_provenance_and_once_for_queue(env,
     env["run_full_training"], env["evaluate_final_training"] = fake_training(env, events), fake_evaluation(env)
     assert [row["seed"] for row in env["run_seed_queue"]()] == [7, 3407]
     assert download.call_count == 1
+
+
+def test_valid_cache_reused_without_any_sdk_or_network_calls(env, monkeypatch):
+    import ultralytics.data.utils as data_utils
+
+    monkeypatch.setattr(data_utils, "check_font", lambda *a, **k: None)
+    yaml = synthetic_dataset(env["DATASET_DIR"])
+    env["Roboflow"] = Mock(side_effect=ProxyError("API must not be called for valid cache"))
+    path, info, provenance = env["download_roboflow_dataset"]()
+    env["Roboflow"].assert_not_called()
+    assert path == str(yaml) and info["roboflow"]["version"] == 3
+    assert provenance["cache_reused"] is True
+    assert provenance["format_evidence"] == "not-recorded-in-cache-yaml"
+    assert env["ROBOFLOW_VERSION"] == 3 and env["ROBOFLOW_FORMAT"] == "yolo26"
+
+
+@pytest.mark.parametrize("missing", ["workspace", "project", "version"])
+def test_cache_requires_provenance_before_offline_reuse(env, monkeypatch, missing):
+    import ultralytics.data.utils as data_utils
+
+    monkeypatch.setattr(data_utils, "check_font", lambda *a, **k: None)
+    yaml = synthetic_dataset(env["DATASET_DIR"])
+    lines = [line for line in yaml.read_text().splitlines() if not line.startswith(f"  {missing}:")]
+    yaml.write_text("\n".join(lines) + "\n")
+    constructor, _download = roboflow_mock(env)
+    with pytest.raises(ValueError, match="identitas"):
+        env["download_roboflow_dataset"]()
+    constructor.assert_not_called()
+
+
+@pytest.mark.parametrize("stage", ["authentication", "workspace", "project", "version", "download/export"])
+def test_proxy_error_shows_redacted_stage_and_preserves_cloud_proxy(env, monkeypatch, capsys, stage):
+    proxy = "http://proxy-account:proxy-password@proxy.example.test:3128"
+    monkeypatch.setenv("HTTPS_PROXY", proxy)
+    constructor, download = roboflow_mock(env)
+    failure = ProxyError("Unable to connect to proxy " + proxy +
+                         "; https://api.roboflow.com/workspace?api_key=" + quote(env["ROBOFLOW_API_KEY"], safe="") +
+                         " Tunnel connection failed: 403 Forbidden")
+    target = {"authentication": constructor, "workspace": constructor.return_value.workspace,
+              "project": constructor.return_value.workspace.return_value.project,
+              "version": constructor.return_value.workspace.return_value.project.return_value.version,
+              "download/export": download}[stage]
+    target.side_effect = failure
+    before = dict(os.environ)
+    with pytest.raises(RuntimeError) as caught:
+        env["download_roboflow_dataset"]()
+    assert dict(os.environ) == before
+    message = str(caught.value)
+    diagnostic = json.loads(message[message.index("{"):message.rindex("}") + 1])
+    assert diagnostic["stage"] == stage and diagnostic["category"] == "proxy-tunnel-denied"
+    assert "HTTPS_PROXY" in diagnostic["proxy_variables_present"]
+    assert diagnostic["proxy_policy"] == "environment-unchanged"
+    assert "403 Forbidden" in diagnostic["detail_redacted"]
+    output = capsys.readouterr()
+    for private in (env["ROBOFLOW_API_KEY"], env["WANDB_API_KEY"], "proxy-account", "proxy-password", proxy):
+        assert private not in message + output.out + output.err
+    assert env["ROBOFLOW_VERSION"] == 3 and env["ROBOFLOW_FORMAT"] == "yolo26"
+
+
+@pytest.mark.parametrize("message,error_type,category", [
+    ("Tunnel connection failed: 407 Proxy Authentication Required", ProxyError, "proxy-authentication-required"),
+    ("Proxy connection refused", ProxyError, "proxy-connection-failed"),
+    ("Read timed out", TimeoutError, "network-timeout"),
+    ("Name or service not known", ConnectionError, "dns-resolution-failed"),
+    ("403 Forbidden", RuntimeError, "request-failed"),
+])
+def test_network_categories_do_not_confuse_proxy_and_api_auth(env, message, error_type, category):
+    result = env["roboflow_network_diagnostics"](error_type(message), "workspace")
+    assert result["category"] == category and result["stage"] == "workspace"
 
 
 @pytest.mark.parametrize("failure", ["partial", "missing-train", "empty-train", "wrong-version", "download", "missing-yaml"])

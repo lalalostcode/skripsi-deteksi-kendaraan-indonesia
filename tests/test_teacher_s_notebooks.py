@@ -98,7 +98,7 @@ def test_notebook_schema_syntax_defaults_and_reference_hashes(notebook):
     env = {}
     exec(compile(code(notebook, "config"), "<config>", "exec"), env)
     expected = {"MODEL_WEIGHTS": "yolo26n.pt", "EPOCHS": 100, "IMGSZ": 640, "BATCH": 16,
-                "SEED": 123, "SEEDS_TO_RUN": [123, 2024], "DEVICE": 0, "WORKERS": 2, "OPTIMIZER": "AdamW", "LR": 0.001,
+                "SEED": 123, "SEEDS_TO_RUN": [123, 2024, 7, 3407], "DEVICE": 0, "WORKERS": 2, "OPTIMIZER": "AdamW", "LR": 0.001,
                 "PATIENCE": 100, "AMP": True, "WEIGHT_DECAY": 0.0005, "WARMUP_EPOCHS": 3.0,
                 "CLOSE_MOSAIC": 10, "EVAL_SPLIT": "val", "RUN_FULL_TRAINING": True,
                  "WANDB_ENABLED": True, "TEACHER_ARTIFACT": REFERENCE}

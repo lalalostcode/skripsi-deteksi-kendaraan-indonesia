@@ -1,13 +1,18 @@
 # Multi-seed serial: baseline n, Native s → n, CrossKD s → n
 
 Tanggal: 17 Oktober 2026, Asia/Jakarta.
+Pembaruan daftar seed: 19 Oktober 2026, Asia/Jakarta.
 
 ## Perilaku
 
-Notebook eksperimen 03, 10 dan 11 sekarang menggunakan `SEEDS_TO_RUN=[123, 2024]`.
+Notebook baseline 03 menggunakan `SEEDS_TO_RUN=[7, 3407]`; seed 42, 123 dan 2024
+sudah selesai dan ditampilkan sebagai komentar. Native 10 dan CrossKD 11 menggunakan
+`SEEDS_TO_RUN=[123, 2024, 7, 3407]`; hanya seed 42 yang sudah selesai dan dikomentari.
 `SEED` diatur otomatis ke seed aktif; pengguna cukup mengubah daftar tersebut.
-Seed 42 tidak ditambahkan atau dijalankan ulang secara otomatis. Untuk tahap final gunakan
-`[7, 3407]`; untuk satu training gunakan `[123]`. Setiap seed memakai target 100 epoch.
+Seed selesai tidak ditambahkan atau dijalankan ulang secara otomatis. Untuk satu training,
+isi daftar dengan satu seed yang belum selesai, misalnya `[7]`. Setiap seed memakai target
+100 epoch; target akhir ketiga metode tetap lima seed: 42, 123, 2024, 7 dan 3407.
+Varian AMD tetap ditunda dan tidak diubah pada pembaruan ini.
 
 Ketiga notebook tetap standalone. Environment/login dan dataset disiapkan sebelum antrean.
 `run_seed_queue()` memvalidasi daftar seed sebelum membuka run. `run_one_seed()` menyelesaikan
@@ -61,10 +66,11 @@ upload dan finish sukses. Hasil seed sebelumnya tetap tersimpan jika seed selanj
 
 Tidak ada auto-resume atau penarikan otomatis hasil historis. Setelah kegagalan/sesi terputus,
 lihat hasil/progress dan isi `SEEDS_TO_RUN` hanya dengan seed yang belum selesai sebelum Run All
-ulang. Run 42 yang sudah ada digabung saat pelaporan mean ± standar deviasi. Rekap lokal ini
-hanya berisi hasil yang benar-benar selesai pada antrean baru.
+ulang. Hasil historis baseline (42, 123, 2024) dan KD (42) digabung manual saat pelaporan
+mean ± standar deviasi. Rekap lokal ini hanya berisi hasil yang benar-benar selesai pada
+antrean baru; notebook tidak mengambil atau mengagregasi hasil lama.
 
-## Verifikasi lokal
+## Verifikasi implementasi awal (17 Oktober 2026)
 
 - Validasi JSON/nbformat/Python seluruh notebook eksperimen dan lint pengujian.
 - Mock dua seed memeriksa ID, tag, nama, state, callback, output, metrik dan artifact terpisah;
@@ -99,3 +105,30 @@ tidak berlaku untuk baseline. Peringatan yang muncul berasal dari deprecation de
 Audit konfigurasi efektif baseline terhadap snapshot sebelum perubahan (pada seed yang sama)
 menemukan perbedaan hanya pada `project`/`name` untuk output. Audit Native/CrossKD terhadap
 referensi teacher m tetap menemukan perbedaan hanya pada output dan sumber teacher.
+
+## Verifikasi pembaruan seed (19 Oktober 2026)
+
+- JSON/nbformat dan sintaks seluruh cell Python pada 03/10/11 valid. Audit AST terhadap
+  snapshot sebelum pembaruan hanya menemukan perubahan daftar seed dan dua pesan antrean;
+  rumus loss, konfigurasi training, teacher v62 dan mekanisme serial tetap sama.
+- Hash 15 notebook lain tetap identik, termasuk AMD, PKD, HEAD dan RM.
+- Mock default memverifikasi dua run baseline dan empat run per notebook KD, tanpa seed
+  historis: student/state/callback, ID, nama/tag, direktori, metrik dan artifact terpisah.
+  Upload/finish selesai sebelum run berikutnya. Tes injeksi kegagalan tetap lulus.
+- Fixture training sintetis mengatur `[123, 2024]` secara eksplisit, terpisah dari default
+  notebook. Dua training CPU satu epoch per metode berhasil (enam training total).
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest tests/test_serial_multiseed_notebooks.py tests/test_teacher_s_notebooks.py tests/test_kd_notebook_tracking.py -q
+# 122 passed, 1 skipped, 3 deselected, 4 warnings
+
+.\.venv\Scripts\python.exe -m pytest tests/test_serial_multiseed_notebooks.py -m slow -q
+# 3 passed, 45 deselected, 4 warnings
+
+.\.venv\Scripts\ruff.exe check tests/test_serial_multiseed_notebooks.py tests/test_teacher_s_notebooks.py
+# All checks passed
+```
+
+Total 125 tes lulus; satu kasus teacher tidak berlaku untuk baseline dan dilewati.
+Peringatan berasal dari deprecation THOP. Pemeriksaan diff lulus. Tidak ada training
+Poltrada 100 epoch atau akses W&B nyata dalam pengujian pembaruan ini.
