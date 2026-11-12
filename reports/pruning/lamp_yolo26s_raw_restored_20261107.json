@@ -1,0 +1,266 @@
+{
+  "status": "PASS",
+  "source_suite_id": "20261107T020459Z_45575a7f",
+  "rows": [
+    {
+      "historical_input": "yolo26s-lamp-su1.20x-seed42-raw:v0",
+      "historical_artifact_ref": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/yolo26s-lamp-su1.20x-seed42-raw:v0",
+      "artifact_ref": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/yolo26s-lamp-su1.20x-seed42-raw:v1",
+      "artifact_url": "https://wandb.ai/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed42-raw/v1",
+      "seed": 42,
+      "raw_sha256": "1c20b10f3a33de89377e1cf80e1ff244489fb9fc737b121735cd6d24618d7159",
+      "manifest_sha256": "2ed9f4eec2143262ee0a75749edaf58fae077ffad965eeb3e00fdfee0a2724df",
+      "files_sha256": {
+        "baseline_fp32.pt": "48733cbdb927ea6dde0985ec7a006cbd8f92d1b84def45d927e3c6c86fab5d50",
+        "dependency_audit.json": "85e252b87f1419378337e0364e3a13004138436c269bee39c3234dc8e652bb5d",
+        "inventories.json": "1a97eda6ba55112c2440bf6d3e7a9040ea0e9fd0c58fb779cd24d67c372d338a",
+        "pruned_fp32.pt": "1c20b10f3a33de89377e1cf80e1ff244489fb9fc737b121735cd6d24618d7159",
+        "raw_pruned_manifest.json": "2ed9f4eec2143262ee0a75749edaf58fae077ffad965eeb3e00fdfee0a2724df",
+        "wandb_metadata.json": "bd89061e8e6a9057438dd07581c3ae37bc31138dea66d7f1209796b7162e88ae"
+      },
+      "status": "CONFIRMED",
+      "restoration_run_id": "ptrb9c04",
+      "local_verified_package": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\pruning\\raw_per_seed_verified\\yolo26s-lamp-su1.20x-seed42-raw_v0",
+      "measurement_metadata": {
+        "gflops": 19.1691264,
+        "parameters": 8325054,
+        "map50_95": 0.00016666666666666666,
+        "map50": 0.0004166666666666667,
+        "latency_p50_ms": 14.27561949981282,
+        "latency_p95_ms": 15.987523300304927,
+        "latency": {
+          "status": "PASS",
+          "median_ms": 14.27561949981282,
+          "mean_ms": 14.550615914988612,
+          "p05_ms": 13.873118949823038,
+          "p95_ms": 15.987523300304927,
+          "warmup": 50,
+          "repeats": 200,
+          "batch": 1,
+          "imgsz": [
+            640,
+            640
+          ],
+          "precision": "FP32",
+          "device": "cuda:0",
+          "fusion": false,
+          "scope": "raw model forward"
+        },
+        "baseline_gflops": 23.0068224,
+        "baseline_parameters": 9952508,
+        "dataset_fingerprint": "8d1ad77d6fa88ed43660370f4a805f803387b7328035aa553b290bc0fa58e6b0",
+        "evaluation_mode": "full_val",
+        "platform": "kaggle",
+        "measurement_provenance": "Copied from the original verified pruning manifest; restoration performs no evaluation."
+      }
+    },
+    {
+      "historical_input": "yolo26s-lamp-su1.20x-seed0-raw:v0",
+      "historical_artifact_ref": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/yolo26s-lamp-su1.20x-seed0-raw:v0",
+      "artifact_ref": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/yolo26s-lamp-su1.20x-seed0-raw:v1",
+      "artifact_url": "https://wandb.ai/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed0-raw/v1",
+      "seed": 0,
+      "raw_sha256": "99df514946a6a283e91d90ba22c8c159e6fd107baba739f8860a20c79af2e8aa",
+      "manifest_sha256": "7a9597a815e75b5e5909de3f281c14f69ec5bad6ee9e5eee6aa1fdc479963a05",
+      "files_sha256": {
+        "baseline_fp32.pt": "fb811a61b070580b13c5a7908b93898d4e88c96bd3e82df192227699e275bac1",
+        "dependency_audit.json": "39084dadce5be805fc63d3f6ef221d0385bdb4270b84f5fa689423f7660b3ea0",
+        "inventories.json": "1a97eda6ba55112c2440bf6d3e7a9040ea0e9fd0c58fb779cd24d67c372d338a",
+        "pruned_fp32.pt": "99df514946a6a283e91d90ba22c8c159e6fd107baba739f8860a20c79af2e8aa",
+        "raw_pruned_manifest.json": "7a9597a815e75b5e5909de3f281c14f69ec5bad6ee9e5eee6aa1fdc479963a05",
+        "wandb_metadata.json": "58bb699fcdff79b075c38b5950842d45b3b64b985cf2a333c9714bffc66eee61"
+      },
+      "status": "CONFIRMED",
+      "restoration_run_id": "ptrb9c04",
+      "local_verified_package": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\pruning\\raw_per_seed_verified\\yolo26s-lamp-su1.20x-seed0-raw_v0",
+      "measurement_metadata": {
+        "gflops": 19.1691264,
+        "parameters": 8325054,
+        "map50_95": 0.00016147000832166477,
+        "map50": 0.0009265450499725786,
+        "latency_p50_ms": 14.588658500088059,
+        "latency_p95_ms": 15.478992949829257,
+        "latency": {
+          "status": "PASS",
+          "median_ms": 14.588658500088059,
+          "mean_ms": 14.81206364499485,
+          "p05_ms": 14.205323549686,
+          "p95_ms": 15.478992949829257,
+          "warmup": 50,
+          "repeats": 200,
+          "batch": 1,
+          "imgsz": [
+            640,
+            640
+          ],
+          "precision": "FP32",
+          "device": "cuda:0",
+          "fusion": false,
+          "scope": "raw model forward"
+        },
+        "baseline_gflops": 23.0068224,
+        "baseline_parameters": 9952508,
+        "dataset_fingerprint": "8d1ad77d6fa88ed43660370f4a805f803387b7328035aa553b290bc0fa58e6b0",
+        "evaluation_mode": "full_val",
+        "platform": "kaggle",
+        "measurement_provenance": "Copied from the original verified pruning manifest; restoration performs no evaluation."
+      }
+    },
+    {
+      "historical_input": "yolo26s-lamp-su1.20x-seed2024-raw:v0",
+      "historical_artifact_ref": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/yolo26s-lamp-su1.20x-seed2024-raw:v0",
+      "artifact_ref": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/yolo26s-lamp-su1.20x-seed2024-raw:v1",
+      "artifact_url": "https://wandb.ai/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed2024-raw/v1",
+      "seed": 2024,
+      "raw_sha256": "3187dde6e33139a1e4c1afd5a6fbc2235d05cd0cc676be1b494bc2d08e45fcf6",
+      "manifest_sha256": "356bbd6a24b1580beeb17c969f1f810f368fd2fb75e23b270ef16948d6a6356a",
+      "files_sha256": {
+        "baseline_fp32.pt": "e3b464a21029166408bd2006eb388b2fc1399f0d25fc9172307df0aeef604742",
+        "dependency_audit.json": "29d111a782065e191a32d68ad8a37bd5961a5a25a4612e163d4d82eb9c98cda3",
+        "inventories.json": "1a97eda6ba55112c2440bf6d3e7a9040ea0e9fd0c58fb779cd24d67c372d338a",
+        "pruned_fp32.pt": "3187dde6e33139a1e4c1afd5a6fbc2235d05cd0cc676be1b494bc2d08e45fcf6",
+        "raw_pruned_manifest.json": "356bbd6a24b1580beeb17c969f1f810f368fd2fb75e23b270ef16948d6a6356a",
+        "wandb_metadata.json": "126129187fe0a9535df036cb523142f4493c69bf4053cca737d6c3940700a384"
+      },
+      "status": "CONFIRMED",
+      "restoration_run_id": "ptrb9c04",
+      "local_verified_package": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\pruning\\raw_per_seed_verified\\yolo26s-lamp-su1.20x-seed2024-raw_v0",
+      "measurement_metadata": {
+        "gflops": 19.1691264,
+        "parameters": 8325054,
+        "map50_95": 0.0002911603203114337,
+        "map50": 0.001096708364372242,
+        "latency_p50_ms": 14.690045999941503,
+        "latency_p95_ms": 16.79571059967202,
+        "latency": {
+          "status": "PASS",
+          "median_ms": 14.690045999941503,
+          "mean_ms": 14.993077314998118,
+          "p05_ms": 14.272552450211151,
+          "p95_ms": 16.79571059967202,
+          "warmup": 50,
+          "repeats": 200,
+          "batch": 1,
+          "imgsz": [
+            640,
+            640
+          ],
+          "precision": "FP32",
+          "device": "cuda:0",
+          "fusion": false,
+          "scope": "raw model forward"
+        },
+        "baseline_gflops": 23.0068224,
+        "baseline_parameters": 9952508,
+        "dataset_fingerprint": "8d1ad77d6fa88ed43660370f4a805f803387b7328035aa553b290bc0fa58e6b0",
+        "evaluation_mode": "full_val",
+        "platform": "kaggle",
+        "measurement_provenance": "Copied from the original verified pruning manifest; restoration performs no evaluation."
+      }
+    },
+    {
+      "historical_input": "yolo26s-lamp-su1.20x-seed7-raw:v0",
+      "historical_artifact_ref": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/yolo26s-lamp-su1.20x-seed7-raw:v0",
+      "artifact_ref": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/yolo26s-lamp-su1.20x-seed7-raw:v1",
+      "artifact_url": "https://wandb.ai/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed7-raw/v1",
+      "seed": 7,
+      "raw_sha256": "69ed0b860c79626ab435fa06afa1fe4fcf57e4c1478aec498713b4970430cf4a",
+      "manifest_sha256": "4a9b1f98e5fd200d4a6a3953ca0658f02630be22204ca36b692062f064937581",
+      "files_sha256": {
+        "baseline_fp32.pt": "7c3224a2ecdf113c0a0279d59241082565029a1af76d23d78c155dc1e8c7c0cc",
+        "dependency_audit.json": "175a9c8aa10c0fa5880d744a0a03714a7a012a4223a69cb4d6b4a8e46d055536",
+        "inventories.json": "3180c2bbd952ae9af3ea88ac71b56b054113ed8174320f9914dc4322ce2bb66f",
+        "pruned_fp32.pt": "69ed0b860c79626ab435fa06afa1fe4fcf57e4c1478aec498713b4970430cf4a",
+        "raw_pruned_manifest.json": "4a9b1f98e5fd200d4a6a3953ca0658f02630be22204ca36b692062f064937581",
+        "wandb_metadata.json": "9114182ee75798017382ea3bc1f4d08b069c17adbe565d3375271ec2e0cb1884"
+      },
+      "status": "CONFIRMED",
+      "restoration_run_id": "ptrb9c04",
+      "local_verified_package": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\pruning\\raw_per_seed_verified\\yolo26s-lamp-su1.20x-seed7-raw_v0",
+      "measurement_metadata": {
+        "gflops": 19.1714048,
+        "parameters": 8325232,
+        "map50_95": 1.3656847281914018e-05,
+        "map50": 6.666666666666667e-05,
+        "latency_p50_ms": 16.12966899983803,
+        "latency_p95_ms": 17.80705140004102,
+        "latency": {
+          "status": "PASS",
+          "median_ms": 16.12966899983803,
+          "mean_ms": 16.313681280043966,
+          "p05_ms": 15.444342450018667,
+          "p95_ms": 17.80705140004102,
+          "warmup": 50,
+          "repeats": 200,
+          "batch": 1,
+          "imgsz": [
+            640,
+            640
+          ],
+          "precision": "FP32",
+          "device": "cuda:0",
+          "fusion": false,
+          "scope": "raw model forward"
+        },
+        "baseline_gflops": 23.0068224,
+        "baseline_parameters": 9952508,
+        "dataset_fingerprint": "8d1ad77d6fa88ed43660370f4a805f803387b7328035aa553b290bc0fa58e6b0",
+        "evaluation_mode": "full_val",
+        "platform": "kaggle",
+        "measurement_provenance": "Copied from the original verified pruning manifest; restoration performs no evaluation."
+      }
+    },
+    {
+      "historical_input": "yolo26s-lamp-su1.20x-seed3407-raw:v0",
+      "historical_artifact_ref": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/yolo26s-lamp-su1.20x-seed3407-raw:v0",
+      "artifact_ref": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/yolo26s-lamp-su1.20x-seed3407-raw:v1",
+      "artifact_url": "https://wandb.ai/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed3407-raw/v1",
+      "seed": 3407,
+      "raw_sha256": "9a6e64cdf17fb64dfb38082e7f5231a59cf4d6b32f01f05a14aaaf937667d455",
+      "manifest_sha256": "8fa0b9acf87681f48c4130fbff662555717b5c29175522b183f88510cedd1e11",
+      "files_sha256": {
+        "baseline_fp32.pt": "f1dd45dcaec079d67c90ca1c60da50be272bda959184928851578076f2ebb967",
+        "dependency_audit.json": "e9ee9760765a9a63e8d70d4ed4fc8783fc0acec472b9937f5163ef7d069a6a72",
+        "inventories.json": "1a97eda6ba55112c2440bf6d3e7a9040ea0e9fd0c58fb779cd24d67c372d338a",
+        "pruned_fp32.pt": "9a6e64cdf17fb64dfb38082e7f5231a59cf4d6b32f01f05a14aaaf937667d455",
+        "raw_pruned_manifest.json": "8fa0b9acf87681f48c4130fbff662555717b5c29175522b183f88510cedd1e11",
+        "wandb_metadata.json": "4951481615a4e75886643926c6d7d49d0b463f84e913624853764ed5f40728f9"
+      },
+      "status": "CONFIRMED",
+      "restoration_run_id": "ptrb9c04",
+      "local_verified_package": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\pruning\\raw_per_seed_verified\\yolo26s-lamp-su1.20x-seed3407-raw_v0",
+      "measurement_metadata": {
+        "gflops": 19.1691264,
+        "parameters": 8325054,
+        "map50_95": 0.0,
+        "map50": 0.0,
+        "latency_p50_ms": 14.836169500540564,
+        "latency_p95_ms": 15.974352450302831,
+        "latency": {
+          "status": "PASS",
+          "median_ms": 14.836169500540564,
+          "mean_ms": 15.073810544986372,
+          "p05_ms": 14.34979374980685,
+          "p95_ms": 15.974352450302831,
+          "warmup": 50,
+          "repeats": 200,
+          "batch": 1,
+          "imgsz": [
+            640,
+            640
+          ],
+          "precision": "FP32",
+          "device": "cuda:0",
+          "fusion": false,
+          "scope": "raw model forward"
+        },
+        "baseline_gflops": 23.0068224,
+        "baseline_parameters": 9952508,
+        "dataset_fingerprint": "8d1ad77d6fa88ed43660370f4a805f803387b7328035aa553b290bc0fa58e6b0",
+        "evaluation_mode": "full_val",
+        "platform": "kaggle",
+        "measurement_provenance": "Copied from the original verified pruning manifest; restoration performs no evaluation."
+      }
+    }
+  ]
+}

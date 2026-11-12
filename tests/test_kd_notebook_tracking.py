@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import ast
 import json
+import uuid
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock
@@ -53,13 +54,40 @@ def test_json_python_and_group_tags_reach_wandb_init(path):
     assert env["WANDB_GROUP"] == expected_group
     assert env["DATA"] == "/kaggle/input/datasets/ilhamrafiqin/poltrada-v3-yolo26-clean/data.yaml"
     assert env["WANDB_PROJECT"] == "yolom26-kd-indotraffic"
+    assert env["WANDB_ENTITY"] == "ilhamrafiqin-brawijaya-university"
     init = next(node for node in nodes if isinstance(node, ast.Call) and ast.unparse(node.func) == "wandb.init")
+    if number == 1:
+        expected_name = f"base_teacher_yolo26{size}_seed{env['SEED']}"
+    elif number <= 3:
+        variant = "_scratch" if "scratch" in path.stem else ""
+        expected_name = f"base_yolo26{size}{variant}_seed{env['SEED']}"
+    else:
+        weight = f"_dis{env['KD_WEIGHT']:g}" if env["METHOD"] == "native" else ""
+        expected_name = f"kd_{env['METHOD']}_{expected_group}{weight}_seed{env['SEED']}"
     mock = Mock()
-    env.update(wandb=SimpleNamespace(init=mock, Settings=Mock()), RUN_NAME="test-run", NEW_WANDB_RUN_ID="fresh",
+    env.update(wandb=SimpleNamespace(init=mock, Settings=Mock(),
+                                    util=SimpleNamespace(generate_id=lambda: uuid.uuid4().hex)), RUN_NAME="test-run",
                KD_CONFIG={}, TEACHER_PROVENANCE={}, ENVIRONMENT_INFO={}, RUNTIME_VERSIONS={}, diagnostic=False)
-    env.setdefault("WANDB_RUN_NAME", f"baseline_yolo26n_seed{env['SEED']}")
-    eval(compile(ast.Expression(init), "<mocked wandb init>", "eval"), env)
+
+    serial_setup = [n for n in nodes if
+                    (isinstance(n, ast.FunctionDef) and n.name == "seed_run_name") or
+                    (isinstance(n, ast.Assign) and (
+                        ast.unparse(n.targets[0]) == "NEW_WANDB_RUN_ID" or
+                        (ast.unparse(n.targets[0]) == "WANDB_RUN_NAME" and "seed_run_name" in ast.unparse(n.value))))]
+    serial_setup.sort(key=lambda n: 0 if isinstance(n, ast.FunctionDef) else 1)
+
+    def invoke():
+        env["seed"] = env["SEED"]
+        exec(compile(ast.Module(serial_setup, type_ignores=[]), "<W&B serial setup>", "exec"), env)
+        eval(compile(ast.Expression(init), "<mocked wandb init>", "eval"), env)
+
+    invoke()
     kwargs = mock.call_args.kwargs
+    invoke()
+    assert mock.call_args.kwargs["name"] == kwargs["name"] == expected_name
+    assert mock.call_args.kwargs["id"] != kwargs["id"]
+    assert kwargs["resume"] == "never"
+    assert kwargs["project"] == env["WANDB_PROJECT"] and kwargs["entity"] == env["WANDB_ENTITY"]
     assert kwargs["group"] == expected_group
     tags = kwargs["tags"]
     assert {f"seed{env['SEED']}", "poltrada-v3", "research", env["EXPERIMENT_ID"]} <= set(tags)
@@ -76,16 +104,15 @@ def test_json_python_and_group_tags_reach_wandb_init(path):
             assert {"cls1", "box1"} <= set(tags)
         else:
             assert {"agka1", "cross1"} <= set(tags)
-    if number <= 9 or number == 12:
-        if "DIAGNOSTIC_ONLY" in env:
-            env["DIAGNOSTIC_ONLY"] = True
-        else:
-            env["DATA"] = "coco8.yaml"
-        env["diagnostic"] = True
-        eval(compile(ast.Expression(init), "<mocked diagnostic init>", "eval"), env)
-        assert mock.call_args.kwargs["group"] == "diagnostic-" + expected_group
-        assert "diagnostic" in mock.call_args.kwargs["tags"]
-        assert "research" not in mock.call_args.kwargs["tags"]
+    if "DIAGNOSTIC_ONLY" in env:
+        env["DIAGNOSTIC_ONLY"] = True
+    env["DATA"] = "coco8.yaml"
+    env["diagnostic"] = True
+    invoke()
+    assert mock.call_args.kwargs["name"] == expected_name + "_smoke"
+    assert mock.call_args.kwargs["group"] == "diagnostic-" + expected_group
+    assert "diagnostic" in mock.call_args.kwargs["tags"]
+    assert "research" not in mock.call_args.kwargs["tags"]
 
 
 @pytest.mark.parametrize("filename,overrides,expected", [
@@ -98,6 +125,46 @@ def test_tracking_tags_follow_configured_seed_and_weights(filename, overrides, e
     env = configuration(notebook, overrides)
     assert expected <= set(env["WANDB_TAGS"])
     assert "seed42" not in env["WANDB_TAGS"]
+
+
+@pytest.mark.parametrize("filename", [
+    "12_pkd_yolo26n.ipynb",
+    "13_head_yolo26n_teacher_yolo26s.ipynb",
+    "14_rm_yolo26n_teacher_yolo26s.ipynb",
+    "15_mgd_yolo26n_teacher_yolo26s.ipynb",
+])
+def test_teacher_s_special_methods_use_distinct_diagnostic_labels(filename):
+    notebook = json.loads(notebook_path("kaggle", filename).read_bytes())
+    env = configuration(notebook)
+    calls = Mock()
+    env.update(
+        wandb=SimpleNamespace(init=calls, Settings=Mock(),
+                              util=SimpleNamespace(generate_id=lambda: uuid.uuid4().hex)),
+        uuid=uuid, seed=env["SEED"], config={}, DATASET_INFO={}, TEACHER_INFO={},
+        SESSION_DIR=FOLDER, TEACHER_PROVENANCE={}, ENVIRONMENT_INFO={}, NUMERICAL_RESULT={},
+    )
+    tree = ast.parse("\n".join("".join(cell["source"]) for cell in notebook["cells"] if cell["cell_type"] == "code"))
+    init = next(node for node in ast.walk(tree)
+                if isinstance(node, ast.Call) and ast.unparse(node.func) == "wandb.init")
+    function = next(node for node in ast.walk(tree)
+                    if isinstance(node, ast.FunctionDef) and init in ast.walk(node))
+    assignments = [node for node in ast.walk(function) if isinstance(node, ast.Assign)
+                   and node.lineno < init.lineno and ast.unparse(node.targets[0]) in {"name", "display_name"}]
+    assignments.sort(key=lambda node: node.lineno)
+    for diagnostic in (False, True):
+        mode = "diagnostic" if diagnostic else "training"
+        env.update(diagnostic=diagnostic, mode=mode, token="local-path-token")
+        exec(compile(ast.Module(assignments, type_ignores=[]), "<W&B display names>", "exec"), env)
+        eval(compile(ast.Expression(init), "<mocked wandb init>", "eval"), env)
+        kwargs = calls.call_args.kwargs
+        suffix = "_smoke" if diagnostic else ""
+        assert kwargs["name"] == f"kd_{env['METHOD']}_T26s_S26n_seed{env['SEED']}{suffix}"
+        assert kwargs["group"] == ("diagnostic-T26s_S26n" if diagnostic else "T26s_S26n")
+        assert kwargs["project"] == "yolom26-kd-indotraffic"
+        assert kwargs["entity"] == "ilhamrafiqin-brawijaya-university"
+        assert kwargs["resume"] == "never"
+        assert {env["METHOD"], "teacher-s", "student-n", "seed42"} <= set(kwargs["tags"])
+    assert calls.call_args_list[0].kwargs["id"] != calls.call_args_list[1].kwargs["id"]
 
 
 def test_csakd_s_to_n_matches_existing_csakd_protocol_and_uses_baseline_v62():
@@ -114,7 +181,7 @@ def test_csakd_s_to_n_matches_existing_csakd_protocol_and_uses_baseline_v62():
     )
     assert current["TEACHER_RUN_ID"] == "q5kp9k9d"
     assert current["DIAGNOSTIC_ONLY"] is False
-    assert current["WANDB_RUN_NAME"] == "csakd_T26s_S26n_seed42"
+    assert current["WANDB_RUN_NAME"] == "kd_csakd_T26s_S26n_seed42"
     for index in (11, 12, 16, 18):
         assert new["cells"][index]["source"] == original["cells"][index]["source"]
     for notebook, env in ((new, current), (original, reference)):

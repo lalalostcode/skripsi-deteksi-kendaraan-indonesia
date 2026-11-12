@@ -1,0 +1,22 @@
+{
+  "structural_smoke_status": "NOT_RUN",
+  "validation_status": "NOT_RUN",
+  "checks": {
+    "baseline_loaded": false,
+    "baseline_forward": false,
+    "dependency_graph": false,
+    "structural_channels_removed": false,
+    "parameters_reduced": false,
+    "pruned_forward": false,
+    "protected_head_unchanged": false,
+    "checkpoint_saved": false,
+    "checkpoint_reloaded": false,
+    "reload_consistent": false,
+    "detection_prediction": false
+  },
+  "errors": [],
+  "warnings": [],
+  "stages": {
+    "dependency_imports": "PASS"
+  }
+}

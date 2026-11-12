@@ -1,4 +1,4 @@
-"""Standalone LAMP contract, failures, and real offline YOLO26n structural pruning.
+"""Standalone LAMP contract, failures, and offline YOLO26n/s structural pruning.
 
 No training or target W&B artifact is used. Synthetic integration checkpoints are
 explicitly labelled and never substituted for the research baseline.
@@ -34,16 +34,18 @@ def workdir(monkeypatch):
     return folder
 
 
-@pytest.fixture
-def env(workdir):
+@pytest.fixture(params=["n", "s"], ids=["yolo26n", "yolo26s"])
+def env(workdir, request):
     pytest.importorskip("torch_pruning", reason="Optional standalone dependency: install torch-pruning==1.6.1")
-    notebook = nbformat.read(NOTEBOOK, as_version=4)
+    path = NOTEBOOK if request.param == "n" else NOTEBOOK.with_name("02_lamp_yolo26s_no_recovery.ipynb")
+    notebook = nbformat.read(path, as_version=4)
     scope = {"display": lambda _value: None}
     for cell in notebook.cells:
         if cell.cell_type == "code" and set(cell.metadata.get("tags", [])) & {"config", "helpers", "imports"}:
             if "imports" in cell.metadata.get("tags", []):
                 scope.update({"STATE": scope["new_state"](), "RUN_DIR": workdir, "WB_RUN": None})
-            exec(compile(cell.source, str(NOTEBOOK), "exec"), scope)
+            exec(compile(cell.source, str(path), "exec"), scope)
+    scope["_test_model_scale"] = request.param
     scope.update({"STATE": scope["new_state"](), "RUN_DIR": workdir, "WB_RUN": None,
                   "TARGET_DEVICE": torch.device("cpu"), "DEVICE": "cpu", "IMGSZ": 64,
                   "DATASET_ROOT": workdir, "DATA_YAML": workdir / "missing.yaml",
@@ -69,14 +71,15 @@ def forbid_learning(monkeypatch):
 def synthetic_model(env):
     """Construct architecture locally; do not download pretrained weights."""
     from ultralytics.nn.tasks import DetectionModel, yaml_model_load
-    config = yaml_model_load("yolo26n.yaml")
+    config = yaml_model_load(f"yolo26{env['_test_model_scale']}.yaml")
     core = DetectionModel(config, nc=3, verbose=False).float().eval()
     core.names = {0: "synthetic_a", 1: "synthetic_b", 2: "synthetic_c"}
     return core
 
 
-def test_notebook_structure_syntax_and_no_learning_calls():
-    notebook = nbformat.read(NOTEBOOK, as_version=4)
+@pytest.mark.parametrize("path", [NOTEBOOK, NOTEBOOK.with_name("02_lamp_yolo26s_no_recovery.ipynb")])
+def test_notebook_structure_syntax_and_no_learning_calls(path):
+    notebook = nbformat.read(path, as_version=4)
     nbformat.validate(notebook)
     headings = [cell.source for cell in notebook.cells if cell.cell_type == "markdown"]
     assert [int(re.match(r"^#{1,2} (\d{2}) —", text)[1]) for text in headings] == list(range(1, 13))
@@ -97,6 +100,8 @@ def test_notebook_structure_syntax_and_no_learning_calls():
 
 def test_configuration_and_pinned_actual_apis(env):
     env["validate_configuration"]()
+    assert env["PRUNING_RATIO"] == 0.30
+    assert env["RUN_FULL_VALIDATION"] is True
     report = env["environment_report"]()
     assert report["packages"]["torch-pruning"] == "1.6.1"
     assert "max_pruning_ratio" in report["base_pruner_signature"]
@@ -105,6 +110,14 @@ def test_configuration_and_pinned_actual_apis(env):
     env["RECOVERY_ENABLED"] = True
     with pytest.raises(ValueError, match="disabled"):
         env["validate_configuration"]()
+
+
+def test_architecture_audit_rejects_other_model_scale(env, forbid_learning):
+    from ultralytics.nn.tasks import DetectionModel, yaml_model_load
+    other = "s" if env["_test_model_scale"] == "n" else "n"
+    core = DetectionModel(yaml_model_load(f"yolo26{other}.yaml"), nc=3, verbose=False).float().eval()
+    with pytest.raises(ValueError, match="Metadata/struktur"):
+        env["architecture_audit"](core)
 
 
 def test_checkpoint_selection_and_ambiguity(env, workdir):
@@ -142,7 +155,7 @@ def test_provenance_hash_and_json(env, workdir):
     artifact = env["WANDB_ARTIFACT"]
     result = env["checkpoint_provenance"](checkpoint, artifact)
     assert result["source_verification"] == "user_asserted_local_copy"
-    assert result["requested_artifact"].endswith(":v84")
+    assert result["requested_artifact"] == env["WANDB_ARTIFACT"]
     result = env["checkpoint_provenance"](checkpoint, artifact, expected_hash=digest)
     assert result["source_verification"] == "expected_sha256_matched"
     with pytest.raises(ValueError, match="SHA-256"):
@@ -151,29 +164,49 @@ def test_provenance_hash_and_json(env, workdir):
         env["write_json"](workdir / "bad.json", {"map": float("nan")})
 
 
-def test_online_acquisition_uses_exact_artifact_and_job_type(env, workdir):
+@pytest.mark.parametrize("ratio,ratio_tag", [(0.30, "pr0.3"), (0.10, "pr0.1"), (0.50, "pr0.5")])
+def test_online_acquisition_uses_exact_artifact_and_job_type(env, workdir, monkeypatch, ratio, ratio_tag):
     root = workdir / "artifact" / "nested"
     root.mkdir(parents=True)
     (root / "best.pt").write_bytes(b"mock download; no actual auth")
     calls = []
+    init_calls = []
+    monkeypatch.setenv("WANDB_RUN_ID", "baseline-run-must-not-be-reused")
     artifact = SimpleNamespace(qualified_name=env["WANDB_ARTIFACT"], digest="mock-digest",
-                               id="mock-id", version="v84", download=lambda **_kwargs: str(root.parent))
+                               id="mock-id", version=env["WANDB_ARTIFACT"].rsplit(":", 1)[1],
+                               download=lambda **_kwargs: str(root.parent))
     def use_artifact(name, **kwargs):
         calls.append((name, kwargs))
         return artifact
     def init(**kwargs):
+        init_calls.append(kwargs)
         assert kwargs["job_type"] == "lamp-pruning-smoke"
         assert kwargs["entity"] == "ilhamrafiqin-brawijaya-university"
         assert kwargs["project"] == "yolom26-kd-indotraffic"
+        assert kwargs["name"] == f"prun_lamp1_yolo26{env['_test_model_scale']}_pruned-{ratio_tag}"
+        assert kwargs["group"] == "lamp-v1"
+        assert set(kwargs["tags"]) == {"pruned", "lamp", "structured", "no-recovery",
+                                        f"yolo26{env['_test_model_scale']}", "seed42", ratio_tag}
+        assert kwargs["resume"] == "never"
+        assert uuid.UUID(kwargs["id"]).version == 4
+        assert kwargs["id"] != "baseline-run-must-not-be-reused"
         assert "WANDB_API_KEY" not in kwargs["config"]
         return SimpleNamespace(use_artifact=use_artifact)
-    env.update({"WANDB_TRACKING": True, "LOCAL_CHECKPOINT_PATH": None,
+    env.update({"WANDB_TRACKING": True, "LOCAL_CHECKPOINT_PATH": None, "PRUNING_RATIO": ratio,
                 "wandb": SimpleNamespace(init=init, api=SimpleNamespace(api_key="existing-session"))})
     path, provenance = env["obtain_checkpoint"]()
     assert path.name == "best.pt"
     assert calls == [(env["WANDB_ARTIFACT"], {"type": "model"})]
     assert provenance["source_verification"] == "wandb_download"
     assert provenance["artifact_relative_path"] == "nested/best.pt"
+    expected_artifact = {"n": "03_baseline_yolo26n-9uu3meve-checkpoints:v84",
+                         "s": "02_baseline_yolo26s-q5kp9k9d-checkpoints:v62"}
+    assert env["WANDB_ARTIFACT"].endswith(expected_artifact[env["_test_model_scale"]])
+    env["RUN_DIR"] = workdir / "next-unique-run"
+    env["obtain_checkpoint"]()
+    assert len(init_calls) == 2
+    assert init_calls[0]["name"] == init_calls[1]["name"]
+    assert init_calls[0]["id"] != init_calls[1]["id"]
 
 
 def test_class_order_and_ratio_contract(env):
@@ -258,6 +291,19 @@ def test_dataset_absent_invalid_and_class_mismatch(env, workdir):
     assert left["nms"] is None and left["quantize"] is None and left["split"] == "val"
 
 
+def test_group_capacity_excludes_over_cap_channels_without_rescaling(env):
+    score = torch.tensor([0.8, 0.1, 0.2, 0.3, 0.9, 0.4])
+    capped = env["cap_group_importance"](score, 6, 6)
+    assert torch.equal(capped[torch.isfinite(capped)], score[[1, 2, 3]])
+    assert torch.isinf(capped[[0, 4, 5]]).all()
+    # Two channels already removed: only one further channel fits the original 50% cap.
+    remaining = env["cap_group_importance"](score[:4], 6, 4)
+    assert torch.isfinite(remaining).sum().item() == 1
+    assert remaining[1].item() == score[1].item()
+    with pytest.raises(ValueError, match="Importance"):
+        env["cap_group_importance"](torch.tensor([float("nan")]), 1, 1)
+
+
 @pytest.mark.parametrize("end2end", [False, True])
 def test_real_lamp_pruning_fresh_process_reload_and_protection(env, workdir, forbid_learning, end2end):
     core = synthetic_model(env)
@@ -273,6 +319,9 @@ def test_real_lamp_pruning_fresh_process_reload_and_protection(env, workdir, for
     assert not any(module.training for module in core.modules())
     changes = env["apply_structural_pruning"](pruner, audit)
     assert changes and all(change["channels_after"] < change["channels_before"] for change in changes)
+    eligible_before = sum(entry["initial_channels"] for entry in audit["eligible"].values())
+    eligible_after = sum(entry["root"].out_channels for entry in audit["eligible"].values())
+    assert env["reduction"](eligible_before, eligible_after) == pytest.approx(0.30)
     env["assert_layer_consistency"](core)
     env["assert_head_unchanged"](audit["head"], protected_head)
     after = env["model_measurements"](core, 64)

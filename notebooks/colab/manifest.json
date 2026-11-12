@@ -16,7 +16,7 @@
   {
     "colab": "teacher/01_teacher_yolo26m.ipynb",
     "source": "teacher/01_teacher_yolo26m.ipynb",
-    "source_sha256": "31c0258e81a247a721bb99671fc4f6f41546089852b4c4259804e15174697e4e",
+    "source_sha256": "7763ea12f99c23e8bf95643a7f8d883d8a4a42346df4e3c0afa8d40d122f891b",
     "experiment_id": "01_teacher_yolo26m",
     "method": "Supervised teacher",
     "teacher": "—",
@@ -30,7 +30,7 @@
   {
     "colab": "baseline/02_baseline_yolo26s.ipynb",
     "source": "baseline/02_baseline_yolo26s.ipynb",
-    "source_sha256": "871bf920e413375154e3fbf5181f82dc30ae239c460ed9cbc6fb4f096d2cdb11",
+    "source_sha256": "d43781495eb7503cd6c41f960756ba550f8748ae583598a58f99c205b5ba22fc",
     "experiment_id": "02_baseline_yolo26s",
     "method": "Supervised",
     "teacher": "—",
@@ -44,14 +44,13 @@
   {
     "colab": "baseline/03_baseline_yolo26n_pretrained.ipynb",
     "source": "baseline/03_baseline_yolo26n.ipynb",
-    "source_sha256": "4f9599bc6068d636434083505f281e14a1f533c14959f3a0d21e3404ae93ccc7",
+    "source_sha256": "c50eb9b54c7763cfe83a3bd03972e302d4f61b62908f2cda18323fa160388806",
     "experiment_id": "03_baseline_yolo26n",
     "method": "Pretrained baseline",
     "teacher": "—",
     "student": "26n",
     "seeds": [
-      7,
-      3407
+      7
     ],
     "output": "03_baseline_yolo26n_pretrained/<run-id>/",
     "colab_gpu_execution": "NOT TESTED"
@@ -59,7 +58,7 @@
   {
     "colab": "baseline/04_baseline_yolo26n_scratch.ipynb",
     "source": "baseline/03_baseline_yolo26n_scratch.ipynb",
-    "source_sha256": "53027a39ac587414d8249384ae051e2470e789d3bc3c193c858a5716ac010d17",
+    "source_sha256": "b1e7ceabf4a4e2e5a407b49de13f94e476176e2efc872a7527abcf7eea3e143e",
     "experiment_id": "03_baseline_yolo26n_scratch",
     "method": "Scratch baseline",
     "teacher": "—",
@@ -73,7 +72,7 @@
   {
     "colab": "kd/teacher_m/05_native_yolo26m_to_yolo26s.ipynb",
     "source": "kd/teacher_m/04_native_yolo26s.ipynb",
-    "source_sha256": "fac95809c93774f84d73d48e57af581827561643d9959f78449fca38dfbb0cf1",
+    "source_sha256": "ff644a34dfb0238dffbeac8255b49f79fec4c291dfa8e39aadf23e4549423f3d",
     "experiment_id": "04_native_yolo26s_dis1",
     "method": "Native KD",
     "teacher": "26m v50",
@@ -87,7 +86,7 @@
   {
     "colab": "kd/teacher_m/06_native_yolo26m_to_yolo26n.ipynb",
     "source": "kd/teacher_m/05_native_yolo26n.ipynb",
-    "source_sha256": "249cc326c7305ce5cac6069db7e91b5d87336c6e171ba76b1601a2486821962b",
+    "source_sha256": "b8deb29a802c936efc2b93bd3f1be9d28a09d4b97adc9484da6a1fd8d8985975",
     "experiment_id": "05_native_yolo26n_dis1",
     "method": "Native KD",
     "teacher": "26m v50",
@@ -101,7 +100,7 @@
   {
     "colab": "kd/teacher_m/07_crosskd_yolo26m_to_yolo26s.ipynb",
     "source": "kd/teacher_m/06_crosskd_yolo26s.ipynb",
-    "source_sha256": "3c950573e406d335c275f7c5a0224ba80b5fe45ed70097fb3ad452f5b6b8cd37",
+    "source_sha256": "eb91015cc1b7c492e8af5ca1f94953fc9d572b23865fda3cd89facc6c4a7d3ac",
     "experiment_id": "06_crosskd_yolo26s",
     "method": "CrossKD",
     "teacher": "26m v50",
@@ -115,7 +114,7 @@
   {
     "colab": "kd/teacher_m/08_crosskd_yolo26m_to_yolo26n.ipynb",
     "source": "kd/teacher_m/07_crosskd_yolo26n.ipynb",
-    "source_sha256": "11ac22c97ec7fb90e58dfe6dfd0f6bad61dc597fdccf034049788574e7d59345",
+    "source_sha256": "3ed882d564a8a79db8600f56c7febe9ed92e82c11bb083ed267b6eb65cf36f21",
     "experiment_id": "07_crosskd_yolo26n",
     "method": "CrossKD",
     "teacher": "26m v50",
@@ -129,7 +128,7 @@
   {
     "colab": "kd/teacher_m/09_csakd_yolo26m_to_yolo26s.ipynb",
     "source": "kd/teacher_m/08_csakd_yolo26s.ipynb",
-    "source_sha256": "809f110738c527c663a5babdc43ac62124cc6202b93e7c020d4b2276db4e7bef",
+    "source_sha256": "59f27d9f5cf3c4112d1897b023fc40017d634ad14b006fc2f8d6d913d1c85172",
     "experiment_id": "08_csakd_yolo26s",
     "method": "CSAKD",
     "teacher": "26m v50",
@@ -143,7 +142,7 @@
   {
     "colab": "kd/teacher_m/10_csakd_yolo26m_to_yolo26n.ipynb",
     "source": "kd/teacher_m/09_csakd_yolo26n.ipynb",
-    "source_sha256": "6b86b2fa533220f1e05979c0ada4ffabc6d075b8ab7d9e4086208071dc6ea813",
+    "source_sha256": "995d5b19e8189c1b0860c2209b0206e03da9b129c58478b3a4ef54645a0fc59f",
     "experiment_id": "09_csakd_yolo26n",
     "method": "CSAKD",
     "teacher": "26m v50",
@@ -157,7 +156,7 @@
   {
     "colab": "kd/teacher_s/11_native_yolo26s_to_yolo26n.ipynb",
     "source": "kd/teacher_s/10_native_yolo26n_teacher_yolo26s.ipynb",
-    "source_sha256": "c9315888d9ee314536a8b0ab706f28a0edeaf5ba9986bb458e754cc140cc6ca7",
+    "source_sha256": "3d4a45e2b42278d01670646485599b047db63da1d07c0a8c58fb0242b9a62e4d",
     "experiment_id": "10_native_yolo26n_teacher_yolo26s_dis1",
     "method": "Native KD",
     "teacher": "26s v62",
@@ -174,7 +173,7 @@
   {
     "colab": "kd/teacher_s/12_crosskd_yolo26s_to_yolo26n.ipynb",
     "source": "kd/teacher_s/11_crosskd_yolo26n_teacher_yolo26s.ipynb",
-    "source_sha256": "707ff696b1e471ee55ad7d270bcacf5c7e736fadc4cf7034b1a3b26526a4ec6a",
+    "source_sha256": "1625407dea09b99f65e15509e8271e95e114bbfded0a886cf173921809f585a1",
     "experiment_id": "11_crosskd_yolo26n_teacher_yolo26s",
     "method": "CrossKD",
     "teacher": "26s v62",
@@ -191,7 +190,7 @@
   {
     "colab": "kd/teacher_s/13_csakd_yolo26s_to_yolo26n.ipynb",
     "source": "kd/teacher_s/12_csakd_yolo26n_teacher_yolo26s.ipynb",
-    "source_sha256": "1db823e796f86b5a16ba8e936750523711a9bafa05371d4559260701932ebe5c",
+    "source_sha256": "cdd06926071ffedbd7defbba3e8110751ff2d08dd0bf35987147b79dff7d928f",
     "experiment_id": "12_csakd_yolo26n_teacher_yolo26s",
     "method": "CSAKD",
     "teacher": "26s v62",
@@ -205,7 +204,7 @@
   {
     "colab": "kd/teacher_s/14_pearson_pkd_yolo26s_to_yolo26n.ipynb",
     "source": "kd/teacher_s/12_pkd_yolo26n.ipynb",
-    "source_sha256": "bf3a01411c39adbd82e4458ec6a5b73af3023875a856990a2392e70ab01bc69d",
+    "source_sha256": "178fd3d0ee0a8b3fefb37238e4b9ece1612c2f481ac1622cd13f9cff051f9b64",
     "experiment_id": "12_pkd_yolo26n",
     "method": "Pearson/PKD",
     "teacher": "26s v62",
@@ -219,7 +218,7 @@
   {
     "colab": "kd/teacher_s/15_head_yolo26s_to_yolo26n.ipynb",
     "source": "kd/teacher_s/13_head_yolo26n_teacher_yolo26s.ipynb",
-    "source_sha256": "82e19e68d4d9c266295c342ed60c3db2504daf9a094ff3c4009fe88007fcd854",
+    "source_sha256": "96b12aecd3b88087353a23e96b814934cb4fb084403e19e7220b15e3a9405795",
     "experiment_id": "13_head_yolo26n_teacher_yolo26s",
     "method": "HEAD",
     "teacher": "26s v62",
@@ -233,7 +232,7 @@
   {
     "colab": "kd/teacher_s/16_rank_mimicking_yolo26s_to_yolo26n.ipynb",
     "source": "kd/teacher_s/14_rm_yolo26n_teacher_yolo26s.ipynb",
-    "source_sha256": "e438fdb89e1d2f36074ef34a5a0e1a926f6cdf4b652c244c3a864348f0b2106f",
+    "source_sha256": "ff66f902f97f1590d9cbeb590c2c2c60ec813a4a110650c4d64a68c294fe76de",
     "experiment_id": "14_rm_yolo26n_teacher_yolo26s",
     "method": "Rank Mimicking",
     "teacher": "26s v62",

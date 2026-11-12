@@ -1,0 +1,258 @@
+{
+  "date_jakarta": "2026-11-06",
+  "protocol": "source-matched-v1",
+  "tests_passed": 166,
+  "local_smoke_status": "PASS",
+  "device": "cpu",
+  "torch": "2.14.0+cpu",
+  "imgsz": 64,
+  "batch": 2,
+  "nbs": 2,
+  "epochs": 1,
+  "amp": false,
+  "training_seed": 7,
+  "pruning_seed": 42,
+  "train_images": 6,
+  "val_images": 6,
+  "dataset": "synthetic-fixture",
+  "raw_source": "YOLO26s v62 / target 1.02x",
+  "teacher_fixture": "Synthetic YOLO26m for plumbing only",
+  "methods": {
+    "finetune": {
+      "status": "PASS",
+      "input_status": "PASS",
+      "training_status": "PASS",
+      "reload_status": "PASS",
+      "validation_status": "PASS",
+      "eda_status": "PASS",
+      "raw_unchanged": true,
+      "teacher_frozen": null,
+      "raw_sha256": "ccecd07465900f562ed2517b547a2031e42c6eafe628973344cc254d3b0353e2",
+      "checkpoint": {
+        "relative_path": "training/weights/best.pt",
+        "sha256": "b4dad3ecffdede17866cf887edb04c56ebbfabb96f84bef030936faf21522d9b"
+      },
+      "trained_parameters_sha256": "13cef4ed023f629a697b67053a57cc5595933fab3afbc713548306dd8f7dfd2d",
+      "initial_parameters_sha256": "6a1977441607d90f7f5fdf4e249b463c4669f1d8415b1e40dd79ae9e13c22487",
+      "teacher": null,
+      "epochs": 1,
+      "resume_status": "RESUME_NOT_VERIFIED",
+      "manifest": "outputs/pruning/source_matched_cpu_final_20261106/finetune/20261106T162138Z_92e1c681/fine_tuned_manifest.json",
+      "optimizer_steps": 3,
+      "fresh_process_reload": "PASS",
+      "prediction_shape": [
+        1,
+        10,
+        84
+      ],
+      "latency_status": "NOT_RUN",
+      "plots_png": 48,
+      "stages": {
+        "baseline": {
+          "parameters": 9952508,
+          "gflops": 0.225226752,
+          "map50_95": 0.0
+        },
+        "raw_pruned": {
+          "parameters": 9659646,
+          "gflops": 0.2208068,
+          "map50_95": 0.0
+        },
+        "recovered": {
+          "parameters": 9659646,
+          "gflops": 0.2208068,
+          "map50_95": 0.0
+        }
+      }
+    },
+    "native": {
+      "status": "PASS",
+      "input_status": "PASS",
+      "training_status": "PASS",
+      "reload_status": "PASS",
+      "validation_status": "PASS",
+      "eda_status": "PASS",
+      "raw_unchanged": true,
+      "teacher_frozen": true,
+      "raw_sha256": "ccecd07465900f562ed2517b547a2031e42c6eafe628973344cc254d3b0353e2",
+      "checkpoint": {
+        "relative_path": "training/weights/best.pt",
+        "sha256": "cdd32c0e6a2be23206b712f9a26072887009b3c307c1945a1af4dba0c335b841"
+      },
+      "trained_parameters_sha256": "3011c2458f3c0473e92a0608068fcc8818580d547e50ceb22f630dad8fb1e282",
+      "initial_parameters_sha256": "6a1977441607d90f7f5fdf4e249b463c4669f1d8415b1e40dd79ae9e13c22487",
+      "teacher": {
+        "reference": null,
+        "architecture": "YOLO26m",
+        "sha256": "4c5f9665992b852059fe5b273d2634da75aed0f34068e0c844569f9101edc87a",
+        "state_sha256": "0d079c7d87e4a707435d7dd9a80bfbe91881c344c76f646d3e100df5e584b7f9",
+        "provenance": "DIAGNOSTIC_FIXTURE",
+        "hyperparameters": {
+          "dis": 1.0
+        },
+        "adaptation": null
+      },
+      "epochs": 1,
+      "resume_status": "RESUME_NOT_VERIFIED",
+      "manifest": "outputs/pruning/source_matched_cpu_final_20261106/native/20261106T162212Z_314452f3/fine_tuned_manifest.json",
+      "kd_loss": 2.0163304805755615,
+      "optimizer_steps": 3,
+      "fresh_process_reload": "PASS",
+      "prediction_shape": [
+        1,
+        10,
+        84
+      ],
+      "latency_status": "NOT_RUN",
+      "plots_png": 49,
+      "stages": {
+        "baseline": {
+          "parameters": 9952508,
+          "gflops": 0.225226752,
+          "map50_95": 0.0
+        },
+        "raw_pruned": {
+          "parameters": 9659646,
+          "gflops": 0.2208068,
+          "map50_95": 0.0
+        },
+        "recovered": {
+          "parameters": 9659646,
+          "gflops": 0.2208068,
+          "map50_95": 0.0
+        }
+      }
+    },
+    "crosskd": {
+      "status": "PASS",
+      "input_status": "PASS",
+      "training_status": "PASS",
+      "reload_status": "PASS",
+      "validation_status": "PASS",
+      "eda_status": "PASS",
+      "raw_unchanged": true,
+      "teacher_frozen": true,
+      "raw_sha256": "ccecd07465900f562ed2517b547a2031e42c6eafe628973344cc254d3b0353e2",
+      "checkpoint": {
+        "relative_path": "training/weights/best.pt",
+        "sha256": "6bfa6df961a68d3b9c1b3bfd0f1a489701a4db9efc89a532c3088fc7db899f72"
+      },
+      "trained_parameters_sha256": "c02e10d7b33c294e086ed561b4c999cdf9a599fde416ee58970c05b14131924f",
+      "initial_parameters_sha256": "6a1977441607d90f7f5fdf4e249b463c4669f1d8415b1e40dd79ae9e13c22487",
+      "teacher": {
+        "reference": null,
+        "architecture": "YOLO26m",
+        "sha256": "4c5f9665992b852059fe5b273d2634da75aed0f34068e0c844569f9101edc87a",
+        "state_sha256": "0d079c7d87e4a707435d7dd9a80bfbe91881c344c76f646d3e100df5e584b7f9",
+        "provenance": "DIAGNOSTIC_FIXTURE",
+        "hyperparameters": {
+          "cls_weight": 1.0,
+          "box_weight": 1.0,
+          "gamma": 1.0
+        },
+        "adaptation": null
+      },
+      "epochs": 1,
+      "resume_status": "RESUME_NOT_VERIFIED",
+      "manifest": "outputs/pruning/source_matched_cpu_final_20261106/crosskd/20261106T162239Z_b567ed50/fine_tuned_manifest.json",
+      "kd_loss": 0.4898270070552826,
+      "optimizer_steps": 3,
+      "fresh_process_reload": "PASS",
+      "prediction_shape": [
+        1,
+        10,
+        84
+      ],
+      "latency_status": "NOT_RUN",
+      "plots_png": 51,
+      "stages": {
+        "baseline": {
+          "parameters": 9952508,
+          "gflops": 0.225226752,
+          "map50_95": 0.0
+        },
+        "raw_pruned": {
+          "parameters": 9659646,
+          "gflops": 0.2208068,
+          "map50_95": 0.0
+        },
+        "recovered": {
+          "parameters": 9659646,
+          "gflops": 0.2208068,
+          "map50_95": 0.0
+        }
+      }
+    },
+    "mgd": {
+      "status": "PASS",
+      "input_status": "PASS",
+      "training_status": "PASS",
+      "reload_status": "PASS",
+      "validation_status": "PASS",
+      "eda_status": "PASS",
+      "raw_unchanged": true,
+      "teacher_frozen": true,
+      "raw_sha256": "ccecd07465900f562ed2517b547a2031e42c6eafe628973344cc254d3b0353e2",
+      "checkpoint": {
+        "relative_path": "training/weights/best.pt",
+        "sha256": "d7166a0af44e3b3aa5bccb16a80c3996336c5407e1241d71ef793860e8eb04a8"
+      },
+      "trained_parameters_sha256": "20962d773e8a15a9f79aa867ec46612228f997f0dd6147dbb9d2310b1fa4a855",
+      "initial_parameters_sha256": "6a1977441607d90f7f5fdf4e249b463c4669f1d8415b1e40dd79ae9e13c22487",
+      "teacher": {
+        "reference": null,
+        "architecture": "YOLO26m",
+        "sha256": "4c5f9665992b852059fe5b273d2634da75aed0f34068e0c844569f9101edc87a",
+        "state_sha256": "0d079c7d87e4a707435d7dd9a80bfbe91881c344c76f646d3e100df5e584b7f9",
+        "provenance": "DIAGNOSTIC_FIXTURE",
+        "hyperparameters": {
+          "alpha": 2e-05,
+          "mask_ratio": 0.65,
+          "levels": [
+            "P3",
+            "P4",
+            "P5"
+          ],
+          "reconstruction_precision": "FP32"
+        },
+        "adaptation": "Teacher YOLO26m, student YOLO26s pruned"
+      },
+      "epochs": 1,
+      "resume_status": "RESUME_NOT_VERIFIED",
+      "manifest": "outputs/pruning/source_matched_cpu_final_20261106/mgd/20261106T162307Z_4606bf82/fine_tuned_manifest.json",
+      "kd_loss": 0.17604179680347443,
+      "optimizer_steps": 3,
+      "fresh_process_reload": "PASS",
+      "prediction_shape": [
+        1,
+        10,
+        84
+      ],
+      "latency_status": "NOT_RUN",
+      "plots_png": 59,
+      "stages": {
+        "baseline": {
+          "parameters": 9952508,
+          "gflops": 0.225226752,
+          "map50_95": 0.0
+        },
+        "raw_pruned": {
+          "parameters": 9659646,
+          "gflops": 0.2208068,
+          "map50_95": 0.0
+        },
+        "recovered": {
+          "parameters": 9659646,
+          "gflops": 0.2208068,
+          "map50_95": 0.0
+        }
+      }
+    }
+  },
+  "kaggle_gpu": "NOT_RUN",
+  "filkom_gpu": "NOT_RUN",
+  "poltrada_v3_full_val": "NOT_RUN",
+  "wandb_online": "NOT_RUN",
+  "teacher_v50_online": "NOT_RUN",
+  "resume_status": "RESUME_NOT_VERIFIED"
+}

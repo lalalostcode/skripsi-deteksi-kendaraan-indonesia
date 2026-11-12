@@ -1,0 +1,398 @@
+{
+  "date_jakarta": "2026-11-04",
+  "notebook": "notebooks/kaggle/pruning/05_lamp_yolo26ns_audit_no_recovery.ipynb",
+  "notebook_sha256": "08838de4b07610f179efe74365bf272f76abf8950df7def6eb0c934249689b44",
+  "representative_snapshot_notebook_sha256": "c79c563039dc2a3a504ed8478dc269391d5e17128102ba2f05f6224d8dd0824e",
+  "suite": "outputs/pruning/lamp_gflops_cpu_representative/20261104T061909Z_7b30b67a",
+  "status": "PASS",
+  "conditions": {
+    "device": "CPU",
+    "precision": "FP32",
+    "seed": 42,
+    "imgsz": 64,
+    "fixture_images": 6,
+    "extended_ratios": [
+      0.1
+    ],
+    "training_epochs": 0,
+    "eda_render": "NOT_RUN in representative sweep"
+  },
+  "models": [
+    {
+      "model": "YOLO26n",
+      "baseline_parity": "PASS",
+      "target_search": [
+        {
+          "target": 1.1,
+          "status": "REACHED",
+          "tier": 2,
+          "channels": 251,
+          "gflops": 0.052448672,
+          "speed_up": 1.102746090501586
+        },
+        {
+          "target": 1.2,
+          "status": "REACHED",
+          "tier": 3,
+          "channels": 474,
+          "gflops": 0.048172544,
+          "speed_up": 1.2006334562691976
+        },
+        {
+          "target": 1.3,
+          "status": "UNREACHABLE_UNDER_POLICY",
+          "tier": 3,
+          "channels": 492,
+          "gflops": 0.047039488,
+          "speed_up": 1.229553518949866
+        }
+      ],
+      "configurations": [
+        {
+          "configuration_id": "baseline-source",
+          "target_speedup": null,
+          "gflops_speedup": 1.0,
+          "parameters": 2506140,
+          "gflops": 0.057837568,
+          "checkpoint_sha256": null,
+          "structural_status": "PASS",
+          "reload_status": "NOT_RUN",
+          "validation_status": "PASS",
+          "latency_status": "NOT_RUN",
+          "eda_status": "NOT_RUN"
+        },
+        {
+          "configuration_id": "baseline-reserialized",
+          "target_speedup": null,
+          "gflops_speedup": 1.0,
+          "parameters": 2506140,
+          "gflops": 0.057837568,
+          "checkpoint_sha256": null,
+          "structural_status": "PASS",
+          "reload_status": "PASS",
+          "validation_status": "PASS",
+          "latency_status": "NOT_RUN",
+          "eda_status": "NOT_RUN"
+        },
+        {
+          "configuration_id": "extended-pr0.1",
+          "target_speedup": null,
+          "gflops_speedup": 1.0613263996298266,
+          "parameters": 2236276,
+          "gflops": 0.054495552,
+          "checkpoint_sha256": "906d14e5463ae11808a9e55008af7f85b6411d28b48b436ee8a5d6f6d3ef87ad",
+          "structural_status": "PASS",
+          "reload_status": "PASS",
+          "validation_status": "PASS",
+          "latency_status": "NOT_RUN",
+          "eda_status": "NOT_RUN"
+        },
+        {
+          "configuration_id": "p5-only",
+          "target_speedup": null,
+          "gflops_speedup": 1.0256400944252768,
+          "parameters": 2325660,
+          "gflops": 0.05639168,
+          "checkpoint_sha256": "80a17d932b2a0610fbaad1ef51127e0b0a43e7a704f54c802e62f8711e364a49",
+          "structural_status": "PASS",
+          "reload_status": "PASS",
+          "validation_status": "PASS",
+          "latency_status": "NOT_RUN",
+          "eda_status": "NOT_RUN"
+        },
+        {
+          "configuration_id": "p5-protected",
+          "target_speedup": null,
+          "gflops_speedup": 1.1177921023353097,
+          "parameters": 2241194,
+          "gflops": 0.051742688,
+          "checkpoint_sha256": "7a9aa89cf2baef2d33d20d43f0af55a7ac3f1bf811d542096481aeb452e57176",
+          "structural_status": "PASS",
+          "reload_status": "PASS",
+          "validation_status": "PASS",
+          "latency_status": "NOT_RUN",
+          "eda_status": "NOT_RUN"
+        },
+        {
+          "configuration_id": "target-1.1x",
+          "target_speedup": 1.1,
+          "gflops_speedup": 1.102746090501586,
+          "parameters": 2276502,
+          "gflops": 0.052448672,
+          "checkpoint_sha256": "540437e1b8a2870d99315b119e7bf4f4cc9b99a01e1784a6a49bc6579a12f3df",
+          "structural_status": "PASS",
+          "reload_status": "PASS",
+          "validation_status": "PASS",
+          "latency_status": "NOT_RUN",
+          "eda_status": "NOT_RUN"
+        },
+        {
+          "configuration_id": "target-1.2x",
+          "target_speedup": 1.2,
+          "gflops_speedup": 1.2006334562691976,
+          "parameters": 2098584,
+          "gflops": 0.048172544,
+          "checkpoint_sha256": "c2bba863f89d39723485c615a526c372d0249a0ec662ba567b0a598260e8d8ad",
+          "structural_status": "PASS",
+          "reload_status": "PASS",
+          "validation_status": "PASS",
+          "latency_status": "NOT_RUN",
+          "eda_status": "NOT_RUN"
+        },
+        {
+          "configuration_id": "max-diagnostic",
+          "target_speedup": 1.3,
+          "gflops_speedup": 1.229553518949866,
+          "parameters": 2093284,
+          "gflops": 0.047039488,
+          "checkpoint_sha256": "d764f2223701d9976624c2216c637b0c6af341057224c2ce09217f30b1347a9f",
+          "structural_status": "PASS",
+          "reload_status": "PASS",
+          "validation_status": "PASS",
+          "latency_status": "NOT_RUN",
+          "eda_status": "NOT_RUN"
+        }
+      ]
+    },
+    {
+      "model": "YOLO26s",
+      "baseline_parity": "PASS",
+      "target_search": [
+        {
+          "target": 1.1,
+          "status": "REACHED",
+          "tier": 2,
+          "channels": 498,
+          "gflops": 0.204676128,
+          "speed_up": 1.1004055734335565
+        },
+        {
+          "target": 1.2,
+          "status": "REACHED",
+          "tier": 3,
+          "channels": 933,
+          "gflops": 0.18767488,
+          "speed_up": 1.2000900280314553
+        },
+        {
+          "target": 1.3,
+          "status": "UNREACHABLE_UNDER_POLICY",
+          "tier": 3,
+          "channels": 984,
+          "gflops": 0.182331392,
+          "speed_up": 1.2352604207617741
+        }
+      ],
+      "configurations": [
+        {
+          "configuration_id": "baseline-source",
+          "target_speedup": null,
+          "gflops_speedup": 1.0,
+          "parameters": 9952508,
+          "gflops": 0.225226752,
+          "checkpoint_sha256": null,
+          "structural_status": "PASS",
+          "reload_status": "NOT_RUN",
+          "validation_status": "PASS",
+          "latency_status": "NOT_RUN",
+          "eda_status": "NOT_RUN"
+        },
+        {
+          "configuration_id": "baseline-reserialized",
+          "target_speedup": null,
+          "gflops_speedup": 1.0,
+          "parameters": 9952508,
+          "gflops": 0.225226752,
+          "checkpoint_sha256": null,
+          "structural_status": "PASS",
+          "reload_status": "PASS",
+          "validation_status": "PASS",
+          "latency_status": "NOT_RUN",
+          "eda_status": "NOT_RUN"
+        },
+        {
+          "configuration_id": "extended-pr0.1",
+          "target_speedup": null,
+          "gflops_speedup": 1.061021181874137,
+          "parameters": 8858156,
+          "gflops": 0.212273568,
+          "checkpoint_sha256": "3f93faaf2eccf6176b673ca6a797828e4e018d793cd4cb8a8ffc7bc2e960375d",
+          "structural_status": "PASS",
+          "reload_status": "PASS",
+          "validation_status": "PASS",
+          "latency_status": "NOT_RUN",
+          "eda_status": "NOT_RUN"
+        },
+        {
+          "configuration_id": "p5-only",
+          "target_speedup": null,
+          "gflops_speedup": 1.0263172630046475,
+          "parameters": 9231100,
+          "gflops": 0.219451392,
+          "checkpoint_sha256": "c246c5959c9f59be0e254f0e22f392526beb2437f05a18e507e1c51762fc8efb",
+          "structural_status": "PASS",
+          "reload_status": "PASS",
+          "validation_status": "PASS",
+          "latency_status": "NOT_RUN",
+          "eda_status": "NOT_RUN"
+        },
+        {
+          "configuration_id": "p5-protected",
+          "target_speedup": null,
+          "gflops_speedup": 1.10217995086623,
+          "parameters": 8837566,
+          "gflops": 0.204346624,
+          "checkpoint_sha256": "ef1d8b373eb7fb36c4e8249c5cd4da37eced6c5873a9883f26994670f851843d",
+          "structural_status": "PASS",
+          "reload_status": "PASS",
+          "validation_status": "PASS",
+          "latency_status": "NOT_RUN",
+          "eda_status": "NOT_RUN"
+        },
+        {
+          "configuration_id": "target-1.1x",
+          "target_speedup": 1.1,
+          "gflops_speedup": 1.1004055734335565,
+          "parameters": 9032700,
+          "gflops": 0.204676128,
+          "checkpoint_sha256": "6de659827c4a4880782c06c9d6c50a02f47bec51efd41077bcee503441682b70",
+          "structural_status": "PASS",
+          "reload_status": "PASS",
+          "validation_status": "PASS",
+          "latency_status": "NOT_RUN",
+          "eda_status": "NOT_RUN"
+        },
+        {
+          "configuration_id": "target-1.2x",
+          "target_speedup": 1.2,
+          "gflops_speedup": 1.2000900280314553,
+          "parameters": 8331468,
+          "gflops": 0.18767488,
+          "checkpoint_sha256": "55a2f618493ef92a61b462105ab376c2ea859c7b0821c19ca0509f3ee4726588",
+          "structural_status": "PASS",
+          "reload_status": "PASS",
+          "validation_status": "PASS",
+          "latency_status": "NOT_RUN",
+          "eda_status": "NOT_RUN"
+        },
+        {
+          "configuration_id": "max-diagnostic",
+          "target_speedup": 1.3,
+          "gflops_speedup": 1.2352604207617741,
+          "parameters": 8303756,
+          "gflops": 0.182331392,
+          "checkpoint_sha256": "8402a65aaaf49b7f2f000042b62fe0f339c4c661b7e293eb81698b310e864583",
+          "structural_status": "PASS",
+          "reload_status": "PASS",
+          "validation_status": "PASS",
+          "latency_status": "NOT_RUN",
+          "eda_status": "NOT_RUN"
+        }
+      ]
+    }
+  ],
+  "profile_640": {
+    "device": "CPU",
+    "imgsz": 640,
+    "depgraph_imgsz": 64,
+    "counter": "Notebook THOP plus attention matmul",
+    "capacities": {
+      "n": {
+        "baseline_gflops": 5.905408,
+        "baseline_sha256": "380a087fd621e8a43fe2b9b4d6b1bb6fb00a4d0443cc5afe81ef3efdf0775f0f",
+        "tiers": [
+          {
+            "cap_pct": [
+              25,
+              10
+            ],
+            "channels_removed": 160,
+            "gflops": 5.5442304,
+            "speedup": 1.0651447674324646
+          },
+          {
+            "cap_pct": [
+              35,
+              20
+            ],
+            "channels_removed": 252,
+            "gflops": 5.351568,
+            "speedup": 1.1034911637112712
+          },
+          {
+            "cap_pct": [
+              50,
+              50
+            ],
+            "channels_removed": 492,
+            "gflops": 4.8256,
+            "speedup": 1.223766578249337
+          }
+        ]
+      },
+      "s": {
+        "baseline_gflops": 22.7659776,
+        "baseline_sha256": "5bc3ae61f8da1c9f03916922de10146805c27c64a11e46edd766a00d0f6f18fd",
+        "tiers": [
+          {
+            "cap_pct": [
+              25,
+              10
+            ],
+            "channels_removed": 323,
+            "gflops": 21.3122784,
+            "speedup": 1.0682094693357609
+          },
+          {
+            "cap_pct": [
+              35,
+              20
+            ],
+            "channels_removed": 512,
+            "gflops": 20.4817952,
+            "speedup": 1.11152256809989
+          },
+          {
+            "cap_pct": [
+              50,
+              50
+            ],
+            "channels_removed": 984,
+            "gflops": 18.4764416,
+            "speedup": 1.232162452752807
+          }
+        ]
+      }
+    }
+  },
+  "eda_check_640": {
+    "configuration": "YOLO26n extended 10%",
+    "directory": "outputs/pruning/lamp_gflops_cpu/20261104T061203Z_394f68d5/yolo26n/extended-pr0.1",
+    "status": "PASS",
+    "png": 15,
+    "svg": 15
+  },
+  "final_evaluator_stale_cache": {
+    "status": "PASS",
+    "images": 6,
+    "labels": 6,
+    "source_cache_unchanged": true
+  },
+  "tests": {
+    "passed": 176,
+    "unrelated_failed": 1,
+    "failure": "Colab manifest hashes differ from current Kaggle baseline N/S notebook bytes."
+  },
+  "early_attempt": {
+    "configuration": "YOLO26n extended 20%, CPU 640 synthetic",
+    "validation": "FAIL (NMS timeout; printed metrics rejected)"
+  },
+  "external_statuses": {
+    "poltrada_v3": "NOT_RUN",
+    "kaggle_gpu_smoke": "NOT_RUN",
+    "cuda_latency": "NOT_RUN",
+    "full_val": "NOT_RUN",
+    "test": "NOT_RUN",
+    "student_selection": "NOT_RUN"
+  }
+}

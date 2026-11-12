@@ -1,0 +1,56 @@
+{
+  "status": "PASS",
+  "raw_baseline_pairs": [
+    {
+      "student": "yolo26s-lamp-su1.10x-seed42-raw:v0",
+      "raw_sha256": "913672ebac25afdebc09957659006506562b11cc56b7771a81b473a0041fc427",
+      "raw_expected": "913672ebac25afdebc09957659006506562b11cc56b7771a81b473a0041fc427",
+      "baseline_fp32_sha256": "48733cbdb927ea6dde0985ec7a006cbd8f92d1b84def45d927e3c6c86fab5d50",
+      "baseline_expected": "48733cbdb927ea6dde0985ec7a006cbd8f92d1b84def45d927e3c6c86fab5d50"
+    },
+    {
+      "student": "yolo26s-lamp-su1.20x-seed42-raw:v0",
+      "raw_sha256": "1c20b10f3a33de89377e1cf80e1ff244489fb9fc737b121735cd6d24618d7159",
+      "raw_expected": "1c20b10f3a33de89377e1cf80e1ff244489fb9fc737b121735cd6d24618d7159",
+      "baseline_fp32_sha256": "48733cbdb927ea6dde0985ec7a006cbd8f92d1b84def45d927e3c6c86fab5d50",
+      "baseline_expected": "48733cbdb927ea6dde0985ec7a006cbd8f92d1b84def45d927e3c6c86fab5d50"
+    },
+    {
+      "student": "yolo26s-lamp-su1.70x-seed42-raw:v0",
+      "raw_sha256": "e181881b8e5bbd4dc021f6dfad54c579361bcdc4a908724247087204a155f026",
+      "raw_expected": "e181881b8e5bbd4dc021f6dfad54c579361bcdc4a908724247087204a155f026",
+      "baseline_fp32_sha256": "48733cbdb927ea6dde0985ec7a006cbd8f92d1b84def45d927e3c6c86fab5d50",
+      "baseline_expected": "48733cbdb927ea6dde0985ec7a006cbd8f92d1b84def45d927e3c6c86fab5d50"
+    },
+    {
+      "student": "yolo26s-lamp-su1.20x-seed0-raw:v0",
+      "raw_sha256": "99df514946a6a283e91d90ba22c8c159e6fd107baba739f8860a20c79af2e8aa",
+      "raw_expected": "99df514946a6a283e91d90ba22c8c159e6fd107baba739f8860a20c79af2e8aa",
+      "baseline_fp32_sha256": "fb811a61b070580b13c5a7908b93898d4e88c96bd3e82df192227699e275bac1",
+      "baseline_expected": "fb811a61b070580b13c5a7908b93898d4e88c96bd3e82df192227699e275bac1"
+    },
+    {
+      "student": "yolo26s-lamp-su1.20x-seed2024-raw:v0",
+      "raw_sha256": "3187dde6e33139a1e4c1afd5a6fbc2235d05cd0cc676be1b494bc2d08e45fcf6",
+      "raw_expected": "3187dde6e33139a1e4c1afd5a6fbc2235d05cd0cc676be1b494bc2d08e45fcf6",
+      "baseline_fp32_sha256": "e3b464a21029166408bd2006eb388b2fc1399f0d25fc9172307df0aeef604742",
+      "baseline_expected": "e3b464a21029166408bd2006eb388b2fc1399f0d25fc9172307df0aeef604742"
+    },
+    {
+      "student": "yolo26s-lamp-su1.20x-seed7-raw:v0",
+      "raw_sha256": "69ed0b860c79626ab435fa06afa1fe4fcf57e4c1478aec498713b4970430cf4a",
+      "raw_expected": "69ed0b860c79626ab435fa06afa1fe4fcf57e4c1478aec498713b4970430cf4a",
+      "baseline_fp32_sha256": "7c3224a2ecdf113c0a0279d59241082565029a1af76d23d78c155dc1e8c7c0cc",
+      "baseline_expected": "7c3224a2ecdf113c0a0279d59241082565029a1af76d23d78c155dc1e8c7c0cc"
+    },
+    {
+      "student": "yolo26s-lamp-su1.20x-seed3407-raw:v0",
+      "raw_sha256": "9a6e64cdf17fb64dfb38082e7f5231a59cf4d6b32f01f05a14aaaf937667d455",
+      "raw_expected": "9a6e64cdf17fb64dfb38082e7f5231a59cf4d6b32f01f05a14aaaf937667d455",
+      "baseline_fp32_sha256": "f1dd45dcaec079d67c90ca1c60da50be272bda959184928851578076f2ebb967",
+      "baseline_expected": "f1dd45dcaec079d67c90ca1c60da50be272bda959184928851578076f2ebb967"
+    }
+  ],
+  "teacher_sha256": "d749ef0baa0d6c3ae94e83ded1d9999d83c804b76ad5a841fc2ebec953af1428",
+  "verified_after_all_smoke_cleanup": true
+}

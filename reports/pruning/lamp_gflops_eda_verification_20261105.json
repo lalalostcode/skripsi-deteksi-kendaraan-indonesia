@@ -1,0 +1,409 @@
+{
+  "date_jakarta": "2026-11-05",
+  "status": "PASS",
+  "scope": "Notebook 05 experiment preparation and EDA replay on cached CPU synthetic evidence",
+  "notebook": "notebooks\\kaggle\\pruning\\05_lamp_yolo26ns_audit_no_recovery.ipynb",
+  "notebook_sha256": "a1386852a0077f171a659658c3cce77261100db33bd63b736c515cea93ca7657",
+  "defaults": {
+    "models": [
+      "n",
+      "s"
+    ],
+    "mode": "full_val",
+    "seed": 42,
+    "imgsz": 640,
+    "validation_batch": 16,
+    "gflops_targets": [
+      1.1,
+      1.2,
+      1.3
+    ],
+    "training_epochs": 0,
+    "recovery": false,
+    "kd": false,
+    "overview_configurations": "all completed EDA",
+    "detail_configurations": [
+      "target-1.1x"
+    ]
+  },
+  "method_change": false,
+  "checks": {
+    "notebook_format_and_standalone": "PASS",
+    "generator_parity": "PASS",
+    "numeric_eda_regressions": "PASS",
+    "all_new_eda_cells_on_cached_n_and_s": "PASS",
+    "cross_configuration_analysis": "PASS",
+    "old_notebook_bytes": "PASS",
+    "lint": "PASS",
+    "pruning_rerun_this_revision": "NOT_RUN",
+    "poltrada_v3_smoke": "NOT_RUN",
+    "full_val_poltrada_v3": "NOT_RUN",
+    "cuda_latency": "NOT_RUN",
+    "kaggle": "NOT_RUN",
+    "student_selection_experiment": "NOT_RUN"
+  },
+  "pytest": {
+    "passed": 25,
+    "failed": 0,
+    "command": ".venv/Scripts/python.exe -B -m pytest tests/test_lamp_gflops_eda.py tests/test_lamp_gflops_notebook.py tests/test_lamp_v2_eda.py -q"
+  },
+  "old_notebooks_sha256": {
+    "01_lamp_yolo26n_no_recovery.ipynb": "cff1f5d204a7b04800a3905ca20b281bf3f7eab3f2c37dff9841722512d48907",
+    "02_lamp_yolo26s_no_recovery.ipynb": "f66166b3327f7fdddec050847ec8876b8d1143068f5189bbe21c11fe56015f3c",
+    "03_lamp_yolo26n_extended_no_recovery.ipynb": "45628e699b8a52ded64ee174da3a04f062729f9a583064d3e6168ac8c8fa94c1",
+    "04_lamp_yolo26ns_finetune_recovery.ipynb": "c16b8a6f5ff1369bbaa1c3faf46bf75092816bcf4269676bb760658c6f44be1c"
+  },
+  "replays": [
+    {
+      "status": "PASS",
+      "scope": "Replay EDA on cached evidence; no experiment rerun",
+      "source_suite": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\pruning\\lamp_gflops_layout_ns\\20261104T071943Z_1257e562",
+      "source_manifest_sha256": "114f509704e547183f796004a6a49163c907205b68df94f755601fa2290d83d9",
+      "notebook_sha256": "a1386852a0077f171a659658c3cce77261100db33bd63b736c515cea93ca7657",
+      "models": [
+        "YOLO26n",
+        "YOLO26s"
+      ],
+      "configurations": 2,
+      "table_rows": {
+        "metrics": 6,
+        "sources": 2,
+        "architecture": 48,
+        "coverage": 2,
+        "layers": 480,
+        "stages": 36,
+        "groups": 232,
+        "ledger": 732,
+        "per_class_metrics": 24,
+        "validation_protocol": 6,
+        "verification": 2,
+        "target_tiers": 0,
+        "target_search": 2,
+        "search_profiles": 0,
+        "p5_contrasts": 0,
+        "p5_per_class": 0,
+        "student_eligibility": 2
+      },
+      "displayed_images": 70,
+      "displayed_tables": 23,
+      "analysis_plots": [
+        {
+          "model": "YOLO26n",
+          "plot": "extended_sweep",
+          "status": "MEASURED",
+          "measured_values": 3,
+          "reason": null,
+          "png": "extended_sweep.png",
+          "svg": "extended_sweep.svg"
+        },
+        {
+          "model": "YOLO26n",
+          "plot": "configuration_metrics",
+          "status": "MEASURED",
+          "measured_values": 8,
+          "reason": null,
+          "png": "configuration_metrics.png",
+          "svg": "configuration_metrics.svg"
+        },
+        {
+          "model": "YOLO26n",
+          "plot": "per_class_ap_all",
+          "status": "MEASURED",
+          "measured_values": 24,
+          "reason": null,
+          "png": "per_class_ap_all.png",
+          "svg": "per_class_ap_all.svg"
+        },
+        {
+          "model": "YOLO26n",
+          "plot": "tradeoff_parameters",
+          "status": "MEASURED",
+          "measured_values": 2,
+          "reason": null,
+          "png": "tradeoff_parameters.png",
+          "svg": "tradeoff_parameters.svg"
+        },
+        {
+          "model": "YOLO26n",
+          "plot": "tradeoff_gflops",
+          "status": "MEASURED",
+          "measured_values": 2,
+          "reason": null,
+          "png": "tradeoff_gflops.png",
+          "svg": "tradeoff_gflops.svg"
+        },
+        {
+          "model": "YOLO26n",
+          "plot": "tradeoff_latency_median_ms",
+          "status": "NOT_RUN",
+          "measured_values": 0,
+          "reason": "Pengukuran berpasangan belum tersedia.",
+          "png": "tradeoff_latency_median_ms.png",
+          "svg": "tradeoff_latency_median_ms.svg"
+        },
+        {
+          "model": "YOLO26n",
+          "plot": "target_search_capacity",
+          "status": "NOT_RUN",
+          "measured_values": 0,
+          "reason": "Pengukuran berpasangan belum tersedia.",
+          "png": "target_search_capacity.png",
+          "svg": "target_search_capacity.svg"
+        },
+        {
+          "model": "YOLO26s",
+          "plot": "extended_sweep",
+          "status": "MEASURED",
+          "measured_values": 3,
+          "reason": null,
+          "png": "extended_sweep.png",
+          "svg": "extended_sweep.svg"
+        },
+        {
+          "model": "YOLO26s",
+          "plot": "configuration_metrics",
+          "status": "MEASURED",
+          "measured_values": 8,
+          "reason": null,
+          "png": "configuration_metrics.png",
+          "svg": "configuration_metrics.svg"
+        },
+        {
+          "model": "YOLO26s",
+          "plot": "per_class_ap_all",
+          "status": "MEASURED",
+          "measured_values": 24,
+          "reason": null,
+          "png": "per_class_ap_all.png",
+          "svg": "per_class_ap_all.svg"
+        },
+        {
+          "model": "YOLO26s",
+          "plot": "tradeoff_parameters",
+          "status": "MEASURED",
+          "measured_values": 2,
+          "reason": null,
+          "png": "tradeoff_parameters.png",
+          "svg": "tradeoff_parameters.svg"
+        },
+        {
+          "model": "YOLO26s",
+          "plot": "tradeoff_gflops",
+          "status": "MEASURED",
+          "measured_values": 2,
+          "reason": null,
+          "png": "tradeoff_gflops.png",
+          "svg": "tradeoff_gflops.svg"
+        },
+        {
+          "model": "YOLO26s",
+          "plot": "tradeoff_latency_median_ms",
+          "status": "NOT_RUN",
+          "measured_values": 0,
+          "reason": "Pengukuran berpasangan belum tersedia.",
+          "png": "tradeoff_latency_median_ms.png",
+          "svg": "tradeoff_latency_median_ms.svg"
+        },
+        {
+          "model": "YOLO26s",
+          "plot": "target_search_capacity",
+          "status": "NOT_RUN",
+          "measured_values": 0,
+          "reason": "Pengukuran berpasangan belum tersedia.",
+          "png": "target_search_capacity.png",
+          "svg": "target_search_capacity.svg"
+        }
+      ],
+      "old_notebooks_sha256": {
+        "C:\\Local D\\Galeri Belajar\\Skripsi\\notebooks\\kaggle\\pruning\\01_lamp_yolo26n_no_recovery.ipynb": "cff1f5d204a7b04800a3905ca20b281bf3f7eab3f2c37dff9841722512d48907",
+        "C:\\Local D\\Galeri Belajar\\Skripsi\\notebooks\\kaggle\\pruning\\02_lamp_yolo26s_no_recovery.ipynb": "f66166b3327f7fdddec050847ec8876b8d1143068f5189bbe21c11fe56015f3c",
+        "C:\\Local D\\Galeri Belajar\\Skripsi\\notebooks\\kaggle\\pruning\\03_lamp_yolo26n_extended_no_recovery.ipynb": "45628e699b8a52ded64ee174da3a04f062729f9a583064d3e6168ac8c8fa94c1",
+        "C:\\Local D\\Galeri Belajar\\Skripsi\\notebooks\\kaggle\\pruning\\04_lamp_yolo26ns_finetune_recovery.ipynb": "c16b8a6f5ff1369bbaa1c3faf46bf75092816bcf4269676bb760658c6f44be1c"
+      },
+      "experiment_rerun": "NOT_RUN",
+      "poltrada_v3": "NOT_RUN",
+      "kaggle": "NOT_RUN",
+      "cuda_latency": "NOT_RUN",
+      "output_dir": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\pruning\\lamp_gflops_eda_review\\8ff5aef351d4"
+    },
+    {
+      "status": "PASS",
+      "scope": "Replay EDA on cached evidence; no experiment rerun",
+      "source_suite": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\pruning\\lamp_gflops_cpu_representative\\20261104T061909Z_7b30b67a",
+      "source_manifest_sha256": "3478ddbdcfc2be4afb30b124894e95da5c53fb0d27880287fb93b02b211bb2f3",
+      "notebook_sha256": "a1386852a0077f171a659658c3cce77261100db33bd63b736c515cea93ca7657",
+      "models": [
+        "YOLO26n",
+        "YOLO26s"
+      ],
+      "configurations": 12,
+      "table_rows": {
+        "metrics": 16,
+        "sources": 2,
+        "architecture": 48,
+        "coverage": 12,
+        "layers": 0,
+        "stages": 0,
+        "groups": 1392,
+        "ledger": 4392,
+        "per_class_metrics": 84,
+        "validation_protocol": 16,
+        "verification": 12,
+        "target_tiers": 6,
+        "target_search": 6,
+        "search_profiles": 173,
+        "p5_contrasts": 4,
+        "p5_per_class": 24,
+        "student_eligibility": 12
+      },
+      "displayed_images": 16,
+      "displayed_tables": 18,
+      "analysis_plots": [
+        {
+          "model": "YOLO26n",
+          "plot": "extended_sweep",
+          "status": "MEASURED",
+          "measured_values": 6,
+          "reason": null,
+          "png": "extended_sweep.png",
+          "svg": "extended_sweep.svg"
+        },
+        {
+          "model": "YOLO26n",
+          "plot": "configuration_metrics",
+          "status": "MEASURED",
+          "measured_values": 28,
+          "reason": null,
+          "png": "configuration_metrics.png",
+          "svg": "configuration_metrics.svg"
+        },
+        {
+          "model": "YOLO26n",
+          "plot": "per_class_ap_all",
+          "status": "MEASURED",
+          "measured_values": 84,
+          "reason": null,
+          "png": "per_class_ap_all.png",
+          "svg": "per_class_ap_all.svg"
+        },
+        {
+          "model": "YOLO26n",
+          "plot": "tradeoff_parameters",
+          "status": "MEASURED",
+          "measured_values": 7,
+          "reason": null,
+          "png": "tradeoff_parameters.png",
+          "svg": "tradeoff_parameters.svg"
+        },
+        {
+          "model": "YOLO26n",
+          "plot": "tradeoff_gflops",
+          "status": "MEASURED",
+          "measured_values": 7,
+          "reason": null,
+          "png": "tradeoff_gflops.png",
+          "svg": "tradeoff_gflops.svg"
+        },
+        {
+          "model": "YOLO26n",
+          "plot": "tradeoff_latency_median_ms",
+          "status": "NOT_RUN",
+          "measured_values": 0,
+          "reason": "Pengukuran berpasangan belum tersedia.",
+          "png": "tradeoff_latency_median_ms.png",
+          "svg": "tradeoff_latency_median_ms.svg"
+        },
+        {
+          "model": "YOLO26n",
+          "plot": "target_search_capacity",
+          "status": "MEASURED",
+          "measured_values": 86,
+          "reason": null,
+          "png": "target_search_capacity.png",
+          "svg": "target_search_capacity.svg"
+        },
+        {
+          "model": "YOLO26s",
+          "plot": "extended_sweep",
+          "status": "MEASURED",
+          "measured_values": 6,
+          "reason": null,
+          "png": "extended_sweep.png",
+          "svg": "extended_sweep.svg"
+        },
+        {
+          "model": "YOLO26s",
+          "plot": "configuration_metrics",
+          "status": "MEASURED",
+          "measured_values": 28,
+          "reason": null,
+          "png": "configuration_metrics.png",
+          "svg": "configuration_metrics.svg"
+        },
+        {
+          "model": "YOLO26s",
+          "plot": "per_class_ap_all",
+          "status": "MEASURED",
+          "measured_values": 84,
+          "reason": null,
+          "png": "per_class_ap_all.png",
+          "svg": "per_class_ap_all.svg"
+        },
+        {
+          "model": "YOLO26s",
+          "plot": "tradeoff_parameters",
+          "status": "MEASURED",
+          "measured_values": 7,
+          "reason": null,
+          "png": "tradeoff_parameters.png",
+          "svg": "tradeoff_parameters.svg"
+        },
+        {
+          "model": "YOLO26s",
+          "plot": "tradeoff_gflops",
+          "status": "MEASURED",
+          "measured_values": 7,
+          "reason": null,
+          "png": "tradeoff_gflops.png",
+          "svg": "tradeoff_gflops.svg"
+        },
+        {
+          "model": "YOLO26s",
+          "plot": "tradeoff_latency_median_ms",
+          "status": "NOT_RUN",
+          "measured_values": 0,
+          "reason": "Pengukuran berpasangan belum tersedia.",
+          "png": "tradeoff_latency_median_ms.png",
+          "svg": "tradeoff_latency_median_ms.svg"
+        },
+        {
+          "model": "YOLO26s",
+          "plot": "target_search_capacity",
+          "status": "MEASURED",
+          "measured_values": 93,
+          "reason": null,
+          "png": "target_search_capacity.png",
+          "svg": "target_search_capacity.svg"
+        }
+      ],
+      "old_notebooks_sha256": {
+        "C:\\Local D\\Galeri Belajar\\Skripsi\\notebooks\\kaggle\\pruning\\01_lamp_yolo26n_no_recovery.ipynb": "cff1f5d204a7b04800a3905ca20b281bf3f7eab3f2c37dff9841722512d48907",
+        "C:\\Local D\\Galeri Belajar\\Skripsi\\notebooks\\kaggle\\pruning\\02_lamp_yolo26s_no_recovery.ipynb": "f66166b3327f7fdddec050847ec8876b8d1143068f5189bbe21c11fe56015f3c",
+        "C:\\Local D\\Galeri Belajar\\Skripsi\\notebooks\\kaggle\\pruning\\03_lamp_yolo26n_extended_no_recovery.ipynb": "45628e699b8a52ded64ee174da3a04f062729f9a583064d3e6168ac8c8fa94c1",
+        "C:\\Local D\\Galeri Belajar\\Skripsi\\notebooks\\kaggle\\pruning\\04_lamp_yolo26ns_finetune_recovery.ipynb": "c16b8a6f5ff1369bbaa1c3faf46bf75092816bcf4269676bb760658c6f44be1c"
+      },
+      "experiment_rerun": "NOT_RUN",
+      "poltrada_v3": "NOT_RUN",
+      "kaggle": "NOT_RUN",
+      "cuda_latency": "NOT_RUN",
+      "output_dir": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\pruning\\lamp_gflops_eda_review\\ea4f3c81c629"
+    }
+  ],
+  "limitations": [
+    "Cached results use six synthetic images at 64 px on CPU.",
+    "The two-configuration replay includes previously rendered layer and detection EDA.",
+    "The 12-configuration replay covers aggregate metrics, AP, target capacities and P5 contrasts; per-run inventory EDA was skipped in its original run.",
+    "No new pruning, validation, GPU latency or Kaggle execution is claimed.",
+    "No smoke result selects a KD student."
+  ]
+}

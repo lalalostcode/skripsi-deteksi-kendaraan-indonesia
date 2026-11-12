@@ -162,7 +162,7 @@ def test_two_seeds_have_independent_students_state_metrics_and_artifacts(env, mo
         i for i, event in enumerate(runtime.events) if event[:2] == ("init", 123))
     names = []
     for run, row in zip(runtime.wandb.runs, result):
-        assert run.kwargs["name"] == f"baseline_yolo26n_scratch_seed{run.seed}"
+        assert run.kwargs["name"] == f"base_yolo26n_scratch_seed{run.seed}"
         assert run.kwargs["group"] == "supervised" and run.kwargs["resume"] == "never"
         assert {tag for tag in run.kwargs["tags"] if tag.startswith("seed")} == {f"seed{run.seed}"}
         assert "from-scratch" in run.kwargs["tags"]

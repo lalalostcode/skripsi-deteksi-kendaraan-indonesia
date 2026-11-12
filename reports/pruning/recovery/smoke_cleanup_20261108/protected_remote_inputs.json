@@ -1,0 +1,103 @@
+{
+  "status": "PASS",
+  "rows": [
+    {
+      "role": "raw",
+      "expected_raw_sha256": "913672ebac25afdebc09957659006506562b11cc56b7771a81b473a0041fc427",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/yolo26s-lamp-su1.10x-seed42-raw:v0",
+      "state": "COMMITTED",
+      "id": "QXJ0aWZhY3Q6NDQzMzk0MzA5OA==",
+      "metadata_raw_sha256": "913672ebac25afdebc09957659006506562b11cc56b7771a81b473a0041fc427"
+    },
+    {
+      "role": "baseline",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/02_baseline_yolo26s-q5kp9k9d-checkpoints:v62",
+      "state": "COMMITTED",
+      "id": "QXJ0aWZhY3Q6MzkyMzU4MzMyMg==",
+      "metadata_raw_sha256": null
+    },
+    {
+      "role": "raw",
+      "expected_raw_sha256": "1c20b10f3a33de89377e1cf80e1ff244489fb9fc737b121735cd6d24618d7159",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/yolo26s-lamp-su1.20x-seed42-raw:v1",
+      "state": "COMMITTED",
+      "id": "QXJ0aWZhY3Q6NDQ0MDU2MTkxMQ==",
+      "metadata_raw_sha256": "1c20b10f3a33de89377e1cf80e1ff244489fb9fc737b121735cd6d24618d7159"
+    },
+    {
+      "role": "raw",
+      "expected_raw_sha256": "e181881b8e5bbd4dc021f6dfad54c579361bcdc4a908724247087204a155f026",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/yolo26s-lamp-su1.70x-seed42-raw:v1",
+      "state": "COMMITTED",
+      "id": "QXJ0aWZhY3Q6NDQ1MDkxOTU2OA==",
+      "metadata_raw_sha256": "e181881b8e5bbd4dc021f6dfad54c579361bcdc4a908724247087204a155f026"
+    },
+    {
+      "role": "raw",
+      "expected_raw_sha256": "99df514946a6a283e91d90ba22c8c159e6fd107baba739f8860a20c79af2e8aa",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/yolo26s-lamp-su1.20x-seed0-raw:v1",
+      "state": "COMMITTED",
+      "id": "QXJ0aWZhY3Q6NDQ0MDU2NTk3MA==",
+      "metadata_raw_sha256": "99df514946a6a283e91d90ba22c8c159e6fd107baba739f8860a20c79af2e8aa"
+    },
+    {
+      "role": "baseline",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/02_baseline_yolo26s-7f5jmtwb-checkpoints:v71",
+      "state": "COMMITTED",
+      "id": "QXJ0aWZhY3Q6NDM3OTI5OTUzMw==",
+      "metadata_raw_sha256": null
+    },
+    {
+      "role": "raw",
+      "expected_raw_sha256": "3187dde6e33139a1e4c1afd5a6fbc2235d05cd0cc676be1b494bc2d08e45fcf6",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/yolo26s-lamp-su1.20x-seed2024-raw:v1",
+      "state": "COMMITTED",
+      "id": "QXJ0aWZhY3Q6NDQ0MDU2OTE0MQ==",
+      "metadata_raw_sha256": "3187dde6e33139a1e4c1afd5a6fbc2235d05cd0cc676be1b494bc2d08e45fcf6"
+    },
+    {
+      "role": "baseline",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/02_baseline_yolo26s-1o9ggnyw-checkpoints:v41",
+      "state": "COMMITTED",
+      "id": "QXJ0aWZhY3Q6NDM3ODIwOTgyMg==",
+      "metadata_raw_sha256": null
+    },
+    {
+      "role": "raw",
+      "expected_raw_sha256": "69ed0b860c79626ab435fa06afa1fe4fcf57e4c1478aec498713b4970430cf4a",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/yolo26s-lamp-su1.20x-seed7-raw:v1",
+      "state": "COMMITTED",
+      "id": "QXJ0aWZhY3Q6NDQ0MDU3MjYzNg==",
+      "metadata_raw_sha256": "69ed0b860c79626ab435fa06afa1fe4fcf57e4c1478aec498713b4970430cf4a"
+    },
+    {
+      "role": "baseline",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/02_baseline_yolo26s-9cq437l3-checkpoints:v49",
+      "state": "COMMITTED",
+      "id": "QXJ0aWZhY3Q6NDM3ODUxNDYxNg==",
+      "metadata_raw_sha256": null
+    },
+    {
+      "role": "raw",
+      "expected_raw_sha256": "9a6e64cdf17fb64dfb38082e7f5231a59cf4d6b32f01f05a14aaaf937667d455",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/yolo26s-lamp-su1.20x-seed3407-raw:v1",
+      "state": "COMMITTED",
+      "id": "QXJ0aWZhY3Q6NDQ0MDU3NjU5Nw==",
+      "metadata_raw_sha256": "9a6e64cdf17fb64dfb38082e7f5231a59cf4d6b32f01f05a14aaaf937667d455"
+    },
+    {
+      "role": "baseline",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/02_baseline_yolo26s-bmshdzv9-checkpoints:v43",
+      "state": "COMMITTED",
+      "id": "QXJ0aWZhY3Q6NDM3ODIwNTExNg==",
+      "metadata_raw_sha256": null
+    },
+    {
+      "role": "teacher",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/01_teacher_yolo26m-fux5wdcb-checkpoints:v50",
+      "state": "COMMITTED",
+      "id": "QXJ0aWZhY3Q6MzkyNDI1MDYzNQ==",
+      "metadata_raw_sha256": null
+    }
+  ]
+}

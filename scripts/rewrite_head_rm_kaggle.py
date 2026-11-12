@@ -271,8 +271,10 @@ def run_training(diagnostic=False):
         raise ValueError("Gunakan 1 sampai 100 epoch.")
     config = experiment_config()
     name = ("diagnostic" if diagnostic else "training") + "_" + uuid.uuid4().hex[:6]
-    run = wandb.init(entity=WANDB_ENTITY, project=WANDB_PROJECT, group=WANDB_GROUP,
-                     name=f"{EXPERIMENT_ID}_seed{SEED}_{name}", id=uuid.uuid4().hex[:8], resume="never",
+    display_name = f"kd_{METHOD}_{WANDB_GROUP}_seed{SEED}" + ("_smoke" if diagnostic else "")
+    run = wandb.init(entity=WANDB_ENTITY, project=WANDB_PROJECT,
+                     group=f"diagnostic-{WANDB_GROUP}" if diagnostic else WANDB_GROUP,
+                     name=display_name, id=uuid.uuid4().hex[:8], resume="never",
                      tags=[METHOD, "teacher-s", "student-n", f"seed{SEED}", "poltrada-v3", name.split("_")[0]],
                      config={**config, "dataset": DATASET_INFO, "teacher": TEACHER_INFO}, dir=str(SESSION_DIR))
     callbacks, context = make_callbacks(run, diagnostic)

@@ -1,0 +1,798 @@
+{
+  "kind": "actual N/S baseline artifact CPU implementation verification; no Kaggle/GPU claim",
+  "notebook": "notebooks/kaggle/pruning/03_lamp_yolo26n_extended_no_recovery.ipynb",
+  "notebook_sha256": "84842d09821b6d24a06c3ab88a0d84d0464302a11fc36130fff2d21a7b07f2de",
+  "source_checkpoint_sha256": {
+    "n": "380a087fd621e8a43fe2b9b4d6b1bb6fb00a4d0443cc5afe81ef3efdf0775f0f",
+    "s": "5bc3ae61f8da1c9f03916922de10146805c27c64a11e46edd766a00d0f6f18fd"
+  },
+  "source_artifacts": {
+    "n": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/03_baseline_yolo26n-9uu3meve-checkpoints:v84",
+    "s": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/02_baseline_yolo26s-q5kp9k9d-checkpoints:v62"
+  },
+  "device": "cpu",
+  "imgsz": 640,
+  "suite_dir": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\pruning\\lamp_v2_ns_cpu_verification\\20261024T040015Z_d8cb582b",
+  "models": [
+    {
+      "model_variant": "n",
+      "source": {
+        "requested_artifact": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/03_baseline_yolo26n-9uu3meve-checkpoints:v84",
+        "resolved_artifact": null,
+        "checkpoint_name": "best.pt",
+        "checkpoint_path": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\lamp_target_artifact\\artifact\\best.pt",
+        "sha256": "380a087fd621e8a43fe2b9b4d6b1bb6fb00a4d0443cc5afe81ef3efdf0775f0f",
+        "file_bytes": 20766981,
+        "source_verification": "expected_sha256_matched",
+        "model_variant": "n"
+      },
+      "baseline": {
+        "parameters": 2506140,
+        "gflops": 5.905408,
+        "precision": "FP32",
+        "fusion": false,
+        "checkpoint_bytes": 10515843,
+        "latency": {
+          "status": "NOT_RUN",
+          "reason": "CUDA tidak tersedia; tidak mengklaim benchmark GPU."
+        }
+      },
+      "summary": [
+        {
+          "model": "YOLO26n",
+          "model_variant": "n",
+          "policy": "baseline",
+          "ratio": 0,
+          "parameters": 2506140,
+          "gflops": 5.905408,
+          "checkpoint_bytes": 10515843,
+          "map50_95": null,
+          "map50": null,
+          "precision": null,
+          "recall": null,
+          "parameter_reduction_pct": 0,
+          "gflops_reduction_pct": 0,
+          "delta_map50_95_pp": null,
+          "relative_map50_95_pct": null,
+          "actual_eligible_ratio": 0,
+          "pruned_group_count": 0,
+          "latency_median_ms": null,
+          "structural_status": "BASELINE",
+          "validation_status": "NOT_RUN"
+        },
+        {
+          "model": "YOLO26n",
+          "model_variant": "n",
+          "policy": "extended",
+          "ratio": 0.1,
+          "parameters": 2236276,
+          "gflops": 5.5712064,
+          "checkpoint_bytes": 9432743,
+          "map50_95": null,
+          "map50": null,
+          "precision": null,
+          "recall": null,
+          "parameter_reduction_pct": 10.768113513211553,
+          "gflops_reduction_pct": 5.6592465753424674,
+          "delta_map50_95_pp": null,
+          "relative_map50_95_pct": null,
+          "actual_eligible_ratio": 0.10019455252918288,
+          "pruned_group_count": 7,
+          "latency_median_ms": null,
+          "structural_status": "PASS",
+          "validation_status": "NOT_RUN"
+        },
+        {
+          "model": "YOLO26n",
+          "model_variant": "n",
+          "policy": "extended",
+          "ratio": 0.2,
+          "parameters": 2013751,
+          "gflops": 4.9545056,
+          "checkpoint_bytes": 8540839,
+          "map50_95": null,
+          "map50": null,
+          "precision": null,
+          "recall": null,
+          "parameter_reduction_pct": 19.647306215933668,
+          "gflops_reduction_pct": 16.102230362406804,
+          "delta_map50_95_pp": null,
+          "relative_map50_95_pct": null,
+          "actual_eligible_ratio": 0.20038910505836577,
+          "pruned_group_count": 10,
+          "latency_median_ms": null,
+          "structural_status": "PASS",
+          "validation_status": "NOT_RUN"
+        },
+        {
+          "model": "YOLO26n",
+          "model_variant": "n",
+          "policy": "extended",
+          "ratio": 0.3,
+          "parameters": 1800137,
+          "gflops": 4.4114384,
+          "checkpoint_bytes": 7684199,
+          "map50_95": null,
+          "map50": null,
+          "precision": null,
+          "recall": null,
+          "parameter_reduction_pct": 28.170932190540032,
+          "gflops_reduction_pct": 25.298329937575872,
+          "delta_map50_95_pp": null,
+          "relative_map50_95_pct": null,
+          "actual_eligible_ratio": 0.30009727626459143,
+          "pruned_group_count": 16,
+          "latency_median_ms": null,
+          "structural_status": "PASS",
+          "validation_status": "NOT_RUN"
+        }
+      ],
+      "baseline_validation_status": "NOT_RUN",
+      "results": [
+        {
+          "model_variant": "n",
+          "policy": "extended",
+          "ratio": 0.1,
+          "structural_smoke_status": "PASS",
+          "validation_status": "NOT_RUN",
+          "checks": {
+            "baseline_loaded": true,
+            "baseline_forward": true,
+            "dependency_graph": true,
+            "structural_channels_removed": true,
+            "parameters_reduced": true,
+            "pruned_forward": true,
+            "protected_head_unchanged": true,
+            "checkpoint_saved": true,
+            "checkpoint_reloaded": true,
+            "reload_consistent": true,
+            "detection_prediction": true
+          },
+          "actual_eligible_channel_ratio": 0.10019455252918288,
+          "eligible_channels_before": 2056,
+          "eligible_channels_after": 1850,
+          "physical_conv_output_channels_removed": 206,
+          "pruned_group_count": 7,
+          "reload": {
+            "prediction_count": 10,
+            "parameters": 2236276,
+            "direct_yolo_load": true,
+            "raw_parity": true,
+            "prediction_shape": [
+              10,
+              6
+            ],
+            "max_absolute_difference": {
+              "decoded": 0.0,
+              "one2many/boxes": 0.0,
+              "one2many/scores": 0.0,
+              "one2one/boxes": 0.0,
+              "one2one/scores": 0.0
+            },
+            "process": "fresh Python, no repository PYTHONPATH"
+          },
+          "comparison": {
+            "parameter_reduction_pct": 10.768113513211553,
+            "gflops_reduction_pct": 5.6592465753424674,
+            "checkpoint_reduction_pct": 10.299697323362473,
+            "delta_map50_95": null,
+            "delta_map50_95_pp": null,
+            "relative_map50_95_pct": null
+          },
+          "tracking": {
+            "status": "NOT_RUN",
+            "uploads": [],
+            "errors": [],
+            "reason": "WANDB_TRACKING=False"
+          },
+          "eda_status": "PASS"
+        },
+        {
+          "model_variant": "n",
+          "policy": "extended",
+          "ratio": 0.2,
+          "structural_smoke_status": "PASS",
+          "validation_status": "NOT_RUN",
+          "checks": {
+            "baseline_loaded": true,
+            "baseline_forward": true,
+            "dependency_graph": true,
+            "structural_channels_removed": true,
+            "parameters_reduced": true,
+            "pruned_forward": true,
+            "protected_head_unchanged": true,
+            "checkpoint_saved": true,
+            "checkpoint_reloaded": true,
+            "reload_consistent": true,
+            "detection_prediction": true
+          },
+          "actual_eligible_channel_ratio": 0.20038910505836577,
+          "eligible_channels_before": 2056,
+          "eligible_channels_after": 1644,
+          "physical_conv_output_channels_removed": 412,
+          "pruned_group_count": 10,
+          "reload": {
+            "prediction_count": 300,
+            "parameters": 2013751,
+            "direct_yolo_load": true,
+            "raw_parity": true,
+            "prediction_shape": [
+              300,
+              6
+            ],
+            "max_absolute_difference": {
+              "decoded": 0.0,
+              "one2many/boxes": 0.0,
+              "one2many/scores": 0.0,
+              "one2one/boxes": 0.0,
+              "one2one/scores": 0.0
+            },
+            "process": "fresh Python, no repository PYTHONPATH"
+          },
+          "comparison": {
+            "parameter_reduction_pct": 19.647306215933668,
+            "gflops_reduction_pct": 16.102230362406804,
+            "checkpoint_reduction_pct": 18.781223721198575,
+            "delta_map50_95": null,
+            "delta_map50_95_pp": null,
+            "relative_map50_95_pct": null
+          },
+          "tracking": {
+            "status": "NOT_RUN",
+            "uploads": [],
+            "errors": [],
+            "reason": "WANDB_TRACKING=False"
+          },
+          "eda_status": "PASS"
+        },
+        {
+          "model_variant": "n",
+          "policy": "extended",
+          "ratio": 0.3,
+          "structural_smoke_status": "PASS",
+          "validation_status": "NOT_RUN",
+          "checks": {
+            "baseline_loaded": true,
+            "baseline_forward": true,
+            "dependency_graph": true,
+            "structural_channels_removed": true,
+            "parameters_reduced": true,
+            "pruned_forward": true,
+            "protected_head_unchanged": true,
+            "checkpoint_saved": true,
+            "checkpoint_reloaded": true,
+            "reload_consistent": true,
+            "detection_prediction": true
+          },
+          "actual_eligible_channel_ratio": 0.30009727626459143,
+          "eligible_channels_before": 2056,
+          "eligible_channels_after": 1439,
+          "physical_conv_output_channels_removed": 643,
+          "pruned_group_count": 16,
+          "reload": {
+            "prediction_count": 300,
+            "parameters": 1800137,
+            "direct_yolo_load": true,
+            "raw_parity": true,
+            "prediction_shape": [
+              300,
+              6
+            ],
+            "max_absolute_difference": {
+              "decoded": 0.0,
+              "one2many/boxes": 0.0,
+              "one2many/scores": 0.0,
+              "one2one/boxes": 0.0,
+              "one2one/scores": 0.0
+            },
+            "process": "fresh Python, no repository PYTHONPATH"
+          },
+          "comparison": {
+            "parameter_reduction_pct": 28.170932190540032,
+            "gflops_reduction_pct": 25.298329937575872,
+            "checkpoint_reduction_pct": 26.927408482610478,
+            "delta_map50_95": null,
+            "delta_map50_95_pp": null,
+            "relative_map50_95_pct": null
+          },
+          "tracking": {
+            "status": "NOT_RUN",
+            "uploads": [],
+            "errors": [],
+            "reason": "WANDB_TRACKING=False"
+          },
+          "eda_status": "PASS"
+        }
+      ]
+    },
+    {
+      "model_variant": "s",
+      "source": {
+        "requested_artifact": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/02_baseline_yolo26s-q5kp9k9d-checkpoints:v62",
+        "resolved_artifact": null,
+        "checkpoint_name": "best.pt",
+        "checkpoint_path": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\lamp_yolo26s_target_artifact\\artifact\\best.pt",
+        "sha256": "5bc3ae61f8da1c9f03916922de10146805c27c64a11e46edd766a00d0f6f18fd",
+        "file_bytes": 80377733,
+        "source_verification": "expected_sha256_matched",
+        "model_variant": "s"
+      },
+      "baseline": {
+        "parameters": 9952508,
+        "gflops": 22.7659776,
+        "precision": "FP32",
+        "fusion": false,
+        "checkpoint_bytes": 40377795,
+        "latency": {
+          "status": "NOT_RUN",
+          "reason": "CUDA tidak tersedia; tidak mengklaim benchmark GPU."
+        }
+      },
+      "summary": [
+        {
+          "model": "YOLO26s",
+          "model_variant": "s",
+          "policy": "baseline",
+          "ratio": 0,
+          "parameters": 9952508,
+          "gflops": 22.7659776,
+          "checkpoint_bytes": 40377795,
+          "map50_95": null,
+          "map50": null,
+          "precision": null,
+          "recall": null,
+          "parameter_reduction_pct": 0,
+          "gflops_reduction_pct": 0,
+          "delta_map50_95_pp": null,
+          "relative_map50_95_pct": null,
+          "actual_eligible_ratio": 0,
+          "pruned_group_count": 0,
+          "latency_median_ms": null,
+          "structural_status": "BASELINE",
+          "validation_status": "NOT_RUN"
+        },
+        {
+          "model": "YOLO26s",
+          "model_variant": "s",
+          "policy": "extended",
+          "ratio": 0.1,
+          "parameters": 8858156,
+          "gflops": 21.4706592,
+          "checkpoint_bytes": 35994983,
+          "map50_95": null,
+          "map50": null,
+          "precision": null,
+          "recall": null,
+          "parameter_reduction_pct": 10.99574097302911,
+          "gflops_reduction_pct": 5.689711299724723,
+          "delta_map50_95_pp": null,
+          "relative_map50_95_pct": null,
+          "actual_eligible_ratio": 0.10019455252918288,
+          "pruned_group_count": 7,
+          "latency_median_ms": null,
+          "structural_status": "PASS",
+          "validation_status": "NOT_RUN"
+        },
+        {
+          "model": "YOLO26s",
+          "model_variant": "s",
+          "policy": "extended",
+          "ratio": 0.2,
+          "parameters": 7936472,
+          "gflops": 19.5224704,
+          "checkpoint_bytes": 32304615,
+          "map50_95": null,
+          "map50": null,
+          "precision": null,
+          "recall": null,
+          "parameter_reduction_pct": 20.256562466465738,
+          "gflops_reduction_pct": 14.247168546805563,
+          "delta_map50_95_pp": null,
+          "relative_map50_95_pct": null,
+          "actual_eligible_ratio": 0.20014591439688717,
+          "pruned_group_count": 9,
+          "latency_median_ms": null,
+          "structural_status": "PASS",
+          "validation_status": "NOT_RUN"
+        },
+        {
+          "model": "YOLO26s",
+          "model_variant": "s",
+          "policy": "extended",
+          "ratio": 0.3,
+          "parameters": 7075142,
+          "gflops": 17.3486848,
+          "checkpoint_bytes": 28855271,
+          "map50_95": null,
+          "map50": null,
+          "precision": null,
+          "recall": null,
+          "parameter_reduction_pct": 28.9109639499913,
+          "gflops_reduction_pct": 23.795564131627707,
+          "delta_map50_95_pp": null,
+          "relative_map50_95_pct": null,
+          "actual_eligible_ratio": 0.30009727626459143,
+          "pruned_group_count": 16,
+          "latency_median_ms": null,
+          "structural_status": "PASS",
+          "validation_status": "NOT_RUN"
+        }
+      ],
+      "baseline_validation_status": "NOT_RUN",
+      "results": [
+        {
+          "model_variant": "s",
+          "policy": "extended",
+          "ratio": 0.1,
+          "structural_smoke_status": "PASS",
+          "validation_status": "NOT_RUN",
+          "checks": {
+            "baseline_loaded": true,
+            "baseline_forward": true,
+            "dependency_graph": true,
+            "structural_channels_removed": true,
+            "parameters_reduced": true,
+            "pruned_forward": true,
+            "protected_head_unchanged": true,
+            "checkpoint_saved": true,
+            "checkpoint_reloaded": true,
+            "reload_consistent": true,
+            "detection_prediction": true
+          },
+          "actual_eligible_channel_ratio": 0.10019455252918288,
+          "eligible_channels_before": 4112,
+          "eligible_channels_after": 3700,
+          "physical_conv_output_channels_removed": 412,
+          "pruned_group_count": 7,
+          "reload": {
+            "prediction_count": 0,
+            "parameters": 8858156,
+            "direct_yolo_load": true,
+            "raw_parity": true,
+            "prediction_shape": [
+              0,
+              6
+            ],
+            "max_absolute_difference": {
+              "decoded": 0.0,
+              "one2many/boxes": 0.0,
+              "one2many/scores": 0.0,
+              "one2one/boxes": 0.0,
+              "one2one/scores": 0.0
+            },
+            "process": "fresh Python, no repository PYTHONPATH"
+          },
+          "comparison": {
+            "parameter_reduction_pct": 10.99574097302911,
+            "gflops_reduction_pct": 5.689711299724723,
+            "checkpoint_reduction_pct": 10.854510505093208,
+            "delta_map50_95": null,
+            "delta_map50_95_pp": null,
+            "relative_map50_95_pct": null
+          },
+          "tracking": {
+            "status": "NOT_RUN",
+            "uploads": [],
+            "errors": [],
+            "reason": "WANDB_TRACKING=False"
+          },
+          "eda_status": "PASS"
+        },
+        {
+          "model_variant": "s",
+          "policy": "extended",
+          "ratio": 0.2,
+          "structural_smoke_status": "PASS",
+          "validation_status": "NOT_RUN",
+          "checks": {
+            "baseline_loaded": true,
+            "baseline_forward": true,
+            "dependency_graph": true,
+            "structural_channels_removed": true,
+            "parameters_reduced": true,
+            "pruned_forward": true,
+            "protected_head_unchanged": true,
+            "checkpoint_saved": true,
+            "checkpoint_reloaded": true,
+            "reload_consistent": true,
+            "detection_prediction": true
+          },
+          "actual_eligible_channel_ratio": 0.20014591439688717,
+          "eligible_channels_before": 4112,
+          "eligible_channels_after": 3289,
+          "physical_conv_output_channels_removed": 823,
+          "pruned_group_count": 9,
+          "reload": {
+            "prediction_count": 0,
+            "parameters": 7936472,
+            "direct_yolo_load": true,
+            "raw_parity": true,
+            "prediction_shape": [
+              0,
+              6
+            ],
+            "max_absolute_difference": {
+              "decoded": 0.0,
+              "one2many/boxes": 0.0,
+              "one2many/scores": 0.0,
+              "one2one/boxes": 0.0,
+              "one2one/scores": 0.0
+            },
+            "process": "fresh Python, no repository PYTHONPATH"
+          },
+          "comparison": {
+            "parameter_reduction_pct": 20.256562466465738,
+            "gflops_reduction_pct": 14.247168546805563,
+            "checkpoint_reduction_pct": 19.994108147807477,
+            "delta_map50_95": null,
+            "delta_map50_95_pp": null,
+            "relative_map50_95_pct": null
+          },
+          "tracking": {
+            "status": "NOT_RUN",
+            "uploads": [],
+            "errors": [],
+            "reason": "WANDB_TRACKING=False"
+          },
+          "eda_status": "PASS"
+        },
+        {
+          "model_variant": "s",
+          "policy": "extended",
+          "ratio": 0.3,
+          "structural_smoke_status": "PASS",
+          "validation_status": "NOT_RUN",
+          "checks": {
+            "baseline_loaded": true,
+            "baseline_forward": true,
+            "dependency_graph": true,
+            "structural_channels_removed": true,
+            "parameters_reduced": true,
+            "pruned_forward": true,
+            "protected_head_unchanged": true,
+            "checkpoint_saved": true,
+            "checkpoint_reloaded": true,
+            "reload_consistent": true,
+            "detection_prediction": true
+          },
+          "actual_eligible_channel_ratio": 0.30009727626459143,
+          "eligible_channels_before": 4112,
+          "eligible_channels_after": 2878,
+          "physical_conv_output_channels_removed": 1282,
+          "pruned_group_count": 16,
+          "reload": {
+            "prediction_count": 3,
+            "parameters": 7075142,
+            "direct_yolo_load": true,
+            "raw_parity": true,
+            "prediction_shape": [
+              3,
+              6
+            ],
+            "max_absolute_difference": {
+              "decoded": 0.0,
+              "one2many/boxes": 0.0,
+              "one2many/scores": 0.0,
+              "one2one/boxes": 0.0,
+              "one2one/scores": 0.0
+            },
+            "process": "fresh Python, no repository PYTHONPATH"
+          },
+          "comparison": {
+            "parameter_reduction_pct": 28.9109639499913,
+            "gflops_reduction_pct": 23.795564131627707,
+            "checkpoint_reduction_pct": 28.53678364556559,
+            "delta_map50_95": null,
+            "delta_map50_95_pp": null,
+            "relative_map50_95_pct": null
+          },
+          "tracking": {
+            "status": "NOT_RUN",
+            "uploads": [],
+            "errors": [],
+            "reason": "WANDB_TRACKING=False"
+          },
+          "eda_status": "PASS"
+        }
+      ]
+    }
+  ],
+  "environment": {
+    "python": "3.11.14 (main, Oct 28 2025, 12:02:32) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-10-10.0.26300-SP0",
+    "packages": {
+      "ultralytics": "8.4.155",
+      "wandb": "0.28.1",
+      "torch-pruning": "1.6.1",
+      "torch": "2.14.0",
+      "torchvision": "0.29.0",
+      "numpy": "2.3.5",
+      "ultralytics-thop": "2.1.6"
+    },
+    "cuda_available": false,
+    "cuda_build": null,
+    "device": "cpu",
+    "gpu": null,
+    "precision": "FP32",
+    "tf32": false,
+    "cudnn_benchmark": false,
+    "base_pruner_signature": "(model: torch.nn.modules.module.Module, example_inputs: torch.Tensor, importance: Callable, global_pruning: bool = False, pruning_ratio: float = 0.5, pruning_ratio_dict: Dict[Union[torch.nn.modules.module.Module, Tuple[torch.nn.modules.module.Module]], float] = None, max_pruning_ratio: float = 1.0, iterative_steps: int = 1, iterative_pruning_ratio_scheduler: Callable = <function linear_scheduler at 0x0000018929C51760>, ignored_layers: List[torch.nn.modules.module.Module] = None, round_to: int = None, isomorphic: bool = False, in_channel_groups: Dict[torch.nn.modules.module.Module, int] = {}, out_channel_groups: Dict[torch.nn.modules.module.Module, int] = {}, num_heads: Dict[torch.nn.modules.module.Module, int] = {}, prune_num_heads: bool = False, prune_head_dims: bool = True, head_pruning_ratio: float = 0.0, head_pruning_ratio_dict: Dict[torch.nn.modules.module.Module, float] = None, customized_pruners: Dict[Any, torch_pruning.pruner.function.BasePruningFunc] = None, unwrapped_parameters: Dict[torch.nn.parameter.Parameter, int] = None, root_module_types: List = [<class 'torch.nn.modules.conv._ConvNd'>, <class 'torch.nn.modules.linear.Linear'>, <class 'torch.nn.modules.rnn.LSTM'>], forward_fn: Callable = None, output_transform: Callable = None, channel_groups: Dict[torch.nn.modules.module.Module, int] = {}, ch_sparsity: float = None, ch_sparsity_dict: Dict[torch.nn.modules.module.Module, float] = None)",
+    "lamp_signature": "(p=2, group_reduction='mean', normalizer='lamp', bias=False)",
+    "lamp_source_sha256": "fcb71b60e3bb070d98ad009f26252b8eee6bae3e9fe8ae04dcd832d7ea235092",
+    "importance_module_sha256": "499a52945296e45a4446ef11cca77f9823606c083f1dd418da02c81c74834cb8",
+    "flops_method": "THOP full-resolution Conv/BN + separate Ultralytics attention matmul counter; GFLOPs=2*MACs/1e9",
+    "thop_profile_signature": "(model: torch.nn.modules.module.Module, inputs, custom_ops=None, verbose=True, ret_layer_info=False, report_missing=False)",
+    "thop_distribution_versions": {
+      "thop": "0.1.1-2209072238",
+      "ultralytics-thop": "2.1.6"
+    }
+  },
+  "status": "COMPLETE",
+  "guards": [
+    "YOLO.train",
+    "Tensor.backward",
+    "autograd.backward",
+    "Optimizer/SGD/Adam/AdamW.step",
+    "requests.Session.request"
+  ],
+  "limitations": [
+    "Single seed",
+    "No recovery",
+    "W&B upload tested only by mock",
+    "Target V3 mAP NOT_RUN unless explicitly supplied",
+    "CUDA latency NOT_RUN"
+  ],
+  "verification": {
+    "generator_parity": true,
+    "offline_tests": {
+      "tests": 365,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 91.061,
+      "junit_file": "outputs\\lamp_v2_ns_verification\\offline_tests.xml",
+      "junit_sha256": "4afb461e88e733dd79aa1fe8b35327748c023ca7cf1f0c61a02369ec53bc9626",
+      "modules": [
+        "test_lamp_pruning_notebook",
+        "test_lamp_v2_policy",
+        "test_lamp_v2_notebook",
+        "test_lamp_v2_eda",
+        "test_lamp_v2_validation",
+        "test_report_layout",
+        "test_notebook_layout",
+        "test_colab_notebooks"
+      ]
+    },
+    "source_sha256": {
+      "scripts/generate_lamp_v2_notebook.py": "6b9860a1bd73b2efb79ae2f3e924293c048e3e251c8be193096e27d6cb35908e",
+      "scripts/lamp_v2_runtime_source.py": "c2172fd42bda4b83a4eac31389927b66726ce857414e2d65e9d837dd14ffeb37",
+      "scripts/lamp_v2_policy_source.py": "6669c4d7bedeac658f716d314e0c366acdc8d7b340f3c549163021e93ff433e7",
+      "scripts/lamp_v2_eda_source.py": "05d5638a1ecf51ccc37a2dddac9cd4802fcf1bd9c1ddbaac750ef28f8337bbf8",
+      "scripts/lamp_v2_validation_source.py": "610bc5bc9f025f152d317eb853666f795880d2e64c034a6d4750d5f8672a5bab",
+      "scripts/verify_lamp_v2_cpu.py": "67ad6143ba40f0836dccf28a053c1ce2eff2e0ec0ba233c3a66bd22127430b22"
+    },
+    "preservation": {
+      "notebooks": {
+        "count": 50,
+        "missing": [],
+        "changed": []
+      },
+      "reports": {
+        "count": 71,
+        "missing": [],
+        "changed": [
+          "reports/pruning/README.md",
+          "reports/pruning/yolo26n/v2/README.md"
+        ]
+      }
+    },
+    "active_markdown_links": 156,
+    "artifact_consistency": [
+      {
+        "model_variant": "n",
+        "ratio": 0.1,
+        "conv_rows": 126,
+        "independent_channels_removed": 206,
+        "physical_conv_output_channels_removed": 206,
+        "finite_lamp_scores": 2056,
+        "pngs_300dpi": 15,
+        "svgs_parsed": 15,
+        "plot_csv_matches_actual_inventory": true,
+        "mask_counts_match": true,
+        "head_attention_channels_unchanged": true,
+        "cap_checked": true
+      },
+      {
+        "model_variant": "n",
+        "ratio": 0.2,
+        "conv_rows": 126,
+        "independent_channels_removed": 412,
+        "physical_conv_output_channels_removed": 412,
+        "finite_lamp_scores": 2056,
+        "pngs_300dpi": 15,
+        "svgs_parsed": 15,
+        "plot_csv_matches_actual_inventory": true,
+        "mask_counts_match": true,
+        "head_attention_channels_unchanged": true,
+        "cap_checked": true
+      },
+      {
+        "model_variant": "n",
+        "ratio": 0.3,
+        "conv_rows": 126,
+        "independent_channels_removed": 617,
+        "physical_conv_output_channels_removed": 643,
+        "finite_lamp_scores": 2056,
+        "pngs_300dpi": 15,
+        "svgs_parsed": 15,
+        "plot_csv_matches_actual_inventory": true,
+        "mask_counts_match": true,
+        "head_attention_channels_unchanged": true,
+        "cap_checked": true
+      },
+      {
+        "model_variant": "s",
+        "ratio": 0.1,
+        "conv_rows": 126,
+        "independent_channels_removed": 412,
+        "physical_conv_output_channels_removed": 412,
+        "finite_lamp_scores": 4112,
+        "pngs_300dpi": 15,
+        "svgs_parsed": 15,
+        "plot_csv_matches_actual_inventory": true,
+        "mask_counts_match": true,
+        "head_attention_channels_unchanged": true,
+        "cap_checked": true
+      },
+      {
+        "model_variant": "s",
+        "ratio": 0.2,
+        "conv_rows": 126,
+        "independent_channels_removed": 823,
+        "physical_conv_output_channels_removed": 823,
+        "finite_lamp_scores": 4112,
+        "pngs_300dpi": 15,
+        "svgs_parsed": 15,
+        "plot_csv_matches_actual_inventory": true,
+        "mask_counts_match": true,
+        "head_attention_channels_unchanged": true,
+        "cap_checked": true
+      },
+      {
+        "model_variant": "s",
+        "ratio": 0.3,
+        "conv_rows": 126,
+        "independent_channels_removed": 1234,
+        "physical_conv_output_channels_removed": 1282,
+        "finite_lamp_scores": 4112,
+        "pngs_300dpi": 15,
+        "svgs_parsed": 15,
+        "plot_csv_matches_actual_inventory": true,
+        "mask_counts_match": true,
+        "head_attention_channels_unchanged": true,
+        "cap_checked": true
+      }
+    ],
+    "limitations": [
+      "Final sources and delivered notebook tested on CPU only",
+      "Dataset Poltrada V3 absent; target accuracy/curves/confusion matrix NOT_RUN",
+      "CUDA absent; target latency NOT_RUN",
+      "W&B creation/upload tested by mocks only"
+    ],
+    "visual_review": {
+      "status": "PASS",
+      "three_panel_pngs_reviewed": [
+        "yolo26s/extended/pr0.3/eda/channels_overview.png",
+        "yolo26s/extended/pr0.3/eda/channels_detail_01.png"
+      ],
+      "reviewed_pngs_identical_to_final_run": true,
+      "mask_png_reviewed": "yolo26n/extended/pr0.3/eda/channel_mask_01.png",
+      "observations": [
+        "Blue before/red after with matching module order and Y limits",
+        "Detail labels and legends visible; 32 layers per detail page",
+        "Original-index heatmap labels/legend visible",
+        "SVG XML parsed for every run; exported from the same figures as the reviewed PNGs"
+      ]
+    }
+  }
+}

@@ -109,7 +109,7 @@ def test_schema_defaults_and_no_other_method_in_objective():
         "EPOCHS": 100, "IMGSZ": 640, "BATCH": 16, "PKD_WEIGHT": 1.0, "RUN_FULL_TRAINING": True, "RUN_SMOKE_TEST": False,
         "DIAGNOSTIC_BATCH": 16, "DIAGNOSTIC_STEPS": 20}
     assert env["TEACHER_ARTIFACT"].endswith("02_baseline_yolo26s-q5kp9k9d-checkpoints:v62")
-    assert env["WANDB_GROUP"] == "teacher_s_student_n_pkd"
+    assert env["WANDB_GROUP"] == "T26s_S26n"
     assert "teacher-s" in env["WANDB_TAGS"] and "teacher-m" not in env["WANDB_TAGS"]
     assert env["RESUME_STATUS"] == "RESUME_NOT_VERIFIED"
     source = cell(notebook, "loss")
@@ -481,7 +481,9 @@ def configure_synthetic_cpu(env, workdir, monkeypatch):
 
     def init(**kwargs):
         run = original_init(**kwargs)
-        assert kwargs["group"] == "teacher_s_student_n_pkd"
+        diagnostic = kwargs["job_type"] == "diagnostic"
+        assert kwargs["group"] == ("diagnostic-T26s_S26n" if diagnostic else "T26s_S26n")
+        assert kwargs["name"] == "kd_pkd_T26s_S26n_seed42" + ("_smoke" if diagnostic else "")
         assert kwargs["config"]["teacher"] == "yolo26s"
         assert "teacher-s" in kwargs["tags"]
         assert kwargs["job_type"] in {"diagnostic", "training"}

@@ -1,9 +1,20 @@
 # Notebook Penelitian YOLO26: Baseline, KD, dan Pruning
 
+Gunakan [peta repositori](peta-repo.md) untuk menemukan naskah skripsi, paper, notebook, kode, dan hasil eksperimen.
+
 Lihat [indeks notebook](notebooks/README.md) untuk seluruh eksperimen berdasarkan platform dan metode:
-[Kaggle](notebooks/kaggle/README.md), [Google Colab](notebooks/colab/README.md),
+[Filkom](notebooks/filkom/README.md), [Kaggle](notebooks/kaggle/README.md), [Google Colab](notebooks/colab/README.md),
 [AMD ROCm](notebooks/amd/baseline/), dan [analisis lokal](notebooks/local/).
+
+Gunakan [standar penamaan eksperimen W&B](docs/wandb_naming.md) untuk run baru.
 Notebook KD dipisahkan menjadi `kd/teacher_m/` dan `kd/teacher_s/`; baseline, teacher, EDA, dan pruning memiliki folder masing-masing.
+
+[MGD YOLO26s → YOLO26n untuk Kaggle](notebooks/kaggle/kd/teacher_s/15_mgd_yolo26n_teacher_yolo26s.ipynb) menambahkan metode dari referensi lokal `references/mgd` dengan protokol training yang sama dengan KD teacher S sebelumnya. Seed 42 aktif; empat seed pembanding lain tersedia sebagai komentar. Koleksi Colab yang ada tidak berubah.
+
+[LAMP V2 YOLO26n/S](docs/lamp_yolo26n_extended_no_recovery.md) menjalankan extended pruning 10%, 20%, 30%, 40%, dan 50% untuk kedua model, dengan EDA channel dan metrik. Policy conservative tetap tersedia.
+[LAMP dengan recovery fine-tuning biasa](docs/lamp_yolo26ns_finetune_recovery.md) memakai notebook 04 terpisah: baseline → pruned → recovered, optimizer baru, dan struktur hasil pruning tetap dipertahankan.
+[Workflow target GFLOPs dan recovery](docs/lamp_gflops_recovery_workflow.md) menyediakan notebook Kaggle dan Filkom untuk pruning N/S, fine-tuning, Native KD, CrossKD, serta MGD dari checkpoint raw yang dikunci.
+[Indeks laporan](reports/README.md) mengelompokkan bukti baseline, KD, pruning, eksperimen platform, dan engineering.
 
 Paket `skripsi` memisahkan arsitektur YOLO26n FPN-PAN, BiFPN, ASFF, dan AFPN dari notebook. Empat notebook modular ada di [arsip modular](notebooks/archieve/modular/). Import paket, `preflight()`, dan evaluasi **tidak memulai training**. Training hanya berjalan saat Anda memanggil `run_training()` secara eksplisit.
 

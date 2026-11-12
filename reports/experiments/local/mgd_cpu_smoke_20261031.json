@@ -1,0 +1,202 @@
+{
+  "status": "PASS CPU SMOKE - NOT GPU",
+  "notebook_sha256": "2c5af14de0361f4963eff2196c60cddcd1be76385384a7034b5028ecca526e30",
+  "gpu_status": "NOT TESTED",
+  "online_wandb": "NOT TESTED - local adapter",
+  "workdir": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\mgd_cpu_smoke\\c1d1f63350764e1c9a2d76cbe50291bd",
+  "seed": 42,
+  "epochs": 1,
+  "torch": "2.14.0+cpu",
+  "cuda_available": false,
+  "teacher_sha256": "5bc3ae61f8da1c9f03916922de10146805c27c64a11e46edd766a00d0f6f18fd",
+  "teacher_audit": {
+    "version": "v62",
+    "requested_artifact": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/02_baseline_yolo26s-q5kp9k9d-checkpoints:v62",
+    "best_pt_sha256": "5bc3ae61f8da1c9f03916922de10146805c27c64a11e46edd766a00d0f6f18fd",
+    "local_tensor_schema_and_class_order_verified": true,
+    "remote_artifact_retrieval": "NOT TESTED in this smoke run"
+  },
+  "student_initial_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+  "student_source": "https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo26n.pt",
+  "data": "SYNTHETIC: 5 train / 4 val images, not Poltrada V3",
+  "test_overrides": {
+    "device": "cpu",
+    "imgsz": 64,
+    "batch": 2,
+    "workers": 0,
+    "amp": false,
+    "nbs": 2,
+    "plots": false
+  },
+  "pipeline_result": {
+    "status": "PASS",
+    "map50_95": 0.0,
+    "map50": 0.0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "ap_per_class": {
+      "Bus": 0.0
+    },
+    "class_names": [
+      "Bus",
+      "Mobil Penumpang",
+      "Pejalan Kaki",
+      "Sepeda Motor",
+      "Truck",
+      "Unmotorized"
+    ],
+    "parameters_student": 2506140,
+    "gflops_student": 0.0,
+    "inference_ms_per_image": 216.9076000000132,
+    "eval_split": "val",
+    "seed": 42,
+    "diagnostic_only": true,
+    "completed_epochs": 1,
+    "requested_epochs": 1,
+    "best_epoch": 1,
+    "student_checkpoint": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\mgd_cpu_smoke\\c1d1f63350764e1c9a2d76cbe50291bd\\results\\15_mgd_yolo26n_teacher_yolo26s\\multiseed_20261031T013641_217382Z\\smoke-42\\epoch_snapshots\\epoch-001\\best.pt",
+    "seed_directory": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\mgd_cpu_smoke\\c1d1f63350764e1c9a2d76cbe50291bd\\results\\15_mgd_yolo26n_teacher_yolo26s\\multiseed_20261031T013641_217382Z\\smoke-42",
+    "wandb_run_id": "13608e7e",
+    "optimizer_steps": 3,
+    "amp_skipped_steps": 0,
+    "teacher_parameters_and_bn_unchanged": true,
+    "resume_status": "RESUME_NOT_VERIFIED",
+    "duration_seconds": 15.934257699999762
+  },
+  "batches": [
+    {
+      "actual_batch": 2,
+      "box_loss": 3.0323660373687744,
+      "cls_loss": 6.714239597320557,
+      "l1_loss": 0.056619878858327866,
+      "mgd_P3": 5454.26318359375,
+      "mgd_P4": 2080.56201171875,
+      "mgd_P5": 2319.54638671875,
+      "mgd_mask_P3": 0.609375,
+      "mgd_mask_P4": 0.71875,
+      "mgd_mask_P5": 0.5,
+      "mgd_loss": 9854.37109375,
+      "mgd_weighted_loss": 0.19708743691444397,
+      "det_total_loss": 11.726144790649414,
+      "total_loss": 11.923232078552246,
+      "mgd_to_det_ratio": 0.016807522624731064
+    },
+    {
+      "actual_batch": 2,
+      "box_loss": 0.33625268936157227,
+      "cls_loss": 0.4355316162109375,
+      "l1_loss": 0.0073265014216303825,
+      "mgd_P3": 4665.6845703125,
+      "mgd_P4": 1580.41455078125,
+      "mgd_P5": 1608.857666015625,
+      "mgd_mask_P3": 0.65625,
+      "mgd_mask_P4": 0.5625,
+      "mgd_mask_P5": 0.5,
+      "mgd_loss": 7854.95703125,
+      "mgd_weighted_loss": 0.15709912776947021,
+      "det_total_loss": 0.25602197647094727,
+      "total_loss": 0.4131211042404175,
+      "mgd_to_det_ratio": 0.6136158108711243
+    },
+    {
+      "actual_batch": 1,
+      "box_loss": 2.4126734733581543,
+      "cls_loss": 3.792327880859375,
+      "l1_loss": 0.041692208498716354,
+      "mgd_P3": 4376.16162109375,
+      "mgd_P4": 1564.460693359375,
+      "mgd_P5": 2377.87255859375,
+      "mgd_mask_P3": 0.65625,
+      "mgd_mask_P4": 0.625,
+      "mgd_mask_P5": 0.75,
+      "mgd_loss": 8318.494140625,
+      "mgd_weighted_loss": 0.16636988520622253,
+      "det_total_loss": 4.453925132751465,
+      "total_loss": 4.62029504776001,
+      "mgd_to_det_ratio": 0.03735354170203209
+    }
+  ],
+  "gradient_norms": {
+    "student": 9.999987602233887,
+    "alignment": 0.0037014998961240053,
+    "generation": 0.01591608300805092
+  },
+  "student_parameters_changed": true,
+  "portable_checkpoint_and_state": true,
+  "local_artifact_checks": [
+    {
+      "kind": "model",
+      "files": {
+        "args.yaml": {
+          "path": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\mgd_cpu_smoke\\c1d1f63350764e1c9a2d76cbe50291bd\\results\\15_mgd_yolo26n_teacher_yolo26s\\multiseed_20261031T013641_217382Z\\smoke-42\\epoch_snapshots\\epoch-001\\args.yaml",
+          "bytes": 2336,
+          "sha256": "2af9d8435721d9a47545ccadc16166ee72dfcd8f2c5ae2ff736a2e333f7b0cf0"
+        },
+        "best.pt": {
+          "path": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\mgd_cpu_smoke\\c1d1f63350764e1c9a2d76cbe50291bd\\results\\15_mgd_yolo26n_teacher_yolo26s\\multiseed_20261031T013641_217382Z\\smoke-42\\epoch_snapshots\\epoch-001\\best.pt",
+          "bytes": 5332613,
+          "sha256": "0791a2ec3b8050f0933b9805b3c9af48670dc6d09929706413ee3706e0b1a5b0"
+        },
+        "checkpoint_manifest.json": {
+          "path": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\mgd_cpu_smoke\\c1d1f63350764e1c9a2d76cbe50291bd\\results\\15_mgd_yolo26n_teacher_yolo26s\\multiseed_20261031T013641_217382Z\\smoke-42\\epoch_snapshots\\epoch-001\\checkpoint_manifest.json",
+          "bytes": 937,
+          "sha256": "6c4d098fec625c7e33ce55deb261d8118a0d4c60b2601baee4c74cb280df8444"
+        },
+        "last.pt": {
+          "path": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\mgd_cpu_smoke\\c1d1f63350764e1c9a2d76cbe50291bd\\results\\15_mgd_yolo26n_teacher_yolo26s\\multiseed_20261031T013641_217382Z\\smoke-42\\epoch_snapshots\\epoch-001\\last.pt",
+          "bytes": 5332613,
+          "sha256": "3eb3d9a536bb820e873a9cb5d9cc0d7986a77b555744dd90034c96b71cc676e5"
+        },
+        "results.csv": {
+          "path": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\mgd_cpu_smoke\\c1d1f63350764e1c9a2d76cbe50291bd\\results\\15_mgd_yolo26n_teacher_yolo26s\\multiseed_20261031T013641_217382Z\\smoke-42\\epoch_snapshots\\epoch-001\\results.csv",
+          "bytes": 758,
+          "sha256": "df07ec9e263d023c40ff5fa897a8af65cb427e228bd9ad428bc577e3599991e9"
+        },
+        "teacher_provenance.json": {
+          "path": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\mgd_cpu_smoke\\c1d1f63350764e1c9a2d76cbe50291bd\\results\\15_mgd_yolo26n_teacher_yolo26s\\multiseed_20261031T013641_217382Z\\smoke-42\\epoch_snapshots\\epoch-001\\teacher_provenance.json",
+          "bytes": 364,
+          "sha256": "b299205df498840cda327e88083becde50383bddf65cc5554bfbc494b73967a8"
+        },
+        "training_state_best.pt": {
+          "path": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\mgd_cpu_smoke\\c1d1f63350764e1c9a2d76cbe50291bd\\results\\15_mgd_yolo26n_teacher_yolo26s\\multiseed_20261031T013641_217382Z\\smoke-42\\epoch_snapshots\\epoch-001\\training_state_best.pt",
+          "bytes": 142946841,
+          "sha256": "fd93531f15f10c3b2d09883744bddf9066fd8e1e368afbf7b411f76e53788db6"
+        },
+        "training_state_last.pt": {
+          "path": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\mgd_cpu_smoke\\c1d1f63350764e1c9a2d76cbe50291bd\\results\\15_mgd_yolo26n_teacher_yolo26s\\multiseed_20261031T013641_217382Z\\smoke-42\\epoch_snapshots\\epoch-001\\training_state_last.pt",
+          "bytes": 142946841,
+          "sha256": "fd93531f15f10c3b2d09883744bddf9066fd8e1e368afbf7b411f76e53788db6"
+        }
+      },
+      "local_adapter_only": true
+    },
+    {
+      "kind": "results",
+      "files": {
+        "metrics.json": {
+          "path": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\mgd_cpu_smoke\\c1d1f63350764e1c9a2d76cbe50291bd\\results\\15_mgd_yolo26n_teacher_yolo26s\\multiseed_20261031T013641_217382Z\\smoke-42\\metrics.json",
+          "bytes": 1195,
+          "sha256": "91b7b6566b6960407ebccf7cd4a9e2282c8e93c3d0f11d345504917f448ca61b"
+        },
+        "config.json": {
+          "path": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\mgd_cpu_smoke\\c1d1f63350764e1c9a2d76cbe50291bd\\results\\15_mgd_yolo26n_teacher_yolo26s\\multiseed_20261031T013641_217382Z\\smoke-42\\config.json",
+          "bytes": 4528,
+          "sha256": "0e1c2a91412f891efbc6d428b72235629877574bd8458bf2fc49887126e74869"
+        }
+      },
+      "local_adapter_only": true
+    }
+  ],
+  "notebook_defaults": {
+    "EPOCHS": 100,
+    "IMGSZ": 640,
+    "BATCH": 16,
+    "AMP": true,
+    "SEEDS_TO_RUN": [
+      42
+    ],
+    "RUN_FULL_TRAINING": true,
+    "RUN_SMOKE_TEST": false
+  },
+  "notebook_defaults_unchanged": true
+}

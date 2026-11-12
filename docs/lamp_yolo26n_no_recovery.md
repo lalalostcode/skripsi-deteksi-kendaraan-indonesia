@@ -12,7 +12,16 @@ Tidak ada perubahan pada notebook KD, generator, pipeline training, `pyproject.t
    `ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/03_baseline_yolo26n-9uu3meve-checkpoints:v84`.
    Selector eksplisit `best.pt` harus unik; isi path relatif lengkap bila ada beberapa file bernama sama.
 4. Sesuaikan `DATASET_ROOT`, `DATA_YAML`, dan `OUTPUT_DIR`, kemudian **Run All** pada kernel baru.
+   Default saat ini `PRUNING_RATIO=0.30`, `RUN_FULL_VALIDATION=True`, dan `BENCHMARK_LATENCY=True`.
+   Rasio 30% berlaku pada channel eligible; reduksi parameter diukur terpisah. Recovery tetap dinonaktifkan.
 5. Baca `structural_smoke_status` dan `validation_status` secara terpisah, lalu simpan folder output run.
+
+Tracking tetap di project `yolom26-kd-indotraffic`, dengan nama run
+`prun_lamp1_yolo26n_pruned-pr0.3` pada rasio default.
+Akhiran rasio mengikuti `PRUNING_RATIO` otomatis, misalnya `pr0.1` untuk 10%.
+Group `lamp-v1` dan tag metode, model, seed, serta rasio mengikuti [standar W&B](wandb_naming.md).
+Setiap eksekusi memakai UUID run baru secara eksplisit dan `resume="never"`, termasuk bila
+environment memiliki `WANDB_RUN_ID` lama. Run baseline/KD dan artifact sumber `:v84` tidak ditimpa.
 
 Versi yang dikunci: Ultralytics 8.4.155, W&B 0.28.1, Torch-Pruning 1.6.1.
 Torch/torchvision bawaan Kaggle dikunci ke versi yang sudah terpasang selama instalasi tambahan.
@@ -31,7 +40,7 @@ sehingga fusion internal validator tidak mengubah model untuk pengukuran struktu
 ## Metode dan perlindungan arsitektur
 
 Scorer adalah `LAMPImportance(p=2, group_reduction="mean", bias=False)` bawaan Torch-Pruning,
-digunakan oleh `BasePruner` dengan global ranking, target 10%, satu langkah, cap 50%, dan tanpa rounding.
+digunakan oleh `BasePruner` dengan global ranking, target 30%, satu langkah, cap 50%, dan tanpa rounding.
 Magnitude channel dari anggota dependency group direduksi dan dinormalisasi dengan LAMP.
 Ini adaptasi **structured channel pruning** dari [LAMP asli](https://arxiv.org/abs/2010.07611),
 bukan implementasi masking unstructured yang identik dengan paper tersebut.
@@ -39,6 +48,11 @@ bukan implementasi masking unstructured yang identik dengan paper tersebut.
 Root eligible hanya hidden Conv pertama pada modul `Bottleneck` backbone/neck.
 Penghapusan mencakup output Conv tersebut, BN terkait, serta input Conv konsumennya.
 Seluruh dependency group diperiksa sebelum `group.prune()`; cap juga diperiksa eksplisit.
+Torch-Pruning 1.6.1 memeriksa cap pada lebar sebelum langkah, sehingga proposal global
+dapat melampaui cap dalam satu langkah. Notebook membatasi kapasitas sebelum ranking:
+hanya channel dengan skor LAMP terendah sebanyak batas penghapusan tiap group yang
+eligible; sisanya diberi sentinel `+inf`. Skor kandidat tetap asli tanpa normalisasi ulang.
+Ranking global kemudian mengalokasikan target 30% di antara kandidat dalam batas tersebut.
 Graph dibangun pada `eval()` dengan autograd aktif dan raw outputs kedua cabang.
 Tidak ada backward, optimizer, training, KD, teacher, atau recovery.
 
@@ -51,7 +65,8 @@ Yang dilindungi:
 | Attention/C2PSA | Dimensi head, reshape, dan hidden split tidak diubah. |
 | Antarmuka backbone/neck/head | Lebar fitur antartahap tetap; Conv konsumen internal hanya berubah pada input hidden channel. |
 
-Terdapat 13 root eligible pada checkpoint target. Ranking LAMP memilih tiga group untuk diubah:
+Pada pengujian historis rasio 10%, terdapat 13 root eligible pada checkpoint target.
+Ranking LAMP memilih tiga group untuk diubah (bukan hasil run default 30% saat ini):
 
 | Root | Hidden channel sebelum | Sesudah |
 | --- | ---: | ---: |
@@ -99,7 +114,16 @@ Tidak ada metrik mAP buatan maupun fallback dataset.
 
 ## Verifikasi yang benar-benar dijalankan
 
-Pada 22 Oktober 2026, artifact target diunduh melalui W&B API memakai kredensial environment proyek,
+Konfigurasi default 30% telah diuji ulang pada checkpoint target yang sama di CPU FP32 640 px:
+**structural smoke PASS**, channel eligible 440 → 308 (30%), parameter 2.506.140 → 2.337.684
+(6,7217%), GFLOPs 5,905408 → 5,720320. Head tetap identik, direct `YOLO()` reload pada
+interpreter baru dan prediction lulus, dengan selisih maksimum raw/decoded outputs nol.
+Sebanyak 104 tes pruning/layout lulus, termasuk validasi sintetis tanpa training.
+Detail ada di [laporan CPU rasio 30%](../reports/pruning/yolo26n/v1/lamp_ratio030_cpu_smoke_20261022.json).
+Validasi mAP target dan latency CUDA tetap **NOT_RUN**; dataset V3 dan GPU belum tersedia lokal.
+
+Pada 22 Oktober 2026, pengujian historis berikut memakai rasio 10%, sehingga bukan bukti hasil Kaggle 30%.
+Artifact target diunduh melalui W&B API memakai kredensial environment proyek,
 lalu **seluruh code cell notebook** dieksekusi pada salinan lokal `best.pt` dengan SHA-256 terverifikasi:
 
 `380a087fd621e8a43fe2b9b4d6b1bb6fb00a4d0443cc5afe81ef3efdf0775f0f`.
@@ -108,7 +132,7 @@ Hasil CPU FP32 640 px: **structural smoke PASS**. Parameter berkurang dari 2.506
 2.439.236 (2,6696%); channel eligible berkurang tepat 10%. Kedua head tetap identik,
 dan selisih absolut maksimum seluruh tensor pembanding setelah reload adalah nol.
 Angka GFLOPs, provenance W&B, status lengkap, dan lokasi artifact hasil ada pada
-`reports/lamp_yolo26n_cpu_smoke_20261022.json`.
+[laporan CPU historis rasio 10%](../reports/pruning/yolo26n/v1/lamp_yolo26n_cpu_smoke_20261022.json).
 
 Runtime: Python 3.11.14, Torch 2.14.0 CPU, torchvision 0.29.0, Ultralytics 8.4.155,
 Torch-Pruning 1.6.1, W&B 0.28.1. Driver verifikasi menonaktifkan tracking W&B,

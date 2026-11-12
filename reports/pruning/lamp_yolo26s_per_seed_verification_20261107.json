@@ -1,0 +1,124 @@
+{
+  "verification_date_jakarta": "2026-11-07",
+  "notebook": "notebooks/kaggle/pruning/06_lamp_yolo26s_multiseed_wandb.ipynb",
+  "notebook_sha256": "adde82ac7df408dc8071def3f11d5be60d19c5d3f30c9e365f87cee6f2a41b78",
+  "implementation_sha256": "81a80fccd427426c4dfc72368dc0307ca2d761bdd0194e8bb409f872bbb8a83a",
+  "template_notebook_sha256": "6ae367df8dc35b0a9b386a29f177a02779ebf0274dfc4bcf06280d764b5fd646",
+  "verified_heading_count": 24,
+  "unchanged_other_notebooks": 71,
+  "related_tests_passed": 196,
+  "wandb_simulation": {
+    "status": "PASS",
+    "runs_per_suite": 7,
+    "model_artifacts_per_suite": 7,
+    "one_group_per_suite": true,
+    "fresh_suite_has_new_run_ids_and_versions": true,
+    "relocated_resume_reuses_confirmed_uploads": true,
+    "target_not_reached_preserves_actual_speedup": true,
+    "seed0_recovery_registry_and_package": "PASS"
+  },
+  "verified_baseline_best_pt": {
+    "42": {
+      "ref": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/02_baseline_yolo26s-q5kp9k9d-checkpoints:v62",
+      "sha256": "5bc3ae61f8da1c9f03916922de10146805c27c64a11e46edd766a00d0f6f18fd",
+      "file_bytes": 80377733
+    },
+    "0": {
+      "ref": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/02_baseline_yolo26s-7f5jmtwb-checkpoints:v71",
+      "sha256": "d02d8d90d5000fc8379379acb0c0cb3cde0c01143b197d237b25be1bae99bf4f",
+      "file_bytes": 80378885
+    },
+    "2024": {
+      "ref": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/02_baseline_yolo26s-1o9ggnyw-checkpoints:v41",
+      "sha256": "47cfab586889d2b464c882239c86224b645363a5a4fa3badc31c46991ad27d70",
+      "file_bytes": 80375045
+    },
+    "7": {
+      "ref": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/02_baseline_yolo26s-9cq437l3-checkpoints:v49",
+      "sha256": "3e59d5f5302fb524da729e139ef7e9b8456c08d0952c19b08af19c7f39bce6ab",
+      "file_bytes": 80376069
+    },
+    "3407": {
+      "ref": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/02_baseline_yolo26s-bmshdzv9-checkpoints:v43",
+      "sha256": "de9f06892953a343629a4b3a59df880d771973ae95160dee02cd96e37de59e46",
+      "file_bytes": 80375301
+    }
+  },
+  "cpu_smoke": {
+    "status": "PASS",
+    "suite_dir": "outputs/pruning/lamp_per_seed_cpu_20261107/20261107T014946Z_0229fc14",
+    "torch": "2.14.0",
+    "ultralytics": "8.4.155",
+    "torch_pruning": "1.6.1",
+    "protocol": "CPU FP32 64 px, batch 2, six synthetic val images, one-to-many/NMS",
+    "dataset_fingerprint": "3dcd04d7a4ac09cf6ba90b7a7d7a70b9cd80ae5dc5baa049d359490522b40405",
+    "dataset_provenance_status": "UNVERIFIED",
+    "interruption": "After seed 0 audit and reload, before raw validation",
+    "resume": "Completed seed 0 validation without rerunning either audit or changing raw SHA-256",
+    "matched_local_recovery_packages": "PASS",
+    "eda_status": "PASS",
+    "eda_inline_images": 66,
+    "rows": [
+      {
+        "configuration_id": "target-1.20x-seed42",
+        "target_speedup": 1.2,
+        "target_status": "REACHED",
+        "actual_gflops_speedup": 1.2000900280314553,
+        "baseline_seed": 42,
+        "source_baseline_artifact_ref": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/02_baseline_yolo26s-q5kp9k9d-checkpoints:v62",
+        "source_baseline_sha256": "5bc3ae61f8da1c9f03916922de10146805c27c64a11e46edd766a00d0f6f18fd",
+        "baseline_fp32_sha256": "22628583d15440b8b0a1cc72b433b41ca2d5f0b59a49c2e14a6ee3ab1f4885e6",
+        "raw_sha256": "1fd0f8aa377b8b929bcd9eaa3abdb3faad8ac1a3d831c6e5b8703a8df7ee7644",
+        "state_sha256": "89c7296b529a970d0395d0fdb0ab13fb4123990a179ec46eb80642683cd694ba",
+        "baseline_gflops": 0.225226752,
+        "gflops": 0.18767488,
+        "baseline_map50_95": 0.0,
+        "map50_95": 0.0,
+        "baseline_parameters": 9952508,
+        "parameters": 8331468,
+        "validation_image_count": 6,
+        "oracle_status": "PASS",
+        "reproducibility_status": "PASS",
+        "reload_status": "PASS",
+        "integrity_status": "PASS",
+        "baseline_validation_parity_status": "PASS",
+        "validation_status": "PASS",
+        "eda_status": "PASS",
+        "latency_status": "NOT_RUN",
+        "publication_status": "NOT_RUN"
+      },
+      {
+        "configuration_id": "target-1.20x-seed0",
+        "target_speedup": 1.2,
+        "target_status": "REACHED",
+        "actual_gflops_speedup": 1.2001980795019092,
+        "baseline_seed": 0,
+        "source_baseline_artifact_ref": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/02_baseline_yolo26s-7f5jmtwb-checkpoints:v71",
+        "source_baseline_sha256": "d02d8d90d5000fc8379379acb0c0cb3cde0c01143b197d237b25be1bae99bf4f",
+        "baseline_fp32_sha256": "498b951d6b5cb4be68300883f73b4171b9dad60c457ef3f983767844c59758d3",
+        "raw_sha256": "c58ad93c743dff281b2ad029ebdaa8e9d687f29f062f712f22d035611a2c48d5",
+        "state_sha256": "59c39969e4f54a7fc9ea603109276efd3237a563a618586bf0fa09c0f200f45a",
+        "baseline_gflops": 0.225226752,
+        "gflops": 0.187657984,
+        "baseline_map50_95": 0.0,
+        "map50_95": 0.0,
+        "baseline_parameters": 9952508,
+        "parameters": 8331338,
+        "validation_image_count": 6,
+        "oracle_status": "PASS",
+        "reproducibility_status": "PASS",
+        "reload_status": "PASS",
+        "integrity_status": "PASS",
+        "baseline_validation_parity_status": "PASS",
+        "validation_status": "PASS",
+        "eda_status": "PASS",
+        "latency_status": "NOT_RUN",
+        "publication_status": "NOT_RUN"
+      }
+    ]
+  },
+  "kaggle_full_val_t4": "NOT_RUN",
+  "cuda_latency": "NOT_RUN",
+  "wandb_online_publication_of_new_suite": "NOT_RUN",
+  "recovery_training_kd": "NOT_RUN"
+}

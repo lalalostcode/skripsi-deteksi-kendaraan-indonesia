@@ -459,7 +459,7 @@ def test_serial_ids_state_callbacks_tags_and_code_upload_are_isolated(env, workd
         callbacks[0](None)
     assert events.index(("finish", 7, 0)) < next(i for i, event in enumerate(events) if event[:2] == ("init", 3407))
     for run in runs:
-        assert run.kwargs["name"] == f"baseline_yolo26n_amd_seed{run.seed}"
+        assert run.kwargs["name"] == f"base_yolo26n_amd_seed{run.seed}"
         assert run.kwargs["group"] == "supervised"
         assert {"baseline", "amd-rocm", "roboflow-v3", f"seed{run.seed}"} <= set(run.kwargs["tags"])
         assert run.kwargs["save_code"] is False and run.kwargs["settings"].disable_code is True

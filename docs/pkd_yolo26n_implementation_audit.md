@@ -155,8 +155,8 @@ Estimasi durasi baru dihitung dari iterasi GPU yang benar-benar diukur, dan dibe
 
 ## Checkpoint dan W&B
 
-Group: `teacher_s_student_n_pkd`; nama final `12_pkd_yolo26n_seed42_<timestamp>`.
-Run diagnostic memakai `job_type=diagnostic` dan tag diagnostic; final memakai training.
+Run baru memakai group `T26s_S26n` dan nama `kd_pkd_T26s_S26n_seed42`.
+Run diagnostik memakai akhiran `_smoke`, group `diagnostic-T26s_S26n`, `job_type=diagnostic`, dan tag diagnostic.
 ID selalu baru dengan `resume="never"`. Teacher artifact ditautkan lewat `use_artifact`.
 Metrik per epoch dicatat sekali, terpisah dari metrik per batch diagnostic.
 
@@ -223,7 +223,7 @@ Pearson/PKD telah dicoba pada Tesla T4 dengan teacher YOLO26s v62 yang sama dan 
 job berhenti bertepatan dengan batas 75 menit. Validasi dan checkpoint akhir belum selesai.
 Loss finite, memori reserved terakhir 3,22 GiB, dan tidak ditemukan traceback/OOM dalam log.
 Numerical verification terhadap referensi MMRazor lulus di worker GPU (max abs 2,38e-7).
-Rincian serta batas klaim tersedia pada [laporan aktual](../reports/hasil_percobaan/pkd_kaggle_smoke_20261022.md).
+Rincian serta batas klaim tersedia pada [laporan aktual](../reports/experiments/kaggle/pkd_kaggle_smoke_20261022.md).
 
 Callback diagnostic diperbaiki agar pre-hook fused AdamW mengabaikan update yang ditandai
 `optimizer.found_inf != 0`; AMP dapat memanggil hook walaupun update dilewati. Rumus PKD

@@ -37,6 +37,8 @@ desktop.ini
 data/raw/*
 data/processed/*
 data/audited_v2/
+/data/2-ver/
+/data/latest version/
 
 !data/raw/.gitkeep
 !data/processed/.gitkeep
@@ -66,3 +68,9 @@ wandb/
 mlruns/
 Jurnal/
 tmp/
+
+# Local paper PDFs and upstream clones
+/references/*/code/*
+!/references/*/code/.gitkeep
+/references/*/paper/*
+!/references/*/paper/.gitkeep

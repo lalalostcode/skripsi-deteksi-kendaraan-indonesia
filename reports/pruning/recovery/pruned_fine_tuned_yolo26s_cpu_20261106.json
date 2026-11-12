@@ -1,0 +1,41 @@
+{
+  "date_jakarta": "2026-11-06",
+  "workflow": "fine-tunned / YOLO26s / baseline-02",
+  "local_smoke_status": "PASS",
+  "tests_passed": 149,
+  "environment": {"device": "cpu", "torch": "2.14.0+cpu", "ultralytics": "8.4.155", "amp": false},
+  "fixture": {
+    "dataset_id": "synthetic-fixture",
+    "provenance_status": "UNVERIFIED",
+    "train_count": 6,
+    "val_count": 6,
+    "imgsz": 64,
+    "epochs": 1,
+    "batch": 2,
+    "nbs": 2,
+    "seed": 7,
+    "raw_pruning_seed": 42,
+    "source_baseline_version": "v62",
+    "target_speedup": 1.02,
+    "raw_sha256": "ccecd07465900f562ed2517b547a2031e42c6eafe628973344cc254d3b0353e2"
+  },
+  "training_status": "PASS",
+  "raw_unchanged": true,
+  "initial_parameters_sha256": "6a1977441607d90f7f5fdf4e249b463c4669f1d8415b1e40dd79ae9e13c22487",
+  "trained_parameters_sha256": "13cef4ed023f629a697b67053a57cc5595933fab3afbc713548306dd8f7dfd2d",
+  "best_checkpoint_sha256": "1018ec27c43f045ad24b397b981443dc0913fcaa91f147e8bae4db44535a71b2",
+  "structure_and_reload_status": "PASS",
+  "validation_status": "PASS",
+  "eda_status": "PASS",
+  "eda_grouped_plots": 8,
+  "stages": {
+    "baseline": {"parameters": 9952508, "gflops": 0.225226752, "map50_95": 0.0},
+    "raw_pruned": {"parameters": 9659646, "gflops": 0.2208068, "map50_95": 0.0},
+    "recovered": {"parameters": 9659646, "gflops": 0.2208068, "map50_95": 0.0}
+  },
+  "kaggle_gpu_status": "NOT_RUN",
+  "filkom_gpu_status": "NOT_RUN",
+  "poltrada_v3_full_val_status": "NOT_RUN",
+  "wandb_online_status": "NOT_RUN",
+  "local_manifest": "outputs/fine-tunned/local_cpu_20261106/20261106T153927Z_2d332c77/fine_tuned_manifest.json"
+}

@@ -6,20 +6,25 @@ Notebook dikelompokkan berdasarkan **platform**, lalu jenis eksperimen. Nama fil
 
 ```text
 notebooks/
-├── kaggle/{eda,teacher,baseline,kd/teacher_m,kd/teacher_s,pruning}/
+├── kaggle/{eda,teacher,baseline,baseline/fine-tunned,kd/teacher_m,kd/teacher_s,pruning,recovery}/
+├── filkom/{teacher,pruning,recovery,fine-tunned}/
 ├── colab/{eda,teacher,baseline,kd/teacher_m,kd/teacher_s}/
 ├── amd/baseline/
 ├── local/{eda,analysis}/
 └── archieve/
 ```
 
-KD dikelompokkan menurut **teacher**, bukan ukuran student pada nama file. Pearson/PKD termasuk teacher S. Baseline YOLO26s tetap satu notebook di baseline dan juga menghasilkan checkpoint teacher S; tidak dibuat salinan teacher S.
+Notebook KD dari baseline dikelompokkan menurut teacher. Notebook KD dari raw pruned ada di `recovery/`, dipisah menurut metode. Fine-tuning recovery memakai satu notebook per varian.
 
-Kaggle dan Colab tetap standalone. Helper path repository hanya digunakan generator dan tes; notebook tidak mengimpornya.
+Notebook Kaggle, Colab, dan Filkom memuat helper runtime sendiri. Registry path hanya digunakan generator dan tes.
 
-39 notebook aktif dan 10 notebook arsip. Pruning saat ini tersedia untuk Kaggle; tidak ada port Colab pruning baru.
+62 notebook terdaftar dan 10 notebook arsip. Gunakan `recovery/02`–`05` untuk YOLO26s dengan konfigurasi asal. Salinan `fine-tunned/` adalah rujukan historis. [Matriks notebook dan protokol bersama](../docs/lamp_gflops_recovery_workflow.md)
 
-Petunjuk platform: [Kaggle](kaggle/README.md), [Colab](colab/README.md). [Panduan LAMP dan restore](../docs/lamp_yolo26n_no_recovery.md).
+Petunjuk platform tersedia untuk [Filkom](filkom/README.md), [Kaggle](kaggle/README.md), dan [Colab](colab/README.md). Lihat juga panduan LAMP historis [YOLO26n](../docs/lamp_yolo26n_no_recovery.md) dan [YOLO26s](../docs/lamp_yolo26s_no_recovery.md).
+
+[Panduan LAMP V2 N/S dan EDA](../docs/lamp_yolo26n_extended_no_recovery.md) memakai sepuluh eksperimen extended pada rasio 10-50% secara default, dengan diagram channel sebelum/sesudah serta metrik efisiensi dan akurasi; policy conservative tetap tersedia. [Indeks laporan](../reports/README.md) memisahkan bukti baseline, KD, pruning, dan pengujian platform.
+
+[Recovery fine-tuning biasa](../docs/lamp_yolo26ns_finetune_recovery.md) ada pada notebook 04 tersendiri. Notebook 03 tetap menjadi pembanding tanpa recovery; hasil ketiga tahap dibandingkan tanpa mengubah bukti historis.
 
 ## Kaggle
 
@@ -28,6 +33,7 @@ Petunjuk platform: [Kaggle](kaggle/README.md), [Colab](colab/README.md). [Pandua
 | [kaggle/eda/00_eda_poltrada_v3.ipynb](kaggle/eda/00_eda_poltrada_v3.ipynb) | EDA | — | — |
 | [kaggle/eda/00_results_eda-poltrada.ipynb](kaggle/eda/00_results_eda-poltrada.ipynb) | EDA / hasil tersimpan | — | — |
 | [kaggle/teacher/01_teacher_yolo26m.ipynb](kaggle/teacher/01_teacher_yolo26m.ipynb) | Pelatihan teacher | — | YOLO26m |
+| [kaggle/teacher/02_teacher_yolo26m_multiseed.ipynb](kaggle/teacher/02_teacher_yolo26m_multiseed.ipynb) | Pelatihan teacher lima seed | — | YOLO26m |
 | [kaggle/baseline/02_baseline_yolo26s.ipynb](kaggle/baseline/02_baseline_yolo26s.ipynb) | Baseline supervised | — | YOLO26s |
 | [kaggle/baseline/03_baseline_yolo26n.ipynb](kaggle/baseline/03_baseline_yolo26n.ipynb) | Baseline supervised | — | YOLO26n |
 | [kaggle/baseline/03_baseline_yolo26n_scratch.ipynb](kaggle/baseline/03_baseline_yolo26n_scratch.ipynb) | Baseline scratch | — | YOLO26n |
@@ -43,7 +49,34 @@ Petunjuk platform: [Kaggle](kaggle/README.md), [Colab](colab/README.md). [Pandua
 | [kaggle/kd/teacher_s/12_pkd_yolo26n.ipynb](kaggle/kd/teacher_s/12_pkd_yolo26n.ipynb) | Pearson / PKD | YOLO26s | YOLO26n |
 | [kaggle/kd/teacher_s/13_head_yolo26n_teacher_yolo26s.ipynb](kaggle/kd/teacher_s/13_head_yolo26n_teacher_yolo26s.ipynb) | HEAD | YOLO26s | YOLO26n |
 | [kaggle/kd/teacher_s/14_rm_yolo26n_teacher_yolo26s.ipynb](kaggle/kd/teacher_s/14_rm_yolo26n_teacher_yolo26s.ipynb) | Rank Mimicking | YOLO26s | YOLO26n |
+| [kaggle/kd/teacher_s/15_mgd_yolo26n_teacher_yolo26s.ipynb](kaggle/kd/teacher_s/15_mgd_yolo26n_teacher_yolo26s.ipynb) | Masked Generative Distillation / MGD | YOLO26s | YOLO26n |
 | [kaggle/pruning/01_lamp_yolo26n_no_recovery.ipynb](kaggle/pruning/01_lamp_yolo26n_no_recovery.ipynb) | LAMP structured, tanpa recovery | — | YOLO26n |
+| [kaggle/pruning/02_lamp_yolo26s_no_recovery.ipynb](kaggle/pruning/02_lamp_yolo26s_no_recovery.ipynb) | LAMP structured, tanpa recovery | — | YOLO26s |
+| [kaggle/pruning/03_lamp_yolo26n_extended_no_recovery.ipynb](kaggle/pruning/03_lamp_yolo26n_extended_no_recovery.ipynb) | LAMP V2 conservative/extended dan EDA channel, tanpa recovery | — | YOLO26n / YOLO26s |
+| [kaggle/pruning/04_lamp_yolo26ns_finetune_recovery.ipynb](kaggle/pruning/04_lamp_yolo26ns_finetune_recovery.ipynb) | LAMP structured dan recovery fine-tuning supervised biasa | — | YOLO26n / YOLO26s |
+| [kaggle/pruning/05_lamp_yolo26n_gflops_no_recovery.ipynb](kaggle/pruning/05_lamp_yolo26n_gflops_no_recovery.ipynb) | LAMP target GFLOPs, kontrol P5, EDA, dan ekspor full val | — | YOLO26n |
+| [kaggle/pruning/06_lamp_yolo26s_gflops_no_recovery.ipynb](kaggle/pruning/06_lamp_yolo26s_gflops_no_recovery.ipynb) | LAMP target GFLOPs, kontrol P5, EDA, dan ekspor full val | — | YOLO26s |
+| [kaggle/pruning/06_lamp_yolo26s_multiseed_wandb.ipynb](kaggle/pruning/06_lamp_yolo26s_multiseed_wandb.ipynb) | LAMP tujuh perlakuan dengan baseline sesuai seed dan registry W&B untuk Kaggle atau Filkom | — | YOLO26s |
+| [kaggle/recovery/01_yolo26n_standard_finetuning.ipynb](kaggle/recovery/01_yolo26n_standard_finetuning.ipynb) | Fine-tuning raw pruned | — | YOLO26n |
+| [kaggle/recovery/02_yolo26s_standard_finetuning.ipynb](kaggle/recovery/02_yolo26s_standard_finetuning.ipynb) | Fine-tuning raw pruned | — | YOLO26s |
+| [kaggle/recovery/03_yolo26ns_native_kd.ipynb](kaggle/recovery/03_yolo26ns_native_kd.ipynb) | Native KD dari raw pruned | YOLO26m v50 | YOLO26s |
+| [kaggle/recovery/04_yolo26ns_crosskd.ipynb](kaggle/recovery/04_yolo26ns_crosskd.ipynb) | CrossKD dari raw pruned | YOLO26m v50 | YOLO26s |
+| [kaggle/recovery/05_yolo26ns_mgd_kd.ipynb](kaggle/recovery/05_yolo26ns_mgd_kd.ipynb) | MGD dari raw pruned | YOLO26m v50 | YOLO26s |
+| [kaggle/baseline/fine-tunned/01_yolo26s_pruned_fine_tuned.ipynb](kaggle/baseline/fine-tunned/01_yolo26s_pruned_fine_tuned.ipynb) | Rujukan historis fine-tuning baseline | — | YOLO26s |
+
+## Filkom
+
+| Notebook | Metode / peran | Teacher | Model / student |
+|---|---|---|---|
+| [filkom/teacher/02_teacher_yolo26m_multiseed.ipynb](filkom/teacher/02_teacher_yolo26m_multiseed.ipynb) | Pelatihan teacher lima seed | — | YOLO26m |
+| [filkom/pruning/05_lamp_yolo26n_gflops_no_recovery.ipynb](filkom/pruning/05_lamp_yolo26n_gflops_no_recovery.ipynb) | LAMP target GFLOPs | — | YOLO26n |
+| [filkom/pruning/06_lamp_yolo26s_gflops_no_recovery.ipynb](filkom/pruning/06_lamp_yolo26s_gflops_no_recovery.ipynb) | LAMP target GFLOPs | — | YOLO26s |
+| [filkom/recovery/01_yolo26n_standard_finetuning.ipynb](filkom/recovery/01_yolo26n_standard_finetuning.ipynb) | Fine-tuning raw pruned | — | YOLO26n |
+| [filkom/recovery/02_yolo26s_standard_finetuning.ipynb](filkom/recovery/02_yolo26s_standard_finetuning.ipynb) | Fine-tuning raw pruned | — | YOLO26s |
+| [filkom/recovery/03_yolo26ns_native_kd.ipynb](filkom/recovery/03_yolo26ns_native_kd.ipynb) | Native KD dari raw pruned | YOLO26m v50 | YOLO26s |
+| [filkom/recovery/04_yolo26ns_crosskd.ipynb](filkom/recovery/04_yolo26ns_crosskd.ipynb) | CrossKD dari raw pruned | YOLO26m v50 | YOLO26s |
+| [filkom/recovery/05_yolo26ns_mgd_kd.ipynb](filkom/recovery/05_yolo26ns_mgd_kd.ipynb) | MGD dari raw pruned | YOLO26m v50 | YOLO26s |
+| [filkom/fine-tunned/01_yolo26s_pruned_fine_tuned.ipynb](filkom/fine-tunned/01_yolo26s_pruned_fine_tuned.ipynb) | Rujukan historis fine-tuning baseline | — | YOLO26s |
 
 ## Google Colab
 
@@ -80,7 +113,7 @@ Petunjuk platform: [Kaggle](kaggle/README.md), [Colab](colab/README.md). [Pandua
 | [local/eda/01_eda_dataset.ipynb](local/eda/01_eda_dataset.ipynb) | EDA | — | — |
 | [local/analysis/03_baseline_seed42_failure_analysis.ipynb](local/analysis/03_baseline_seed42_failure_analysis.ipynb) | Failure analysis baseline | — | YOLO26n |
 
-Catatan legacy lokal: notebook `local/eda/01_eda_dataset.ipynb` sudah memiliki satu code cell dengan sintaks Python tidak valid (indeks cell 7, baris 3) sebelum penataan. Isi aslinya dipertahankan. Validasi sintaks standalone mencakup seluruh notebook Kaggle, Colab, dan AMD; kedua notebook lokal tetap diperiksa schema dan integritas cell-nya.
+Catatan legacy lokal. Notebook `local/eda/01_eda_dataset.ipynb` memiliki satu code cell dengan sintaks Python tidak valid sejak sebelum penataan (indeks cell 7, baris 3). Pemeriksaan sintaks mencakup Kaggle, Filkom, Colab, dan AMD. Tes schema juga mencakup notebook lokal.
 
 ## Arsip
 

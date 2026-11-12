@@ -1,0 +1,293 @@
+{
+  "status": "PASS",
+  "user_smoke_versions_remaining": [],
+  "system_managed_versions_remaining": [
+    {
+      "id": "QXJ0aWZhY3Q6NDQ1MjkwMjQ3OQ==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-54782faedd064aed96d17f878a2b321b-history:v0",
+      "type": "wandb-history",
+      "collection": "run-54782faedd064aed96d17f878a2b321b-history",
+      "state": "COMMITTED",
+      "size": 304202,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQ1Mjg5OTgyMg==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-70568328c02b40f985b3f5526da8564c-history:v0",
+      "type": "wandb-history",
+      "collection": "run-70568328c02b40f985b3f5526da8564c-history",
+      "state": "COMMITTED",
+      "size": 264644,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQ1Mjg5NjMwNQ==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-aaa6b9344fd74a779ca51ce862368cc7-history:v0",
+      "type": "wandb-history",
+      "collection": "run-aaa6b9344fd74a779ca51ce862368cc7-history",
+      "state": "COMMITTED",
+      "size": 283191,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQ1Mjg5MTc3Mw==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-711be033236748dfb7bad47e832eadcc-history:v0",
+      "type": "wandb-history",
+      "collection": "run-711be033236748dfb7bad47e832eadcc-history",
+      "state": "COMMITTED",
+      "size": 258418,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQ1Mjg4OTEyNA==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-5e86f88da1d94de38c096d1b87ebf8f6-history:v0",
+      "type": "wandb-history",
+      "collection": "run-5e86f88da1d94de38c096d1b87ebf8f6-history",
+      "state": "COMMITTED",
+      "size": 283265,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQ1Mjg4NTEzNQ==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-da5c040dc81744df83783acf04631f26-history:v0",
+      "type": "wandb-history",
+      "collection": "run-da5c040dc81744df83783acf04631f26-history",
+      "state": "COMMITTED",
+      "size": 264551,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQ1Mjg4MTI3OA==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-c0a3187e30d74054b4fac3f254c4107b-history:v0",
+      "type": "wandb-history",
+      "collection": "run-c0a3187e30d74054b4fac3f254c4107b-history",
+      "state": "COMMITTED",
+      "size": 264602,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQ1Mjg3ODczNg==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-9f49241d13084c34bbb5efff433fb677-history:v0",
+      "type": "wandb-history",
+      "collection": "run-9f49241d13084c34bbb5efff433fb677-history",
+      "state": "COMMITTED",
+      "size": 258339,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQ1Mjg3NDYwMg==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-8e0c67d9f41d4b7caa459f0704dbb350-history:v0",
+      "type": "wandb-history",
+      "collection": "run-8e0c67d9f41d4b7caa459f0704dbb350-history",
+      "state": "COMMITTED",
+      "size": 258389,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQ1Mjc2NjEwMw==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-499240371eb140d1b27fed108ef029b4-history:v0",
+      "type": "wandb-history",
+      "collection": "run-499240371eb140d1b27fed108ef029b4-history",
+      "state": "COMMITTED",
+      "size": 283243,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQ1Mjc2MjI2NQ==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-ea4934dbd250410abe25ec6d7972a2b1-history:v0",
+      "type": "wandb-history",
+      "collection": "run-ea4934dbd250410abe25ec6d7972a2b1-history",
+      "state": "COMMITTED",
+      "size": 284470,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQ1Mjc1OTI3Mw==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-a9c6030cf098402d8ea5dc666a2faa3e-history:v0",
+      "type": "wandb-history",
+      "collection": "run-a9c6030cf098402d8ea5dc666a2faa3e-history",
+      "state": "COMMITTED",
+      "size": 277904,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQ1MjU3MjM1Mg==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-e9e8e7c4032645c198c56390d326fb0d-history:v0",
+      "type": "wandb-history",
+      "collection": "run-e9e8e7c4032645c198c56390d326fb0d-history",
+      "state": "COMMITTED",
+      "size": 282971,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQ1MjMxODQ4OA==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-55f31201fa294fd18dd9874cedd6a27d-history:v0",
+      "type": "wandb-history",
+      "collection": "run-55f31201fa294fd18dd9874cedd6a27d-history",
+      "state": "COMMITTED",
+      "size": 264366,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQ1MjIwMjk5Mw==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-c41dad4318694ec3b17b4b3157242e05-history:v0",
+      "type": "wandb-history",
+      "collection": "run-c41dad4318694ec3b17b4b3157242e05-history",
+      "state": "COMMITTED",
+      "size": 258119,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQzNjczOTgyMg==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-57ac099470d440afa297081043a2e7b2-history:v0",
+      "type": "wandb-history",
+      "collection": "run-57ac099470d440afa297081043a2e7b2-history",
+      "state": "COMMITTED",
+      "size": 162887,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQzNjczOTUzNA==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-bf837132872a4e5a9d4934a6c662f474-history:v0",
+      "type": "wandb-history",
+      "collection": "run-bf837132872a4e5a9d4934a6c662f474-history",
+      "state": "COMMITTED",
+      "size": 162882,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQzNjczODM5Ng==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-13411cc3388846b1b9016399deb946c3-history:v0",
+      "type": "wandb-history",
+      "collection": "run-13411cc3388846b1b9016399deb946c3-history",
+      "state": "COMMITTED",
+      "size": 162885,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQzNjczNzEwMQ==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-378bf1f9c9f04ffa9a830f2ac932ed23-history:v0",
+      "type": "wandb-history",
+      "collection": "run-378bf1f9c9f04ffa9a830f2ac932ed23-history",
+      "state": "COMMITTED",
+      "size": 162894,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQzNjIyMDYyMQ==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-d3846bc86bfa4a7d96aef4835ece8cb5-history:v0",
+      "type": "wandb-history",
+      "collection": "run-d3846bc86bfa4a7d96aef4835ece8cb5-history",
+      "state": "COMMITTED",
+      "size": 162925,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQzNjIxNTQwNQ==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-5884d03c8cba458f8cf7f437d3fa73a0-history:v0",
+      "type": "wandb-history",
+      "collection": "run-5884d03c8cba458f8cf7f437d3fa73a0-history",
+      "state": "COMMITTED",
+      "size": 162885,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    },
+    {
+      "id": "QXJ0aWZhY3Q6NDQzNjEzODcxMQ==",
+      "reference": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/run-06d2cd2bf833441081570d348abd0225-history:v0",
+      "type": "wandb-history",
+      "collection": "run-06d2cd2bf833441081570d348abd0225-history",
+      "state": "COMMITTED",
+      "size": 162895,
+      "aliases": [
+        "latest"
+      ],
+      "safe_to_delete": true
+    }
+  ],
+  "system_managed_bytes": 5230927,
+  "system_managed_limitation": "Artifact.delete rejected system-managed wandb-history; retained with run history/server lifecycle",
+  "old_empty_collections_deleted": 776,
+  "new_smoke_cleanup": [
+    {
+      "run_id": "10a3d29cb5fe46e18c7799fbfa102e2a",
+      "status": "PASS",
+      "versions_deleted": 29,
+      "logical_bytes_deleted": 264894579,
+      "empty_collections_removed": 29,
+      "errors": []
+    },
+    {
+      "run_id": "1c655fbf8114423498649beda51e31b2",
+      "status": "PASS",
+      "versions_deleted": 29,
+      "logical_bytes_deleted": 396799252,
+      "empty_collections_removed": 29,
+      "errors": []
+    }
+  ],
+  "active_smoke_run_ids": [],
+  "physical_storage_freed_not_measured": true
+}

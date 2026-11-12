@@ -1,0 +1,125 @@
+{
+  "date_jakarta": "2026-11-06",
+  "scope": "Notebook 06 YOLO26s Kaggle and Filkom now use the same nine targets as notebook 05.",
+  "targets": [
+    1.02,
+    1.05,
+    1.1,
+    1.2,
+    1.3,
+    1.4,
+    1.5,
+    1.6,
+    1.7
+  ],
+  "feasibility_640_fp32_cpu": {
+    "source": "reports/pruning/lamp_gflops_05_nine_targets_verification_20261106.json",
+    "baseline_gflops": 22.7659776,
+    "max_speedup": 1.232162452752807,
+    "minimum_gflops": 18.4764416
+  },
+  "replay": {
+    "verification": "outputs/pruning/lamp_06_nine_targets_replay_20261106/20261106T143904Z_a49782d2/verification.json",
+    "status": "PASS",
+    "scope": "Filkom 06 CPU replay from saved 64 px profiles, native YOLO26s checkpoints and synthetic validation. Renders EDA for the maximum candidate plus aggregate EDA. No new pruning, validation or fine-tuning.",
+    "source": "outputs/pruning/lamp_s_partial_resume_20261106/20261106T025440Z_fce9439c",
+    "suite": "outputs/pruning/lamp_06_nine_targets_replay_20261106/20261106T143904Z_a49782d2",
+    "notebook_sha256": "d0c905e6a1c5bb7ac729856757f882a8bb1741fd1d6222a386ce54070a3f6369",
+    "checkpoint_count": 5,
+    "recovery_discovery_targets": [
+      1.02,
+      1.05,
+      1.1,
+      1.2,
+      1.7
+    ],
+    "maximum_checkpoint_sha256": "b8cda27cb4181ba47f871879ae767f68dc874db01227f564eb88047bf51193ff",
+    "rows": [
+      {
+        "target_speedup": 1.02,
+        "target_status": "REACHED",
+        "gflops": 0.2208068,
+        "gflops_speedup": 1.020017282076458,
+        "artifact_configuration_id": "target-1.02x",
+        "eda_status": "NOT_RUN"
+      },
+      {
+        "target_speedup": 1.05,
+        "target_status": "REACHED",
+        "gflops": 0.214354656,
+        "gflops_speedup": 1.050720129914043,
+        "artifact_configuration_id": "target-1.05x",
+        "eda_status": "NOT_RUN"
+      },
+      {
+        "target_speedup": 1.1,
+        "target_status": "REACHED",
+        "gflops": 0.204676128,
+        "gflops_speedup": 1.1004055734335565,
+        "artifact_configuration_id": "target-1.10x",
+        "eda_status": "NOT_RUN"
+      },
+      {
+        "target_speedup": 1.2,
+        "target_status": "REACHED",
+        "gflops": 0.18767488,
+        "gflops_speedup": 1.2000900280314553,
+        "artifact_configuration_id": "target-1.20x",
+        "eda_status": "NOT_RUN"
+      },
+      {
+        "target_speedup": 1.3,
+        "target_status": "TARGET_NOT_REACHED",
+        "gflops": 0.182331392,
+        "gflops_speedup": 1.2352604207617741,
+        "artifact_configuration_id": "target-1.70x",
+        "eda_status": "PASS"
+      },
+      {
+        "target_speedup": 1.4,
+        "target_status": "TARGET_NOT_REACHED",
+        "gflops": 0.182331392,
+        "gflops_speedup": 1.2352604207617741,
+        "artifact_configuration_id": "target-1.70x",
+        "eda_status": "PASS"
+      },
+      {
+        "target_speedup": 1.5,
+        "target_status": "TARGET_NOT_REACHED",
+        "gflops": 0.182331392,
+        "gflops_speedup": 1.2352604207617741,
+        "artifact_configuration_id": "target-1.70x",
+        "eda_status": "PASS"
+      },
+      {
+        "target_speedup": 1.6,
+        "target_status": "TARGET_NOT_REACHED",
+        "gflops": 0.182331392,
+        "gflops_speedup": 1.2352604207617741,
+        "artifact_configuration_id": "target-1.70x",
+        "eda_status": "PASS"
+      },
+      {
+        "target_speedup": 1.7,
+        "target_status": "TARGET_NOT_REACHED",
+        "gflops": 0.182331392,
+        "gflops_speedup": 1.2352604207617741,
+        "artifact_configuration_id": "target-1.70x",
+        "eda_status": "PASS"
+      }
+    ]
+  },
+  "focused_tests": {
+    "status": "PASS",
+    "passed": 166,
+    "log": "outputs/lamp_06_nine_targets_tests_20261106.log"
+  },
+  "notebook_06_sha256": {
+    "notebooks/kaggle/pruning/06_lamp_yolo26s_gflops_no_recovery.ipynb": "6ae367df8dc35b0a9b386a29f177a02779ebf0274dfc4bcf06280d764b5fd646",
+    "notebooks/filkom/pruning/06_lamp_yolo26s_gflops_no_recovery.ipynb": "d0c905e6a1c5bb7ac729856757f882a8bb1741fd1d6222a386ce54070a3f6369"
+  },
+  "full_validation_poltrada": "NOT_RUN",
+  "finetuning_and_kd": "NOT_RUN",
+  "kaggle_gpu": "NOT_RUN",
+  "filkom_gpu": "NOT_RUN"
+}

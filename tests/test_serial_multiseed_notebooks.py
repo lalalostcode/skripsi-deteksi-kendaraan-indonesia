@@ -171,7 +171,7 @@ def install_fake_teacher(env):
 def test_default_seed_queue_metadata_artifacts_and_finish_are_isolated(notebook, workdir):
     env = load_environment(notebook, workdir)
     baseline = env["METHOD"] == "none"
-    expected_seeds = [7, 3407] if baseline else [123, 2024, 7, 3407]
+    expected_seeds = [7] if baseline else [123, 2024, 7, 3407]
     completed_seeds = {42, 123, 2024} if baseline else {42}
     assert env["SEEDS_TO_RUN"] == expected_seeds
     assert completed_seeds.isdisjoint(env["SEEDS_TO_RUN"])
@@ -265,7 +265,7 @@ def test_invalid_queue_fails_before_wandb_init(notebook, workdir, seeds):
     assert not fake.runs
 
 
-@pytest.mark.parametrize("seeds", [[123], [7, 3407]])
+@pytest.mark.parametrize("seeds", [[0], [123], [7, 3407]])
 def test_single_seed_and_final_stage_are_supported(notebook, workdir, seeds):
     env = load_environment(notebook, workdir)
     env["SEEDS_TO_RUN"] = seeds

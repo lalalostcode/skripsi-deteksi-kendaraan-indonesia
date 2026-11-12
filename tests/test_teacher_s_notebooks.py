@@ -108,12 +108,16 @@ def test_notebook_schema_syntax_defaults_and_reference_hashes(notebook):
     if env["METHOD"] == "native":
         assert env["KD_WEIGHT"] == 1.0
         assert env["EXPERIMENT_ID"] == "10_native_yolo26n_teacher_yolo26s_dis1"
-        assert env["WANDB_RUN_NAME"] == "native_T26s_S26n_dis1_seed123"
+        assert env["WANDB_RUN_NAME"] == "kd_native_T26s_S26n_dis1_seed123"
     else:
         assert env["EXPERIMENT_ID"] == "11_crosskd_yolo26n_teacher_yolo26s"
-        assert env["WANDB_RUN_NAME"] == "crosskd_T26s_S26n_seed123"
+        assert env["WANDB_RUN_NAME"] == "kd_crosskd_T26s_S26n_seed123"
+    # These hashes identify the original comparison notebooks at migration time.
+    report = ROOT / "reports/engineering/report_reorganization_20261022.json"
+    historical = json.loads(report.read_bytes())["protected_existing_notebooks"]
     for name, digest in env["REFERENCE_SHA256"].items():
-        assert hashlib.sha256((notebook_path("kaggle", name)).read_bytes()).hexdigest() == digest
+        relative = notebook_path("kaggle", name).relative_to(ROOT).as_posix()
+        assert historical[relative] == digest
     for cell in notebook["cells"]:
         if cell["cell_type"] == "code":
             compile("".join(cell["source"]), cell["id"], "exec")

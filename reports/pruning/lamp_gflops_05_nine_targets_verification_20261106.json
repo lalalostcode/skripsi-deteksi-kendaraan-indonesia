@@ -1,0 +1,404 @@
+{
+  "date_jakarta": "2026-11-06",
+  "requested_targets_notebook_05": [
+    1.02,
+    1.05,
+    1.1,
+    1.2,
+    1.3,
+    1.4,
+    1.5,
+    1.6,
+    1.7
+  ],
+  "scope": "In-place revision of Kaggle and Filkom notebook 05 (YOLO26n). Notebook 06 and recovery notebooks retained.",
+  "feasibility": {
+    "status": "PASS",
+    "source": "outputs/pruning/lamp_nine_targets_feasibility_20261106/capacity.json",
+    "device": "cpu",
+    "precision": "FP32",
+    "trace_imgsz": 640,
+    "profile_imgsz": 640,
+    "seed": 42,
+    "counter": "notebook THOP + attention, dual Detect unfused",
+    "models": {
+      "n": {
+        "source_sha256": "380a087fd621e8a43fe2b9b4d6b1bb6fb00a4d0443cc5afe81ef3efdf0775f0f",
+        "baseline_gflops": 5.905408,
+        "tiers": [
+          {
+            "tier": 1,
+            "hidden_cap_pct": 25,
+            "other_cap_pct": 10,
+            "eligible_channels": 984,
+            "capacity_channels": 160,
+            "status": "PASS",
+            "max_gflops_speed_up": 1.0651447674324646,
+            "gflops_at_capacity": 5.5442304
+          },
+          {
+            "tier": 2,
+            "hidden_cap_pct": 35,
+            "other_cap_pct": 20,
+            "eligible_channels": 984,
+            "capacity_channels": 252,
+            "status": "PASS",
+            "max_gflops_speed_up": 1.1034911637112712,
+            "gflops_at_capacity": 5.351568
+          },
+          {
+            "tier": 3,
+            "hidden_cap_pct": 50,
+            "other_cap_pct": 50,
+            "eligible_channels": 984,
+            "capacity_channels": 492,
+            "status": "PASS",
+            "max_gflops_speed_up": 1.223766578249337,
+            "gflops_at_capacity": 4.8256
+          }
+        ],
+        "target_results": [
+          {
+            "target": 1.3,
+            "status": "TARGET_NOT_REACHED",
+            "tier": 3,
+            "channels": 492,
+            "gflops": 4.8256,
+            "speed_up": 1.223766578249337
+          },
+          {
+            "target": 1.4,
+            "status": "TARGET_NOT_REACHED",
+            "tier": 3,
+            "channels": 492,
+            "gflops": 4.8256,
+            "speed_up": 1.223766578249337
+          },
+          {
+            "target": 1.5,
+            "status": "TARGET_NOT_REACHED",
+            "tier": 3,
+            "channels": 492,
+            "gflops": 4.8256,
+            "speed_up": 1.223766578249337
+          },
+          {
+            "target": 1.6,
+            "status": "TARGET_NOT_REACHED",
+            "tier": 3,
+            "channels": 492,
+            "gflops": 4.8256,
+            "speed_up": 1.223766578249337
+          },
+          {
+            "target": 1.7,
+            "status": "TARGET_NOT_REACHED",
+            "tier": 3,
+            "channels": 492,
+            "gflops": 4.8256,
+            "speed_up": 1.223766578249337
+          }
+        ],
+        "unique_maximum_plans": 1,
+        "profile_count": 3,
+        "environment": {
+          "python": "3.11.14 (main, Oct 28 2025, 12:02:32) [MSC v.1944 64 bit (AMD64)]",
+          "platform": "Windows-10-10.0.26300-SP0",
+          "packages": {
+            "ultralytics": "8.4.155",
+            "wandb": "0.28.1",
+            "torch-pruning": "1.6.1",
+            "torch": "2.14.0",
+            "torchvision": "0.29.0",
+            "numpy": "2.3.5",
+            "ultralytics-thop": "2.1.6"
+          },
+          "cuda_available": false,
+          "cuda_build": null,
+          "device": "cpu",
+          "gpu": null,
+          "precision": "FP32",
+          "tf32": false,
+          "cudnn_benchmark": false,
+          "base_pruner_signature": "(model: torch.nn.modules.module.Module, example_inputs: torch.Tensor, importance: Callable, global_pruning: bool = False, pruning_ratio: float = 0.5, pruning_ratio_dict: Dict[Union[torch.nn.modules.module.Module, Tuple[torch.nn.modules.module.Module]], float] = None, max_pruning_ratio: float = 1.0, iterative_steps: int = 1, iterative_pruning_ratio_scheduler: Callable = <function linear_scheduler at 0x000001B141D76520>, ignored_layers: List[torch.nn.modules.module.Module] = None, round_to: int = None, isomorphic: bool = False, in_channel_groups: Dict[torch.nn.modules.module.Module, int] = {}, out_channel_groups: Dict[torch.nn.modules.module.Module, int] = {}, num_heads: Dict[torch.nn.modules.module.Module, int] = {}, prune_num_heads: bool = False, prune_head_dims: bool = True, head_pruning_ratio: float = 0.0, head_pruning_ratio_dict: Dict[torch.nn.modules.module.Module, float] = None, customized_pruners: Dict[Any, torch_pruning.pruner.function.BasePruningFunc] = None, unwrapped_parameters: Dict[torch.nn.parameter.Parameter, int] = None, root_module_types: List = [<class 'torch.nn.modules.conv._ConvNd'>, <class 'torch.nn.modules.linear.Linear'>, <class 'torch.nn.modules.rnn.LSTM'>], forward_fn: Callable = None, output_transform: Callable = None, channel_groups: Dict[torch.nn.modules.module.Module, int] = {}, ch_sparsity: float = None, ch_sparsity_dict: Dict[torch.nn.modules.module.Module, float] = None)",
+          "lamp_signature": "(p=2, group_reduction='mean', normalizer='lamp', bias=False)",
+          "lamp_source_sha256": "fcb71b60e3bb070d98ad009f26252b8eee6bae3e9fe8ae04dcd832d7ea235092",
+          "importance_module_sha256": "499a52945296e45a4446ef11cca77f9823606c083f1dd418da02c81c74834cb8",
+          "flops_method": "THOP full-resolution Conv/BN + separate Ultralytics attention matmul counter; GFLOPs=2*MACs/1e9",
+          "thop_profile_signature": "(model: torch.nn.modules.module.Module, inputs, custom_ops=None, verbose=True, ret_layer_info=False, report_missing=False)",
+          "thop_distribution_versions": {
+            "thop": "0.1.1-2209072238",
+            "ultralytics-thop": "2.1.6"
+          }
+        }
+      },
+      "s": {
+        "source_sha256": "5bc3ae61f8da1c9f03916922de10146805c27c64a11e46edd766a00d0f6f18fd",
+        "baseline_gflops": 22.7659776,
+        "tiers": [
+          {
+            "tier": 1,
+            "hidden_cap_pct": 25,
+            "other_cap_pct": 10,
+            "eligible_channels": 1968,
+            "capacity_channels": 323,
+            "status": "PASS",
+            "max_gflops_speed_up": 1.0682094693357609,
+            "gflops_at_capacity": 21.3122784
+          },
+          {
+            "tier": 2,
+            "hidden_cap_pct": 35,
+            "other_cap_pct": 20,
+            "eligible_channels": 1968,
+            "capacity_channels": 512,
+            "status": "PASS",
+            "max_gflops_speed_up": 1.11152256809989,
+            "gflops_at_capacity": 20.4817952
+          },
+          {
+            "tier": 3,
+            "hidden_cap_pct": 50,
+            "other_cap_pct": 50,
+            "eligible_channels": 1968,
+            "capacity_channels": 984,
+            "status": "PASS",
+            "max_gflops_speed_up": 1.232162452752807,
+            "gflops_at_capacity": 18.4764416
+          }
+        ],
+        "target_results": [
+          {
+            "target": 1.3,
+            "status": "TARGET_NOT_REACHED",
+            "tier": 3,
+            "channels": 984,
+            "gflops": 18.4764416,
+            "speed_up": 1.232162452752807
+          },
+          {
+            "target": 1.4,
+            "status": "TARGET_NOT_REACHED",
+            "tier": 3,
+            "channels": 984,
+            "gflops": 18.4764416,
+            "speed_up": 1.232162452752807
+          },
+          {
+            "target": 1.5,
+            "status": "TARGET_NOT_REACHED",
+            "tier": 3,
+            "channels": 984,
+            "gflops": 18.4764416,
+            "speed_up": 1.232162452752807
+          },
+          {
+            "target": 1.6,
+            "status": "TARGET_NOT_REACHED",
+            "tier": 3,
+            "channels": 984,
+            "gflops": 18.4764416,
+            "speed_up": 1.232162452752807
+          },
+          {
+            "target": 1.7,
+            "status": "TARGET_NOT_REACHED",
+            "tier": 3,
+            "channels": 984,
+            "gflops": 18.4764416,
+            "speed_up": 1.232162452752807
+          }
+        ],
+        "unique_maximum_plans": 1,
+        "profile_count": 3,
+        "environment": {
+          "python": "3.11.14 (main, Oct 28 2025, 12:02:32) [MSC v.1944 64 bit (AMD64)]",
+          "platform": "Windows-10-10.0.26300-SP0",
+          "packages": {
+            "ultralytics": "8.4.155",
+            "wandb": "0.28.1",
+            "torch-pruning": "1.6.1",
+            "torch": "2.14.0",
+            "torchvision": "0.29.0",
+            "numpy": "2.3.5",
+            "ultralytics-thop": "2.1.6"
+          },
+          "cuda_available": false,
+          "cuda_build": null,
+          "device": "cpu",
+          "gpu": null,
+          "precision": "FP32",
+          "tf32": false,
+          "cudnn_benchmark": false,
+          "base_pruner_signature": "(model: torch.nn.modules.module.Module, example_inputs: torch.Tensor, importance: Callable, global_pruning: bool = False, pruning_ratio: float = 0.5, pruning_ratio_dict: Dict[Union[torch.nn.modules.module.Module, Tuple[torch.nn.modules.module.Module]], float] = None, max_pruning_ratio: float = 1.0, iterative_steps: int = 1, iterative_pruning_ratio_scheduler: Callable = <function linear_scheduler at 0x000001B141D76520>, ignored_layers: List[torch.nn.modules.module.Module] = None, round_to: int = None, isomorphic: bool = False, in_channel_groups: Dict[torch.nn.modules.module.Module, int] = {}, out_channel_groups: Dict[torch.nn.modules.module.Module, int] = {}, num_heads: Dict[torch.nn.modules.module.Module, int] = {}, prune_num_heads: bool = False, prune_head_dims: bool = True, head_pruning_ratio: float = 0.0, head_pruning_ratio_dict: Dict[torch.nn.modules.module.Module, float] = None, customized_pruners: Dict[Any, torch_pruning.pruner.function.BasePruningFunc] = None, unwrapped_parameters: Dict[torch.nn.parameter.Parameter, int] = None, root_module_types: List = [<class 'torch.nn.modules.conv._ConvNd'>, <class 'torch.nn.modules.linear.Linear'>, <class 'torch.nn.modules.rnn.LSTM'>], forward_fn: Callable = None, output_transform: Callable = None, channel_groups: Dict[torch.nn.modules.module.Module, int] = {}, ch_sparsity: float = None, ch_sparsity_dict: Dict[torch.nn.modules.module.Module, float] = None)",
+          "lamp_signature": "(p=2, group_reduction='mean', normalizer='lamp', bias=False)",
+          "lamp_source_sha256": "fcb71b60e3bb070d98ad009f26252b8eee6bae3e9fe8ae04dcd832d7ea235092",
+          "importance_module_sha256": "499a52945296e45a4446ef11cca77f9823606c083f1dd418da02c81c74834cb8",
+          "flops_method": "THOP full-resolution Conv/BN + separate Ultralytics attention matmul counter; GFLOPs=2*MACs/1e9",
+          "thop_profile_signature": "(model: torch.nn.modules.module.Module, inputs, custom_ops=None, verbose=True, ret_layer_info=False, report_missing=False)",
+          "thop_distribution_versions": {
+            "thop": "0.1.1-2209072238",
+            "ultralytics-thop": "2.1.6"
+          }
+        }
+      }
+    }
+  },
+  "evaluation_poltrada_full_val": "NOT_RUN",
+  "latency_cuda": "NOT_RUN",
+  "kaggle_gpu": "NOT_RUN",
+  "filkom_gpu": "NOT_RUN",
+  "finetuning_and_kd": "NOT_RUN",
+  "wandb_online": "NOT_RUN",
+  "notebook_05_sha256": {
+    "notebooks/filkom/pruning/05_lamp_yolo26n_gflops_no_recovery.ipynb": "b7e02a995c3e0da8ce52c0369b60633ec44db7c7d41caa4de6010afded8a0856",
+    "notebooks/kaggle/pruning/05_lamp_yolo26n_gflops_no_recovery.ipynb": "379fafe9b88b8da27e823329e961a0757663c91e7a466ea8d7dfd976c90717b4"
+  },
+  "retained_notebook_hashes_verified": [
+    "notebooks/filkom/pruning/06_lamp_yolo26s_gflops_no_recovery.ipynb",
+    "notebooks/filkom/recovery/01_yolo26n_standard_finetuning.ipynb",
+    "notebooks/filkom/recovery/02_yolo26s_standard_finetuning.ipynb",
+    "notebooks/filkom/recovery/03_yolo26ns_native_kd.ipynb",
+    "notebooks/filkom/recovery/04_yolo26ns_crosskd.ipynb",
+    "notebooks/filkom/recovery/05_yolo26ns_mgd_kd.ipynb",
+    "notebooks/kaggle/pruning/01_lamp_yolo26n_no_recovery.ipynb",
+    "notebooks/kaggle/pruning/02_lamp_yolo26s_no_recovery.ipynb",
+    "notebooks/kaggle/pruning/03_lamp_yolo26n_extended_no_recovery.ipynb",
+    "notebooks/kaggle/pruning/04_lamp_yolo26ns_finetune_recovery.ipynb",
+    "notebooks/kaggle/pruning/06_lamp_yolo26s_gflops_no_recovery.ipynb",
+    "notebooks/kaggle/recovery/01_yolo26n_standard_finetuning.ipynb",
+    "notebooks/kaggle/recovery/02_yolo26s_standard_finetuning.ipynb",
+    "notebooks/kaggle/recovery/03_yolo26ns_native_kd.ipynb",
+    "notebooks/kaggle/recovery/04_yolo26ns_crosskd.ipynb",
+    "notebooks/kaggle/recovery/05_yolo26ns_mgd_kd.ipynb"
+  ],
+  "smoke_notebook_05": {
+    "status": "PASS",
+    "suite_status": "PARTIAL",
+    "evaluation_status": "PASS",
+    "analysis_status": "PASS",
+    "source": "outputs/pruning/lamp_05_nine_targets_cpu_20261106/yolo26n/20261106T133659Z_7d6d5fe7/student_candidates.json",
+    "scope": "CPU FP32 64 px, seed 42, six synthetic val images",
+    "raw_checkpoint_count": 5,
+    "maximum_checkpoint_relative_path": "yolo26n/target-1.70x/pruned_fp32.pt",
+    "maximum_checkpoint_sha256": "dd4055979f992b78c502305adef08b5837b23fc8b7b32ccde111d18617ebc805",
+    "recovery_discovery_targets": [
+      1.02,
+      1.05,
+      1.1,
+      1.2,
+      1.7
+    ],
+    "rows": [
+      {
+        "target_speedup": 1.02,
+        "target_status": "REACHED",
+        "gflops": 0.056686016,
+        "gflops_speedup": 1.0203145692934215,
+        "artifact_configuration_id": "target-1.02x",
+        "structural_status": "PASS",
+        "reload_status": "PASS",
+        "validation_status": "PASS",
+        "eda_status": "PASS"
+      },
+      {
+        "target_speedup": 1.05,
+        "target_status": "REACHED",
+        "gflops": 0.055067264,
+        "gflops_speedup": 1.0503076383093957,
+        "artifact_configuration_id": "target-1.05x",
+        "structural_status": "PASS",
+        "reload_status": "PASS",
+        "validation_status": "PASS",
+        "eda_status": "PASS"
+      },
+      {
+        "target_speedup": 1.1,
+        "target_status": "REACHED",
+        "gflops": 0.052448672,
+        "gflops_speedup": 1.102746090501586,
+        "artifact_configuration_id": "target-1.10x",
+        "structural_status": "PASS",
+        "reload_status": "PASS",
+        "validation_status": "PASS",
+        "eda_status": "PASS"
+      },
+      {
+        "target_speedup": 1.2,
+        "target_status": "REACHED",
+        "gflops": 0.048172544,
+        "gflops_speedup": 1.2006334562691976,
+        "artifact_configuration_id": "target-1.20x",
+        "structural_status": "PASS",
+        "reload_status": "PASS",
+        "validation_status": "PASS",
+        "eda_status": "PASS"
+      },
+      {
+        "target_speedup": 1.3,
+        "target_status": "TARGET_NOT_REACHED",
+        "gflops": 0.047039488,
+        "gflops_speedup": 1.229553518949866,
+        "artifact_configuration_id": "target-1.70x",
+        "structural_status": "PASS",
+        "reload_status": "PASS",
+        "validation_status": "PASS",
+        "eda_status": "PASS"
+      },
+      {
+        "target_speedup": 1.4,
+        "target_status": "TARGET_NOT_REACHED",
+        "gflops": 0.047039488,
+        "gflops_speedup": 1.229553518949866,
+        "artifact_configuration_id": "target-1.70x",
+        "structural_status": "PASS",
+        "reload_status": "PASS",
+        "validation_status": "PASS",
+        "eda_status": "PASS"
+      },
+      {
+        "target_speedup": 1.5,
+        "target_status": "TARGET_NOT_REACHED",
+        "gflops": 0.047039488,
+        "gflops_speedup": 1.229553518949866,
+        "artifact_configuration_id": "target-1.70x",
+        "structural_status": "PASS",
+        "reload_status": "PASS",
+        "validation_status": "PASS",
+        "eda_status": "PASS"
+      },
+      {
+        "target_speedup": 1.6,
+        "target_status": "TARGET_NOT_REACHED",
+        "gflops": 0.047039488,
+        "gflops_speedup": 1.229553518949866,
+        "artifact_configuration_id": "target-1.70x",
+        "structural_status": "PASS",
+        "reload_status": "PASS",
+        "validation_status": "PASS",
+        "eda_status": "PASS"
+      },
+      {
+        "target_speedup": 1.7,
+        "target_status": "TARGET_NOT_REACHED",
+        "gflops": 0.047039488,
+        "gflops_speedup": 1.229553518949866,
+        "artifact_configuration_id": "target-1.70x",
+        "structural_status": "PASS",
+        "reload_status": "PASS",
+        "validation_status": "PASS",
+        "eda_status": "PASS"
+      }
+    ]
+  },
+  "shared_policy_evaluation_eda_cell_hashes": {
+    "def search_gflops_targets(": "099f6ca1edb84490c4b1b706f780d00c804695083e215720f782b78a60088032",
+    "def gflops_eda_tables(": "c1a1b0fca6d3d6c64a2aa546b7273654bf27b24e8dc9b529f544ba9abfc81b96",
+    "def evaluate_checkpoint(": "3c6c17ec6c5ccc551f93c294d9007a06f0ba815bcce03f4421a10a966155c392"
+  },
+  "focused_tests": {
+    "status": "PASS",
+    "passed": 166,
+    "log": "outputs/lamp_05_nine_targets_tests_20261106.log"
+  }
+}

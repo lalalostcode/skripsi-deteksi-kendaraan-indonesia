@@ -1,0 +1,558 @@
+{
+  "kind": "actual N/S baseline artifact CPU implementation verification; no Kaggle/GPU claim",
+  "notebook": "notebooks/kaggle/pruning/03_lamp_yolo26n_extended_no_recovery.ipynb",
+  "notebook_sha256": "f2c146c4e86cc3051950cabbebeb30be8f273f772f4731a28bf6f7f853e5b43e",
+  "source_checkpoint_sha256": {
+    "n": "380a087fd621e8a43fe2b9b4d6b1bb6fb00a4d0443cc5afe81ef3efdf0775f0f",
+    "s": "5bc3ae61f8da1c9f03916922de10146805c27c64a11e46edd766a00d0f6f18fd"
+  },
+  "source_artifacts": {
+    "n": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/03_baseline_yolo26n-9uu3meve-checkpoints:v84",
+    "s": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/02_baseline_yolo26s-q5kp9k9d-checkpoints:v62"
+  },
+  "device": "cpu",
+  "imgsz": 640,
+  "suite_dir": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\pruning\\lamp_v2_ratio050_cpu_verification\\20261103T065006Z_9c620f03",
+  "models": [
+    {
+      "model_variant": "n",
+      "source": {
+        "requested_artifact": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/03_baseline_yolo26n-9uu3meve-checkpoints:v84",
+        "resolved_artifact": null,
+        "checkpoint_name": "best.pt",
+        "checkpoint_path": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\lamp_target_artifact\\artifact\\best.pt",
+        "sha256": "380a087fd621e8a43fe2b9b4d6b1bb6fb00a4d0443cc5afe81ef3efdf0775f0f",
+        "file_bytes": 20766981,
+        "source_verification": "expected_sha256_matched",
+        "model_variant": "n"
+      },
+      "baseline": {
+        "parameters": 2506140,
+        "gflops": 5.905408,
+        "precision": "FP32",
+        "fusion": false,
+        "checkpoint_bytes": 10515843,
+        "latency": {
+          "status": "NOT_RUN",
+          "reason": "CUDA tidak tersedia; tidak mengklaim benchmark GPU."
+        }
+      },
+      "summary": [
+        {
+          "model": "YOLO26n",
+          "model_variant": "n",
+          "policy": "baseline",
+          "ratio": 0,
+          "parameters": 2506140,
+          "gflops": 5.905408,
+          "checkpoint_bytes": 10515843,
+          "map50_95": null,
+          "map50": null,
+          "precision": null,
+          "recall": null,
+          "parameter_reduction_pct": 0,
+          "gflops_reduction_pct": 0,
+          "delta_map50_95_pp": null,
+          "relative_map50_95_pct": null,
+          "actual_eligible_ratio": 0,
+          "pruned_group_count": 0,
+          "latency_median_ms": null,
+          "structural_status": "BASELINE",
+          "validation_status": "NOT_RUN"
+        },
+        {
+          "model": "YOLO26n",
+          "model_variant": "n",
+          "policy": "extended",
+          "ratio": 0.4,
+          "parameters": 1625418,
+          "gflops": 3.9618944,
+          "checkpoint_bytes": 6982631,
+          "map50_95": null,
+          "map50": null,
+          "precision": null,
+          "recall": null,
+          "parameter_reduction_pct": 35.142569848452204,
+          "gflops_reduction_pct": 32.91074215363275,
+          "delta_map50_95_pp": null,
+          "relative_map50_95_pct": null,
+          "actual_eligible_ratio": 0.40029182879377434,
+          "pruned_group_count": 27,
+          "latency_median_ms": null,
+          "structural_status": "PASS",
+          "validation_status": "NOT_RUN"
+        },
+        {
+          "model": "YOLO26n",
+          "model_variant": "n",
+          "policy": "extended",
+          "ratio": 0.5,
+          "parameters": 1536092,
+          "gflops": 3.3729536,
+          "checkpoint_bytes": 6623591,
+          "map50_95": null,
+          "map50": null,
+          "precision": null,
+          "recall": null,
+          "parameter_reduction_pct": 38.706855961757924,
+          "gflops_reduction_pct": 42.88364834402636,
+          "delta_map50_95_pp": null,
+          "relative_map50_95_pct": null,
+          "actual_eligible_ratio": 0.5,
+          "pruned_group_count": 35,
+          "latency_median_ms": null,
+          "structural_status": "PASS",
+          "validation_status": "NOT_RUN"
+        }
+      ],
+      "baseline_validation_status": "NOT_RUN",
+      "results": [
+        {
+          "model_variant": "n",
+          "policy": "extended",
+          "ratio": 0.4,
+          "structural_smoke_status": "PASS",
+          "validation_status": "NOT_RUN",
+          "checks": {
+            "baseline_loaded": true,
+            "baseline_forward": true,
+            "dependency_graph": true,
+            "structural_channels_removed": true,
+            "parameters_reduced": true,
+            "pruned_forward": true,
+            "protected_head_unchanged": true,
+            "checkpoint_saved": true,
+            "checkpoint_reloaded": true,
+            "reload_consistent": true,
+            "detection_prediction": true
+          },
+          "actual_eligible_channel_ratio": 0.40029182879377434,
+          "eligible_channels_before": 2056,
+          "eligible_channels_after": 1233,
+          "physical_conv_output_channels_removed": 909,
+          "pruned_group_count": 27,
+          "reload": {
+            "prediction_count": 80,
+            "parameters": 1625418,
+            "direct_yolo_load": true,
+            "raw_parity": true,
+            "prediction_shape": [
+              80,
+              6
+            ],
+            "max_absolute_difference": {
+              "decoded": 0.0,
+              "one2many/boxes": 0.0,
+              "one2many/scores": 0.0,
+              "one2one/boxes": 0.0,
+              "one2one/scores": 0.0
+            },
+            "process": "fresh Python, no repository PYTHONPATH"
+          },
+          "comparison": {
+            "parameter_reduction_pct": 35.142569848452204,
+            "gflops_reduction_pct": 32.91074215363275,
+            "checkpoint_reduction_pct": 33.59894209147094,
+            "delta_map50_95": null,
+            "delta_map50_95_pp": null,
+            "relative_map50_95_pct": null
+          },
+          "tracking": {
+            "status": "NOT_RUN",
+            "uploads": [],
+            "errors": [],
+            "reason": "WANDB_TRACKING=False"
+          },
+          "eda_status": "PASS"
+        },
+        {
+          "model_variant": "n",
+          "policy": "extended",
+          "ratio": 0.5,
+          "structural_smoke_status": "PASS",
+          "validation_status": "NOT_RUN",
+          "checks": {
+            "baseline_loaded": true,
+            "baseline_forward": true,
+            "dependency_graph": true,
+            "structural_channels_removed": true,
+            "parameters_reduced": true,
+            "pruned_forward": true,
+            "protected_head_unchanged": true,
+            "checkpoint_saved": true,
+            "checkpoint_reloaded": true,
+            "reload_consistent": true,
+            "detection_prediction": true
+          },
+          "actual_eligible_channel_ratio": 0.5,
+          "eligible_channels_before": 2056,
+          "eligible_channels_after": 1028,
+          "physical_conv_output_channels_removed": 1204,
+          "pruned_group_count": 35,
+          "reload": {
+            "prediction_count": 102,
+            "parameters": 1536092,
+            "direct_yolo_load": true,
+            "raw_parity": true,
+            "prediction_shape": [
+              102,
+              6
+            ],
+            "max_absolute_difference": {
+              "decoded": 0.0,
+              "one2many/boxes": 0.0,
+              "one2many/scores": 0.0,
+              "one2one/boxes": 0.0,
+              "one2one/scores": 0.0
+            },
+            "process": "fresh Python, no repository PYTHONPATH"
+          },
+          "comparison": {
+            "parameter_reduction_pct": 38.706855961757924,
+            "gflops_reduction_pct": 42.88364834402636,
+            "checkpoint_reduction_pct": 37.01321900678814,
+            "delta_map50_95": null,
+            "delta_map50_95_pp": null,
+            "relative_map50_95_pct": null
+          },
+          "tracking": {
+            "status": "NOT_RUN",
+            "uploads": [],
+            "errors": [],
+            "reason": "WANDB_TRACKING=False"
+          },
+          "eda_status": "PASS"
+        }
+      ]
+    },
+    {
+      "model_variant": "s",
+      "source": {
+        "requested_artifact": "ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/02_baseline_yolo26s-q5kp9k9d-checkpoints:v62",
+        "resolved_artifact": null,
+        "checkpoint_name": "best.pt",
+        "checkpoint_path": "C:\\Local D\\Galeri Belajar\\Skripsi\\outputs\\lamp_yolo26s_target_artifact\\artifact\\best.pt",
+        "sha256": "5bc3ae61f8da1c9f03916922de10146805c27c64a11e46edd766a00d0f6f18fd",
+        "file_bytes": 80377733,
+        "source_verification": "expected_sha256_matched",
+        "model_variant": "s"
+      },
+      "baseline": {
+        "parameters": 9952508,
+        "gflops": 22.7659776,
+        "precision": "FP32",
+        "fusion": false,
+        "checkpoint_bytes": 40377795,
+        "latency": {
+          "status": "NOT_RUN",
+          "reason": "CUDA tidak tersedia; tidak mengklaim benchmark GPU."
+        }
+      },
+      "summary": [
+        {
+          "model": "YOLO26s",
+          "model_variant": "s",
+          "policy": "baseline",
+          "ratio": 0,
+          "parameters": 9952508,
+          "gflops": 22.7659776,
+          "checkpoint_bytes": 40377795,
+          "map50_95": null,
+          "map50": null,
+          "precision": null,
+          "recall": null,
+          "parameter_reduction_pct": 0,
+          "gflops_reduction_pct": 0,
+          "delta_map50_95_pp": null,
+          "relative_map50_95_pct": null,
+          "actual_eligible_ratio": 0,
+          "pruned_group_count": 0,
+          "latency_median_ms": null,
+          "structural_status": "BASELINE",
+          "validation_status": "NOT_RUN"
+        },
+        {
+          "model": "YOLO26s",
+          "model_variant": "s",
+          "policy": "extended",
+          "ratio": 0.4,
+          "parameters": 6426986,
+          "gflops": 15.1312576,
+          "checkpoint_bytes": 26256231,
+          "map50_95": null,
+          "map50": null,
+          "precision": null,
+          "recall": null,
+          "parameter_reduction_pct": 35.42345306328817,
+          "gflops_reduction_pct": 33.53565629441716,
+          "delta_map50_95_pp": null,
+          "relative_map50_95_pct": null,
+          "actual_eligible_ratio": 0.40004863813229574,
+          "pruned_group_count": 29,
+          "latency_median_ms": null,
+          "structural_status": "PASS",
+          "validation_status": "NOT_RUN"
+        },
+        {
+          "model": "YOLO26s",
+          "model_variant": "s",
+          "policy": "extended",
+          "ratio": 0.5,
+          "parameters": 6077564,
+          "gflops": 12.7924224,
+          "checkpoint_bytes": 24857127,
+          "map50_95": null,
+          "map50": null,
+          "precision": null,
+          "recall": null,
+          "parameter_reduction_pct": 38.934347000776086,
+          "gflops_reduction_pct": 43.80903546175851,
+          "delta_map50_95_pp": null,
+          "relative_map50_95_pct": null,
+          "actual_eligible_ratio": 0.5,
+          "pruned_group_count": 35,
+          "latency_median_ms": null,
+          "structural_status": "PASS",
+          "validation_status": "NOT_RUN"
+        }
+      ],
+      "baseline_validation_status": "NOT_RUN",
+      "results": [
+        {
+          "model_variant": "s",
+          "policy": "extended",
+          "ratio": 0.4,
+          "structural_smoke_status": "PASS",
+          "validation_status": "NOT_RUN",
+          "checks": {
+            "baseline_loaded": true,
+            "baseline_forward": true,
+            "dependency_graph": true,
+            "structural_channels_removed": true,
+            "parameters_reduced": true,
+            "pruned_forward": true,
+            "protected_head_unchanged": true,
+            "checkpoint_saved": true,
+            "checkpoint_reloaded": true,
+            "reload_consistent": true,
+            "detection_prediction": true
+          },
+          "actual_eligible_channel_ratio": 0.40004863813229574,
+          "eligible_channels_before": 4112,
+          "eligible_channels_after": 2467,
+          "physical_conv_output_channels_removed": 1813,
+          "pruned_group_count": 29,
+          "reload": {
+            "prediction_count": 12,
+            "parameters": 6426986,
+            "direct_yolo_load": true,
+            "raw_parity": true,
+            "prediction_shape": [
+              12,
+              6
+            ],
+            "max_absolute_difference": {
+              "decoded": 0.0,
+              "one2many/boxes": 0.0,
+              "one2many/scores": 0.0,
+              "one2one/boxes": 0.0,
+              "one2one/scores": 0.0
+            },
+            "process": "fresh Python, no repository PYTHONPATH"
+          },
+          "comparison": {
+            "parameter_reduction_pct": 35.42345306328817,
+            "gflops_reduction_pct": 33.53565629441716,
+            "checkpoint_reduction_pct": 34.97358882524417,
+            "delta_map50_95": null,
+            "delta_map50_95_pp": null,
+            "relative_map50_95_pct": null
+          },
+          "tracking": {
+            "status": "NOT_RUN",
+            "uploads": [],
+            "errors": [],
+            "reason": "WANDB_TRACKING=False"
+          },
+          "eda_status": "PASS"
+        },
+        {
+          "model_variant": "s",
+          "policy": "extended",
+          "ratio": 0.5,
+          "structural_smoke_status": "PASS",
+          "validation_status": "NOT_RUN",
+          "checks": {
+            "baseline_loaded": true,
+            "baseline_forward": true,
+            "dependency_graph": true,
+            "structural_channels_removed": true,
+            "parameters_reduced": true,
+            "pruned_forward": true,
+            "protected_head_unchanged": true,
+            "checkpoint_saved": true,
+            "checkpoint_reloaded": true,
+            "reload_consistent": true,
+            "detection_prediction": true
+          },
+          "actual_eligible_channel_ratio": 0.5,
+          "eligible_channels_before": 4112,
+          "eligible_channels_after": 2056,
+          "physical_conv_output_channels_removed": 2408,
+          "pruned_group_count": 35,
+          "reload": {
+            "prediction_count": 50,
+            "parameters": 6077564,
+            "direct_yolo_load": true,
+            "raw_parity": true,
+            "prediction_shape": [
+              50,
+              6
+            ],
+            "max_absolute_difference": {
+              "decoded": 0.0,
+              "one2many/boxes": 0.0,
+              "one2many/scores": 0.0,
+              "one2one/boxes": 0.0,
+              "one2one/scores": 0.0
+            },
+            "process": "fresh Python, no repository PYTHONPATH"
+          },
+          "comparison": {
+            "parameter_reduction_pct": 38.934347000776086,
+            "gflops_reduction_pct": 43.80903546175851,
+            "checkpoint_reduction_pct": 38.438622019850264,
+            "delta_map50_95": null,
+            "delta_map50_95_pp": null,
+            "relative_map50_95_pct": null
+          },
+          "tracking": {
+            "status": "NOT_RUN",
+            "uploads": [],
+            "errors": [],
+            "reason": "WANDB_TRACKING=False"
+          },
+          "eda_status": "PASS"
+        }
+      ]
+    }
+  ],
+  "environment": {
+    "python": "3.11.14 (main, Oct 28 2025, 12:02:32) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-10-10.0.26300-SP0",
+    "packages": {
+      "ultralytics": "8.4.155",
+      "wandb": "0.28.1",
+      "torch-pruning": "1.6.1",
+      "torch": "2.14.0",
+      "torchvision": "0.29.0",
+      "numpy": "2.3.5",
+      "ultralytics-thop": "2.1.6"
+    },
+    "cuda_available": false,
+    "cuda_build": null,
+    "device": "cpu",
+    "gpu": null,
+    "precision": "FP32",
+    "tf32": false,
+    "cudnn_benchmark": false,
+    "base_pruner_signature": "(model: torch.nn.modules.module.Module, example_inputs: torch.Tensor, importance: Callable, global_pruning: bool = False, pruning_ratio: float = 0.5, pruning_ratio_dict: Dict[Union[torch.nn.modules.module.Module, Tuple[torch.nn.modules.module.Module]], float] = None, max_pruning_ratio: float = 1.0, iterative_steps: int = 1, iterative_pruning_ratio_scheduler: Callable = <function linear_scheduler at 0x000001E185B418A0>, ignored_layers: List[torch.nn.modules.module.Module] = None, round_to: int = None, isomorphic: bool = False, in_channel_groups: Dict[torch.nn.modules.module.Module, int] = {}, out_channel_groups: Dict[torch.nn.modules.module.Module, int] = {}, num_heads: Dict[torch.nn.modules.module.Module, int] = {}, prune_num_heads: bool = False, prune_head_dims: bool = True, head_pruning_ratio: float = 0.0, head_pruning_ratio_dict: Dict[torch.nn.modules.module.Module, float] = None, customized_pruners: Dict[Any, torch_pruning.pruner.function.BasePruningFunc] = None, unwrapped_parameters: Dict[torch.nn.parameter.Parameter, int] = None, root_module_types: List = [<class 'torch.nn.modules.conv._ConvNd'>, <class 'torch.nn.modules.linear.Linear'>, <class 'torch.nn.modules.rnn.LSTM'>], forward_fn: Callable = None, output_transform: Callable = None, channel_groups: Dict[torch.nn.modules.module.Module, int] = {}, ch_sparsity: float = None, ch_sparsity_dict: Dict[torch.nn.modules.module.Module, float] = None)",
+    "lamp_signature": "(p=2, group_reduction='mean', normalizer='lamp', bias=False)",
+    "lamp_source_sha256": "fcb71b60e3bb070d98ad009f26252b8eee6bae3e9fe8ae04dcd832d7ea235092",
+    "importance_module_sha256": "499a52945296e45a4446ef11cca77f9823606c083f1dd418da02c81c74834cb8",
+    "flops_method": "THOP full-resolution Conv/BN + separate Ultralytics attention matmul counter; GFLOPs=2*MACs/1e9",
+    "thop_profile_signature": "(model: torch.nn.modules.module.Module, inputs, custom_ops=None, verbose=True, ret_layer_info=False, report_missing=False)",
+    "thop_distribution_versions": {
+      "thop": "0.1.1-2209072238",
+      "ultralytics-thop": "2.1.6"
+    }
+  },
+  "status": "COMPLETE",
+  "guards": [
+    "YOLO.train",
+    "Tensor.backward",
+    "autograd.backward",
+    "Optimizer/SGD/Adam/AdamW.step",
+    "requests.Session.request"
+  ],
+  "limitations": [
+    "Single seed",
+    "No recovery",
+    "W&B upload tested only by mock",
+    "Target V3 mAP NOT_RUN unless explicitly supplied",
+    "CUDA latency NOT_RUN"
+  ],
+  "verification": {
+    "nbformat_syntax_generator_parity": "PASS",
+    "tests": {
+      "unique_cases_passed": 402,
+      "initial_passed": 401,
+      "initial_failed": 1,
+      "retest_passed": 1,
+      "retest_reason": "Updated obsolete failure-path job-count assertion from 6 to 10; no runtime algorithm changes",
+      "initial_junit_sha256": "b0d1f01cc9bfe43faecfeb3bb7a3f90717010dcd8ce1ec61624f9eab71be4995",
+      "retest_junit_sha256": "6794aa608c62b1a87a332d8a53e10540c7d56da7944ab939239368ae6b651b06",
+      "aggregate_junit_sha256": "ea68ef2b1e0f67e9a396228909a0515c285997bcf65251ac4b2a53ffe7d13549"
+    },
+    "artifact_checks": [
+      {
+        "model": "n",
+        "ratio": 0.4,
+        "cap_checked": true,
+        "mask_counts_checked": true,
+        "scores_finite": true,
+        "actual_eligible_ratio": 0.40029182879377434,
+        "reload_max_abs": 0
+      },
+      {
+        "model": "n",
+        "ratio": 0.5,
+        "cap_checked": true,
+        "mask_counts_checked": true,
+        "scores_finite": true,
+        "actual_eligible_ratio": 0.5,
+        "reload_max_abs": 0
+      },
+      {
+        "model": "s",
+        "ratio": 0.4,
+        "cap_checked": true,
+        "mask_counts_checked": true,
+        "scores_finite": true,
+        "actual_eligible_ratio": 0.40004863813229574,
+        "reload_max_abs": 0
+      },
+      {
+        "model": "s",
+        "ratio": 0.5,
+        "cap_checked": true,
+        "mask_counts_checked": true,
+        "scores_finite": true,
+        "actual_eligible_ratio": 0.5,
+        "reload_max_abs": 0
+      }
+    ],
+    "preservation": {
+      "files_checked": 141,
+      "notebooks_preserved": 51,
+      "src_files_preserved": 13,
+      "missing": [],
+      "changed_navigation_only": [
+        "reports/pruning/README.md",
+        "reports/pruning/comparisons/README.md",
+        "reports/pruning/yolo26s/v2/README.md"
+      ],
+      "historical_json_csv_images_unchanged": true
+    },
+    "local_links_resolved": 156,
+    "visual_review": "YOLO26n pr0.5 detail PNG: all three panels, consistent axes/order, readable labels and legends",
+    "source_sha256": {
+      "scripts/generate_lamp_v2_notebook.py": "08bce001d4e8042b506a6646f60965a37027de171d1fe4812291f98755a5ee8e",
+      "scripts/lamp_v2_runtime_source.py": "ebd2611a1d8bacd331dafc93f199d24682f9c8bd9dd22e6e2954c05b57228e66",
+      "scripts/lamp_v2_policy_source.py": "6669c4d7bedeac658f716d314e0c366acdc8d7b340f3c549163021e93ff433e7",
+      "scripts/verify_lamp_v2_cpu.py": "1c33d8649c10348306302a574a8131a0ac5d9d03b291b2a5df0629655258a40a",
+      "tests/test_lamp_v2_notebook.py": "8fdaeebabd1ea21d321a33de9c72605553984f5497a9cb699aa70bd04ad38fc2",
+      "tests/test_lamp_v2_policy.py": "0e70ef2b529820f90ce967429c3bad254c17a0a379d56ce4d6c26bb6cf0080ea"
+    }
+  }
+}

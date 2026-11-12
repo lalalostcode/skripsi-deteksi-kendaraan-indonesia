@@ -1,0 +1,16 @@
+{
+  "changed": [
+    "notebooks/filkom/recovery/01_yolo26n_standard_finetuning.ipynb",
+    "notebooks/filkom/recovery/02_yolo26s_standard_finetuning.ipynb",
+    "notebooks/filkom/recovery/03_yolo26ns_native_kd.ipynb",
+    "notebooks/filkom/recovery/04_yolo26ns_crosskd.ipynb",
+    "notebooks/filkom/recovery/05_yolo26ns_mgd_kd.ipynb",
+    "notebooks/kaggle/recovery/01_yolo26n_standard_finetuning.ipynb",
+    "notebooks/kaggle/recovery/02_yolo26s_standard_finetuning.ipynb",
+    "notebooks/kaggle/recovery/03_yolo26ns_native_kd.ipynb",
+    "notebooks/kaggle/recovery/04_yolo26ns_crosskd.ipynb",
+    "notebooks/kaggle/recovery/05_yolo26ns_mgd_kd.ipynb"
+  ],
+  "count": 10,
+  "other_notebooks_unchanged": 62
+}

@@ -1,0 +1,54 @@
+{
+  "status": "PASS",
+  "notebook_sha256": "0acc82fae01e32ea676be0f44427f0a1e44e0bf65eb961b303d154229f32745f",
+  "suite": "outputs/pruning/lamp_gflops_layout_ns/20261104T071943Z_1257e562",
+  "scope": "Two actual pinned checkpoints, one cached 1.1x plan replay per variant; target search not repeated",
+  "device": "cpu",
+  "imgsz": 64,
+  "seed": 42,
+  "fixture_images": 6,
+  "eda_images_displayed": 56,
+  "external_statuses": {
+    "poltrada_v3": "NOT_RUN",
+    "cuda_latency": "NOT_RUN",
+    "kaggle": "NOT_RUN"
+  },
+  "models": [
+    {
+      "model": "YOLO26n",
+      "source_sha256": "380a087fd621e8a43fe2b9b4d6b1bb6fb00a4d0443cc5afe81ef3efdf0775f0f",
+      "baseline_validation_parity": "PASS",
+      "baseline_parameters": 2506140,
+      "baseline_gflops": 0.057837568,
+      "oracle_max_abs_diff": 4.1961669921875e-05,
+      "configuration_id": "target-1.1x",
+      "parameters": 2276502,
+      "gflops": 0.052448672,
+      "gflops_speedup": 1.102746090501586,
+      "structural_status": "PASS",
+      "reload_status": "PASS",
+      "validation_status": "PASS",
+      "eda_status": "PASS",
+      "latency_status": "NOT_RUN",
+      "checkpoint_sha256": "1a9a7a48219c93777dca92632b30b2cfa173096a9ef6abefcb314e9b871ae9d9"
+    },
+    {
+      "model": "YOLO26s",
+      "source_sha256": "5bc3ae61f8da1c9f03916922de10146805c27c64a11e46edd766a00d0f6f18fd",
+      "baseline_validation_parity": "PASS",
+      "baseline_parameters": 9952508,
+      "baseline_gflops": 0.225226752,
+      "oracle_max_abs_diff": 1.9073486328125e-05,
+      "configuration_id": "target-1.1x",
+      "parameters": 9032700,
+      "gflops": 0.204676128,
+      "gflops_speedup": 1.1004055734335565,
+      "structural_status": "PASS",
+      "reload_status": "PASS",
+      "validation_status": "PASS",
+      "eda_status": "PASS",
+      "latency_status": "NOT_RUN",
+      "checkpoint_sha256": "1d67a85ad7264fac058c8c8b1e684f630f4c18f99e64b9ae58727661dacc16e8"
+    }
+  ]
+}

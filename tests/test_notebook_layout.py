@@ -13,6 +13,9 @@ import pytest
 from IPython.core.inputtransformer2 import TransformerManager
 
 from scripts.notebook_paths import (
+    GFLOPS_PRUNING,
+    MULTISEED_PRUNING,
+    MULTISEED_TEACHER,
     NOTEBOOK_CATEGORIES,
     NOTEBOOK_LOCATIONS,
     NOTEBOOK_ROOT,
@@ -26,9 +29,9 @@ def test_complete_inventory_without_duplicates_or_old_copies():
     expected = {path for platform in NOTEBOOK_LOCATIONS for path in notebook_paths(platform)}
     actual = {path for path in NOTEBOOK_ROOT.rglob("*.ipynb") if "archieve" not in path.parts}
     assert actual == expected
-    assert len(expected) == 39
+    assert len(expected) == 62
     assert {platform: len(notebook_paths(platform)) for platform in NOTEBOOK_LOCATIONS} == {
-        "kaggle": 19, "colab": 17, "amd": 1, "local": 2,
+        "kaggle": 33, "filkom": 9, "colab": 17, "amd": 1, "local": 2,
     }
     assert len(list((NOTEBOOK_ROOT / "archieve").rglob("*.ipynb"))) == 10
     assert not (NOTEBOOK_ROOT / "yolo26-kd-indotraffic").exists()
@@ -57,7 +60,7 @@ def test_notebook_schema_and_independence_of_repository_path_helper(path):
             assert "scripts.notebook_paths" not in cell.source
 
 
-@pytest.mark.parametrize("path", [path for platform in ("kaggle", "colab", "amd") for path in notebook_paths(platform)],
+@pytest.mark.parametrize("path", [path for platform in ("kaggle", "filkom", "colab", "amd") for path in notebook_paths(platform)],
                          ids=lambda path: path.relative_to(NOTEBOOK_ROOT).as_posix())
 def test_standalone_notebook_code_syntax(path):
     # Local legacy notebooks contain historical reference cells, including an
@@ -71,7 +74,7 @@ def test_standalone_notebook_code_syntax(path):
 @pytest.mark.parametrize("role", ["teacher_m", "teacher_s"])
 def test_kaggle_kd_teacher_matches_configuration(role):
     names = NOTEBOOK_CATEGORIES["kaggle"]["kd/" + role]
-    assert len(names) == 6
+    assert len(names) == (7 if role == "teacher_s" else 6)
     for name in names:
         path = notebook_path("kaggle", name)
         book = json.loads(path.read_text(encoding="utf-8"))
@@ -85,14 +88,31 @@ def test_kaggle_kd_teacher_matches_configuration(role):
         expected = "T26m_" if role == "teacher_m" else "T26s_"
         assert len(groups) == 1 and (groups[0].startswith(expected) or groups[0].startswith(role + "_")), (name, groups)
     assert notebook_path("kaggle", "12_pkd_yolo26n.ipynb").parent.name == "teacher_s"
+    assert notebook_path("kaggle", "15_mgd_yolo26n_teacher_yolo26s.ipynb").parent.name == "teacher_s"
 
 
 def test_supervised_sources_and_platform_specific_workflows_are_not_duplicated():
     assert notebook_path("kaggle", "02_baseline_yolo26s.ipynb").parent.name == "baseline"
-    assert NOTEBOOK_CATEGORIES["kaggle"]["teacher"] == ("01_teacher_yolo26m.ipynb",)
+    assert NOTEBOOK_CATEGORIES["kaggle"]["teacher"] == ("01_teacher_yolo26m.ipynb", MULTISEED_TEACHER)
+    assert NOTEBOOK_CATEGORIES["filkom"]["teacher"] == (MULTISEED_TEACHER,)
     assert notebook_path("amd", "03_baseline_yolo26n_amd_roboflow.ipynb").parent.name == "baseline"
     assert notebook_path("kaggle", "01_lamp_yolo26n_no_recovery.ipynb").parent.name == "pruning"
     assert "pruning" not in NOTEBOOK_CATEGORIES["colab"]
+    assert NOTEBOOK_CATEGORIES["filkom"]["pruning"] == GFLOPS_PRUNING
+    assert NOTEBOOK_CATEGORIES["kaggle"]["pruning"][4:] == (*GFLOPS_PRUNING, MULTISEED_PRUNING)
+    assert NOTEBOOK_CATEGORIES["filkom"]["recovery"] == NOTEBOOK_CATEGORIES["kaggle"]["recovery"]
+    assert NOTEBOOK_CATEGORIES["filkom"]["fine-tunned"] == NOTEBOOK_CATEGORIES["kaggle"]["baseline/fine-tunned"]
+
+
+def test_historical_pruning_notebooks_keep_original_bytes():
+    expected = (
+        "cff1f5d204a7b04800a3905ca20b281bf3f7eab3f2c37dff9841722512d48907",
+        "f66166b3327f7fdddec050847ec8876b8d1143068f5189bbe21c11fe56015f3c",
+        "45628e699b8a52ded64ee174da3a04f062729f9a583064d3e6168ac8c8fa94c1",
+        "c16b8a6f5ff1369bbaa1c3faf46bf75092816bcf4269676bb760658c6f44be1c",
+    )
+    for name, digest in zip(NOTEBOOK_CATEGORIES["kaggle"]["pruning"][:4], expected, strict=True):
+        assert hashlib.sha256(notebook_path("kaggle", name).read_bytes()).hexdigest() == digest
 
 
 def test_colab_manifest_source_metadata_and_generator_dry_run():
@@ -116,7 +136,8 @@ def test_colab_manifest_source_metadata_and_generator_dry_run():
     assert generator["readme"](manifest) == (NOTEBOOK_ROOT / "colab/README.md").read_text(encoding="utf-8")
 
 
-@pytest.mark.parametrize("relative", ["README.md", "notebooks/README.md", "notebooks/kaggle/README.md", "notebooks/colab/README.md"])
+@pytest.mark.parametrize("relative", ["README.md", "notebooks/README.md", "notebooks/kaggle/README.md", "notebooks/filkom/README.md",
+                                     "notebooks/colab/README.md", "docs/lamp_gflops_recovery_workflow.md"])
 def test_active_readme_links_resolve(relative):
     path = ROOT / relative
     text = path.read_text(encoding="utf-8")
