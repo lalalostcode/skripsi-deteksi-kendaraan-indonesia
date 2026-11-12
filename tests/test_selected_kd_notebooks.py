@@ -1,8 +1,11 @@
 """Input identity, teacher locking, KD protocol, and partial cross-method summaries."""
 # ruff: noqa: S102 -- Execute trusted declarations and generated configuration cells.
 import ast
+import builtins
 import hashlib
 import json
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -16,8 +19,8 @@ from scripts.generate_pruned_fine_tuned_notebooks import (
 from scripts.generate_selected_kd_notebooks import METHODS, build_notebook
 
 
-def configuration(method="native", **changes):
-    book = build_notebook("filkom", method)
+def configuration(method="native", *, platform="filkom", **changes):
+    book = build_notebook(platform, method)
     scope = {}
     for cell in book["cells"]:
         tags = cell.get("metadata", {}).get("tags", [])
@@ -26,6 +29,106 @@ def configuration(method="native", **changes):
             if "config" in tags:
                 scope.update(changes)
     return scope
+
+
+@pytest.mark.parametrize("override", ["defaults", "workspace", "individual"])
+def test_filkom_mgd_paths_ignore_kernel_cwd_and_append_method_once(tmp_path, monkeypatch, override):
+    home = tmp_path / "home"
+    monkeypatch.setattr(Path, "home", lambda: home)
+    monkeypatch.setenv("USERPROFILE", str(home))
+    monkeypatch.setenv("HOME", str(home))
+    monkeypatch.chdir(tmp_path)
+    for name in ("SKRIPSI_ROOT", "SKRIPSI_REPO_ROOT", "SKRIPSI_DATASET_ROOT", "SKRIPSI_DATA_YAML", "SKRIPSI_OUTPUT_DIR"):
+        monkeypatch.delenv(name, raising=False)
+    root = home / "skripsi-kd"
+    if override == "workspace":
+        monkeypatch.setenv("SKRIPSI_ROOT", "~/custom-workspace")
+        root = home / "custom-workspace"
+    expected = {"WORKSPACE_ROOT": root, "REPO_ROOT": root / "repo",
+                "DATASET_ROOT": root / "datasets/roboflow-poltrada-v3",
+                "DATA_YAML": root / "datasets/roboflow-poltrada-v3/data.yaml",
+                "OUTPUT_DIR": root / "outputs/filkom/recovery/selected/yolo26s/mgd"}
+    if override == "individual":
+        for key in ("REPO_ROOT", "DATASET_ROOT", "DATA_YAML", "OUTPUT_DIR"):
+            monkeypatch.setenv("SKRIPSI_" + key, "~/custom/" + key.lower())
+            expected[key] = home / "custom" / key.lower()
+        expected["OUTPUT_DIR"] /= "mgd"
+    scope = configuration("mgd")
+    assert {key: scope[key] for key in expected} == expected
+    assert scope["OUTPUT_DIR"].parts.count("mgd") == 1
+    assert not expected["OUTPUT_DIR"].exists()
+
+
+def test_filkom_mgd_research_configuration_and_protocol_match_kaggle():
+    filkom = configuration("mgd")
+    assert filkom["SEED"] == 0
+    assert filkom["STUDENT_INPUTS"] == ["yolo26s-lamp-su1.20x-seed0-raw:v1"]
+    kaggle = configuration("mgd", platform="kaggle", STUDENT_INPUTS=filkom["STUDENT_INPUTS"])
+    deployment = {"PLATFORM", "WORKSPACE_ROOT", "REPO_ROOT", "DATASET_ROOT", "DATA_YAML", "OUTPUT_DIR"}
+    names = {name for name in filkom.keys() | kaggle.keys() if name.isupper()} - deployment
+    assert {name: filkom[name] for name in names} == {name: kaggle[name] for name in names}
+    assert filkom["PLATFORM"] == "filkom" and filkom["RECOVERY_METHOD"] == "mgd"
+    assert filkom["NOTEBOOK_VARIANT"] == "s"
+    for mode in ("full_val", "smoke"):
+        filkom["MODE"] = kaggle["MODE"] = mode
+        assert filkom["fine_tuned_train_args"]("data.yaml", "output", "run", "teacher.pt") == (
+            kaggle["fine_tuned_train_args"]("data.yaml", "output", "run", "teacher.pt"))
+        assert filkom["fine_tuned_val_args"]("data.yaml") == kaggle["fine_tuned_val_args"]("data.yaml")
+    books = [build_notebook(platform, "mgd") for platform in ("filkom", "kaggle")]
+    # All loss, trainer, teacher/student handling, evaluation and EDA code stays identical.
+    for tag in ("runtime", "protocol", "selection", "run", "display", "group-display"):
+        sources = [next("".join(c["source"]) for c in book["cells"]
+                        if tag in c.get("metadata", {}).get("tags", [])) for book in books]
+        sources = ["\n".join(line for line in source.splitlines() if not line.startswith("IMPLEMENTATION_SHA256 ="))
+                   for source in sources]
+        assert sources[0] == sources[1]
+
+
+@pytest.mark.parametrize("version", [(3, 8, 10), (3, 10, 16)])
+def test_filkom_mgd_preflight_rejects_old_kernel_before_any_side_effect(version):
+    book = build_notebook("filkom", "mgd")
+    source = next("".join(c["source"]) for c in book["cells"] if "bootstrap" in c.get("metadata", {}).get("tags", []))
+    imported = []
+
+    def import_only_sys(name, *args, **kwargs):
+        imported.append(name)
+        assert name == "sys", "Preflight must precede dependency imports and datetime.UTC"
+        return SimpleNamespace(version_info=version, version=".".join(map(str, version)), executable="/hpc/old/bin/python")
+
+    scope = {"__builtins__": {**vars(builtins), "__import__": import_only_sys}}
+    # Verify even Python 3.8 can parse the cell that reports the unsupported kernel.
+    ast.parse(source, feature_version=(3, 8))
+    with pytest.raises(RuntimeError, match=r"Python >=3.11.*pyproject.toml.*kernel aktif.*Jupyter"):
+        exec(source, scope)
+    assert imported == ["sys"] and "RUN_DIR" not in scope
+
+
+@pytest.mark.parametrize("version", [(3, 11, 0), (3, 12, 0)])
+def test_filkom_mgd_preflight_accepts_supported_kernel(version):
+    book = build_notebook("filkom", "mgd")
+    source = next("".join(c["source"]) for c in book["cells"] if "bootstrap" in c.get("metadata", {}).get("tags", []))
+    prefix = ast.Module(body=ast.parse(source).body[:2], type_ignores=[])
+    fake_sys = SimpleNamespace(version_info=version)
+    exec(compile(prefix, "python-preflight", "exec"),
+         {"__builtins__": {**vars(builtins), "__import__": lambda *args, **kwargs: fake_sys}})
+
+
+def test_filkom_mgd_datetime_imports_work_without_datetime_utc_attribute():
+    scope = {"__builtins__": {**vars(builtins), "__import__": lambda *args, **kwargs:
+                             SimpleNamespace(datetime=datetime, timedelta=timedelta, timezone=timezone)}}
+    for cell in build_notebook("filkom", "mgd")["cells"]:
+        if cell["cell_type"] != "code":
+            continue
+        nodes = ast.parse("".join(cell["source"])).body
+        for node in ast.walk(ast.Module(body=nodes, type_ignores=[])):
+            if isinstance(node, ast.ImportFrom) and node.module == "datetime":
+                assert all(alias.name != "UTC" for alias in node.names)
+        declarations = [node for node in nodes if isinstance(node, ast.ImportFrom) and node.module == "datetime"
+                        or isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id in {"UTC", "_RECOVERY_UTC"}
+                                                               for t in node.targets)]
+        exec(compile(ast.Module(body=declarations, type_ignores=[]), "portable-datetime", "exec"), scope)
+    assert scope["UTC"] is scope["_RECOVERY_UTC"] is timezone.utc  # noqa: UP017 -- Exercise the Python <3.11 API.
+    assert scope["datetime"].now(scope["UTC"]).utcoffset().total_seconds() == 0
 
 
 @pytest.mark.parametrize("platform", ["kaggle", "filkom"])

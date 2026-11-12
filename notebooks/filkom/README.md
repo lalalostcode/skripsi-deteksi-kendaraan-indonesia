@@ -44,6 +44,26 @@ scp /path/lokal/dataset_manifest.json USER@HOST:/path/ke/skripsi/datasets/
 
 Pada sel konfigurasi, periksa `WORKSPACE_ROOT`, `DATASET_ROOT`, `DATA_YAML`, `DATASET_MANIFEST_PATH`, `OUTPUT_DIR`, dan `DEVICE`. `WORKSPACE_ROOT` memakai `SKRIPSI_ROOT` atau direktori kernel saat ini. Secara default data dicari di `datasets/poltrada-v3` dan output ditulis di `outputs/filkom`. `DEVICE="auto"` memilih `cuda:0` ketika CUDA tersedia. Pastikan nama GPU dan versi CUDA pada preflight sesuai dengan perangkat yang hendak diukur.
 
+Khusus [MGD recovery 05](recovery/05_yolo26ns_mgd_kd.ipynb), default HPC memakai
+`Path.home() / "skripsi-kd"` sebagai `WORKSPACE_ROOT`, dengan repository di `repo`,
+dataset di `datasets/roboflow-poltrada-v3`, YAML di folder dataset tersebut, dan output
+akhir di `outputs/filkom/recovery/selected/yolo26s/mgd`. Lokasi ini tidak bergantung
+pada direktori kernel. Override opsional memakai `SKRIPSI_ROOT` untuk workspace,
+`SKRIPSI_REPO_ROOT`, `SKRIPSI_DATASET_ROOT`, `SKRIPSI_DATA_YAML`, serta
+`SKRIPSI_OUTPUT_DIR`. Nilai `SKRIPSI_OUTPUT_DIR` adalah output dasar sampai `yolo26s`;
+generator menambahkan `mgd` satu kali. Jika Jupyter mewarisi `SKRIPSI_ROOT` lama,
+sesuaikan ke `~/skripsi-kd` atau hapus override agar default baru berlaku.
+
+MGD 05 memeriksa Python **3.11 atau lebih baru**, sesuai `pyproject.toml`, sebelum
+membuat folder run atau memasang dependency. Import UTC portabel tidak menambahkan
+dukungan Python 3.8. Aktifkan environment HPC dengan Python yang memenuhi syarat
+dan Torch/torchvision CUDA yang sesuai sebelum mendaftarkan kernel Jupyter memakai
+`python -m ipykernel install` seperti contoh di atas. Bootstrap mempertahankan
+Torch/torchvision yang telah tersedia; kedua paket tersebut harus dipasang di
+environment kernel, termasuk ketika Python sudah 3.11. Seed aktif MGD FILKOM tetap
+0 dari raw terpilih; loss, teacher, hyperparameter dan protokol evaluasi sama dengan
+MGD recovery Kaggle untuk input raw/seed yang sama.
+
 Sediakan `WANDB_API_KEY` di environment proses Jupyter atau isi prompt tersembunyi ketika notebook meminta login. Pastikan akun dapat membaca raw `:vN` serta teacher `:vN` yang dipakai dan menulis ke project penelitian. File notebook cukup menyimpan referensi artefak dan hash. Panduan menjalankan pruning, menyiapkan input recovery, dan meneruskan suite ada di [panduan eksperimen](../../docs/lamp_gflops_recovery_workflow.md).
 
 ## Teacher YOLO26m lima seed

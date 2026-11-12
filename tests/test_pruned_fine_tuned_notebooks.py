@@ -31,7 +31,8 @@ def test_generator_and_empty_input(platform, method):
     book = json.loads(notebook_path(platform, METHOD_NOTEBOOKS[method][0]).read_text(encoding="utf-8"))
     assert book == build_notebook(platform, method)
     scope = execute_cells(book, {"config", "selection", "protocol"})
-    assert len(scope["STUDENT_INPUTS"]) == 1 and scope["SEED"] == 42
+    expected_seed = 0 if (platform, method) == ("filkom", "mgd") else 42
+    assert len(scope["STUDENT_INPUTS"]) == 1 and scope["SEED"] == expected_seed
     assert scope["RESUME_RUN_DIR"] is None and scope["RESUME_SNAPSHOT_REF"] is None
     assert len(scope.get("ACTIVE_STUDENT_INPUTS", scope["STUDENT_PINS"])) == (7 if method == "finetune" else 5)
 
@@ -56,7 +57,8 @@ def test_explicit_and_effective_protocol_match_sources(method):
         expression = next(node.value for node in nodes if isinstance(node, ast.Assign)
                           and isinstance(node.targets[0], ast.Name) and node.targets[0].id == variable)
         result.update({kw.arg: eval(ast.unparse(kw.value), {**config, "RUN_NAME": "training"}) for kw in expression.keywords})
-    args.update(data="test.yaml", project="results")
+    # Recovery inherits the selected raw's seed, including FILKOM MGD seed 0.
+    args.update(data="test.yaml", project="results", seed=scope["SEED"])
     validation.update(data="test.yaml")
     extras = {"finetune": {}, "native": {"dis": 1.0}, "crosskd": {"dis": 1.0, "compile": False},
               "mgd": {"dis": 1.0, "compile": False, "resume": False}}[method]
