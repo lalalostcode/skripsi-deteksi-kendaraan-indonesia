@@ -82,9 +82,10 @@ def test_filkom_mgd_research_configuration_and_protocol_match_kaggle():
         sources = ["\n".join(line for line in source.splitlines() if not line.startswith("IMPLEMENTATION_SHA256 ="))
                    for source in sources]
         if tag == "runtime":
-            policy = (Path(__file__).resolve().parents[1] / "scripts/filkom_mgd_dataset_source.py").read_text(encoding="utf-8").strip()
-            assert sources[0].count(policy) == 1 and policy not in sources[1]
-            sources[0] = sources[0].replace("\n\n" + policy, "")
+            for filename in ("filkom_mgd_labels_source.py", "filkom_mgd_dataset_source.py"):
+                policy = (Path(__file__).resolve().parents[1] / "scripts" / filename).read_text(encoding="utf-8").strip()
+                assert sources[0].count(policy) == 1 and policy not in sources[1]
+                sources[0] = sources[0].replace("\n\n" + policy, "")
         assert sources[0] == sources[1]
 
 

@@ -3,8 +3,11 @@
 import ast
 import hashlib
 import json
+from contextlib import contextmanager
 from pathlib import Path
+from unittest.mock import patch
 
+import numpy as np
 import pytest
 import yaml
 
@@ -25,9 +28,14 @@ def local_dataset(tmp_path):
         label.write_text("0 0.5 0.5 0.2 0.2\n", encoding="utf-8")
     source = root / "data.yaml"
     source.write_text("train: ../train/images\nval: ../valid/images\nnames: [car]\nnc: 1\n", encoding="utf-8")
+    def write_json(path, value):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(value), encoding="utf-8")
+
     scope = {"Path": Path, "json": json, "hashlib": hashlib, "yaml": yaml,
+             "np": np, "contextmanager": contextmanager, "patch": patch,
              "sha256_file": lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest(),
-             "write_json": lambda p, value: Path(p).write_text(json.dumps(value), encoding="utf-8"),
+             "write_json": write_json,
              "ordered_names": list, "MODE": "full_val", "SMOKE_DATASET_ROOT": None,
              "DATASET_ROOT": root, "DATA_YAML": source, "DATASET_ID": "filkom/roboflow-poltrada-v3",
              "POLTRADA_V3_ID": "ilhamrafiqin/poltrada-v3-yolo26-clean",
@@ -39,6 +47,12 @@ def local_dataset(tmp_path):
              for node in ast.parse("".join(cell["source"])).body
              if isinstance(node, ast.FunctionDef) and node.name in required]
     exec(compile(ast.Module(body=nodes, type_ignores=[]), "local-dataset-helpers", "exec"), scope)
+    # Load the original context first; the FILKOM reader wraps it without replacing cache behavior.
+    original_cache = next(node for cell in book["cells"] if cell["cell_type"] == "code"
+                          for node in ast.parse("".join(cell["source"])).body
+                          if isinstance(node, ast.FunctionDef) and node.name == "gflops_disable_label_cache")
+    exec(compile(ast.Module(body=[original_cache], type_ignores=[]), "label-cache-context", "exec"), scope)
+    exec((ROOT / "scripts/filkom_mgd_labels_source.py").read_text(encoding="utf-8"), scope)
     exec((ROOT / "scripts/filkom_mgd_dataset_source.py").read_text(encoding="utf-8"), scope)
     manifest = {"seed": 0, "validation_status": "PASS", "dataset": {
         "dataset_id": scope["POLTRADA_V3_ID"], "provenance_status": "VERIFIED", "class_names": ["car"],

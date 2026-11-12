@@ -17,8 +17,10 @@ def ft_dataset(manifest, folder):
     record, train, _ = workflow_dataset_manifest(dataset, source_yaml, root, folder)
     if record["class_names"] != original["class_names"]:
         raise ValueError("Urutan kelas dataset FILKOM berbeda dari raw.")
+    label_adapter = filkom_mgd_prepare_label_adapter(root, [*train, *map(Path, dataset["image_files"])], folder)
     record.update(
         diagnostic_fixture=diagnostic_fixture,
+        label_adapter=label_adapter,
         fingerprint_policy="record-only-filkom-mgd-v1",
         raw_dataset_reference={"dataset_id": original.get("dataset_id"),
                                "train_fingerprint": original["train_fingerprint"],
@@ -44,5 +46,6 @@ def kd_comparison_settings():
     settings = _filkom_mgd_comparison_settings()
     record = globals().get("FILKOM_MGD_DATASET", {})
     return {**settings, "dataset_policy": "record-only-filkom-mgd-v1",
+            "label_policy": FILKOM_MGD_LABEL_POLICY,
             "dataset_id": DATASET_ID, "train_fingerprint": record.get("train_fingerprint"),
             "val_fingerprint": record.get("val_fingerprint")}

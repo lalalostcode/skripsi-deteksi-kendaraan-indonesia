@@ -116,6 +116,11 @@ def fine_tuned_val_args(DATA):
         # Fail before output creation, dependency inspection/install, or model imports.
         auth = (base.SCRIPTS / "filkom_mgd_auth_source.py").read_text(encoding="utf-8").strip()
         bootstrap = FILKOM_MGD_PREFLIGHT + "\n" + auth + "\n\n" + bootstrap
+        bootstrap = bootstrap.replace("if needed:\n", '''if WANDB_TRACKING and not any(metadata.distributions(name="nbformat")):
+    needed.append("nbformat>=5.10")
+if needed:
+''', 1)
+        bootstrap += '\nENVIRONMENT["nbformat"] = metadata.version("nbformat") if any(metadata.distributions(name="nbformat")) else None\n'
     put(by_tag["bootstrap"], bootstrap)
     source = "".join(by_tag["runtime"]["source"]).split("\nIMPLEMENTATION_SHA256 =")[0]
     source = source.replace("selected-raw-finetune-v2", "selected-raw-kd-v1")
@@ -129,8 +134,9 @@ def fine_tuned_val_args(DATA):
         (base.SCRIPTS / "pruned_kd_selected_source.py").read_text(encoding="utf-8")))
     put(by_tag["runtime"], source + "\n\n" + extra)
     if (platform, method) == ("filkom", "mgd"):
-        dataset_policy = (base.SCRIPTS / "filkom_mgd_dataset_source.py").read_text(encoding="utf-8").strip()
-        put(by_tag["runtime"], "".join(by_tag["runtime"]["source"]) + "\n\n" + dataset_policy)
+        for filename in ("filkom_mgd_labels_source.py", "filkom_mgd_dataset_source.py"):
+            policy = (base.SCRIPTS / filename).read_text(encoding="utf-8").strip()
+            put(by_tag["runtime"], "".join(by_tag["runtime"]["source"]) + "\n\n" + policy)
     for tag in ("display", "run"):
         put(by_tag[tag], "".join(by_tag[tag]["source"]).replace("fine_tuned_manifest.json", "kd_manifest.json")
             .replace("finetuning_registry", "kd_registry"))
@@ -206,6 +212,11 @@ Dataset memakai path lokal FILKOM. Fingerprint train/validation dicatat tanpa ke
 dengan dataset asal raw pruning. Urutan kelas dan pemisahan train/validation tetap diperiksa.
 Baseline, raw, dan hasil MGD dievaluasi ulang pada validation lokal yang sama. Perbedaan dataset
 asal ditandai pada manifest; ringkasan lintas run hanya memilih fingerprint lokal yang cocok.'''
+        descriptions[2] += '''
+
+Label campuran bounding box/polygon dibaca sebagai deteksi memakai konversi polygon ke box
+bawaan Ultralytics. Salinan label hasil konversi dan hash-nya tersimpan di folder run;
+file dataset sumber tetap utuh. Pembaca yang sama digunakan untuk training dan evaluasi.'''
     for cell, text in zip(markdown, descriptions, strict=True):
         put(cell, text)
     if (platform, method) == ("filkom", "mgd"):

@@ -94,6 +94,21 @@ Salin notebook terbaru secara utuh ke server, Restart Kernel lalu Run All; pesan
 `Dataset FILKOM | fingerprint policy=record-only` menunjukkan kebijakan dataset lokal
 sudah aktif. Hindari mencampur sel runtime dari versi notebook berbeda.
 
+Ekspor Roboflow V3 dapat memuat baris bounding box dan polygon dalam satu file label.
+Ultralytics 8.4.155 menolak file campuran itu dan mengurangi jumlah gambar loader.
+MGD FILKOM mengonversi baris polygon pada file campuran ke box memakai fungsi bawaan
+`segments2boxes`, sambil mempertahankan baris box. Salinan label berada di
+`RUN_DIR/data/label_adapter/converted`; hash sumber/hasil dan jumlah baris tercatat
+di `label_adapter/manifest.json` dan metadata dataset. Sumber gambar/label tidak
+ditulis ulang. Pembaca yang sama dipakai pada training dan evaluasi tiga kondisi.
+Pemeriksaan daftar gambar tetap aktif; ketidakcocokan selanjutnya menghasilkan
+`RUN_DIR/dataloader_mismatch.json` dengan jumlah serta daftar file yang berbeda.
+
+Jika W&B melaporkan `nbformat` belum tersedia, bootstrap MGD FILKOM memasang
+`nbformat>=5.10` ketika tracking dan `INSTALL_DEPENDENCIES` aktif. Instalasi ini
+mempertahankan constraint Torch/torchvision kernel. Pesan `nbformat` terkait
+penyimpanan riwayat notebook dan terpisah dari kegagalan pembacaan label.
+
 Pastikan akun dapat membaca raw `:vN` serta teacher `:vN` yang dipakai dan menulis ke project penelitian. File notebook cukup menyimpan referensi artefak dan hash. Panduan menjalankan pruning, menyiapkan input recovery, dan meneruskan suite ada di [panduan eksperimen](../../docs/lamp_gflops_recovery_workflow.md).
 
 ## Teacher YOLO26m lima seed

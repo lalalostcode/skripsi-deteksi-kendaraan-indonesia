@@ -1,0 +1,111 @@
+{
+  "date_jakarta": "2026-11-12",
+  "scope": "FILKOM MGD native SDK data loading, no model training",
+  "sdk": "8.4.155",
+  "before": {
+    "sdk": "8.4.155",
+    "source_root": "C:\\Local D\\Galeri Belajar\\Skripsi\\data\\latest version",
+    "read_only": true,
+    "splits": {
+      "train": {
+        "expected_count": 6775,
+        "accepted_count": 6771,
+        "dropped": [
+          {
+            "image": "train/images/IPCamera_02-10_04_2025-06_50_51_frame_00006_jpg.rf.a0e13c54a5ffd914c9a673fba2415d4f.jpg",
+            "reason": "C:\\Local D\\Galeri Belajar\\Skripsi\\data\\latest version\\train\\images\\IPCamera_02-10_04_2025-06_50_51_frame_00006_jpg.rf.a0e13c54a5ffd914c9a673fba2415d4f.jpg: ignoring corrupt image/label: labels mix segment and detection rows"
+          },
+          {
+            "image": "train/images/Screenshot-2025-05-30-at-09_03_02_png.rf.6c2781d6b0f106403e24660bdcd43dad.jpg",
+            "reason": "C:\\Local D\\Galeri Belajar\\Skripsi\\data\\latest version\\train\\images\\Screenshot-2025-05-30-at-09_03_02_png.rf.6c2781d6b0f106403e24660bdcd43dad.jpg: ignoring corrupt image/label: labels mix segment and detection rows"
+          },
+          {
+            "image": "train/images/Screenshot-2025-05-30-at-09_04_37_png.rf.6a3731117ee13801c20634fd64ae1ed3.jpg",
+            "reason": "C:\\Local D\\Galeri Belajar\\Skripsi\\data\\latest version\\train\\images\\Screenshot-2025-05-30-at-09_04_37_png.rf.6a3731117ee13801c20634fd64ae1ed3.jpg: ignoring corrupt image/label: labels mix segment and detection rows"
+          },
+          {
+            "image": "train/images/Screenshot-2025-05-30-at-09_57_40_png.rf.dd8bf2628eb22e919edb20b4cbc30f66.jpg",
+            "reason": "C:\\Local D\\Galeri Belajar\\Skripsi\\data\\latest version\\train\\images\\Screenshot-2025-05-30-at-09_57_40_png.rf.dd8bf2628eb22e919edb20b4cbc30f66.jpg: ignoring corrupt image/label: labels mix segment and detection rows"
+          }
+        ],
+        "warnings": []
+      },
+      "valid": {
+        "expected_count": 1790,
+        "accepted_count": 1790,
+        "dropped": [],
+        "warnings": []
+      }
+    }
+  },
+  "after": {
+    "status": "PASS",
+    "stage": "native_dataset_construction",
+    "training": "NOT_RUN",
+    "source_root": "C:\\Local D\\Galeri Belajar\\Skripsi\\data\\latest version",
+    "label_adapter": {
+      "policy": "mixed-box-polygon-to-detection-v1",
+      "source_files_modified": false,
+      "converted_file_count": 4,
+      "files": [
+        {
+          "source_label": "train/labels/IPCamera_02-10_04_2025-06_50_51_frame_00006_jpg.rf.a0e13c54a5ffd914c9a673fba2415d4f.txt",
+          "source_sha256": "92b86bad175d68ed3e2d6f84720c7e4be90439c310b0b30f4aee6588c01c311f",
+          "prepared_label": "label_adapter/converted/train/labels/IPCamera_02-10_04_2025-06_50_51_frame_00006_jpg.rf.a0e13c54a5ffd914c9a673fba2415d4f.txt",
+          "prepared_sha256": "a39cdde7506723cc656b788ab7b3d08c6ed80c4bd30785742bc0c90b04369d65",
+          "row_count": 41,
+          "polygon_rows_converted": 1
+        },
+        {
+          "source_label": "train/labels/Screenshot-2025-05-30-at-09_03_02_png.rf.6c2781d6b0f106403e24660bdcd43dad.txt",
+          "source_sha256": "24ddf47b3b458db9bbeb295f96bc4f210593d6b6805c92d6546db093298c06b6",
+          "prepared_label": "label_adapter/converted/train/labels/Screenshot-2025-05-30-at-09_03_02_png.rf.6c2781d6b0f106403e24660bdcd43dad.txt",
+          "prepared_sha256": "fc829f9743fda4ad895472fa40b3b5788f1de66b92501333063c6866081285de",
+          "row_count": 4,
+          "polygon_rows_converted": 1
+        },
+        {
+          "source_label": "train/labels/Screenshot-2025-05-30-at-09_04_37_png.rf.6a3731117ee13801c20634fd64ae1ed3.txt",
+          "source_sha256": "f0d636ea18c9f3bba9485a5743603c1aab51a34cc0c74766f8e10ef5f6549999",
+          "prepared_label": "label_adapter/converted/train/labels/Screenshot-2025-05-30-at-09_04_37_png.rf.6a3731117ee13801c20634fd64ae1ed3.txt",
+          "prepared_sha256": "37932394495abc1ba939f0872b8ed1fcaf2d3395307261d78e6b0352943a858a",
+          "row_count": 8,
+          "polygon_rows_converted": 2
+        },
+        {
+          "source_label": "train/labels/Screenshot-2025-05-30-at-09_57_40_png.rf.dd8bf2628eb22e919edb20b4cbc30f66.txt",
+          "source_sha256": "e9a9159640eefaa078ce71bb294203147c61cbf723cce912453fa8b6691ecd25",
+          "prepared_label": "label_adapter/converted/train/labels/Screenshot-2025-05-30-at-09_57_40_png.rf.dd8bf2628eb22e919edb20b4cbc30f66.txt",
+          "prepared_sha256": "9f4f144751d9d4eb55e291316380e49ac0f2b91e860fb4f9f1b763f989b63a3a",
+          "row_count": 5,
+          "polygon_rows_converted": 1
+        }
+      ]
+    },
+    "splits": {
+      "train": {
+        "expected": 6775,
+        "observed": 6775,
+        "boxes": 125235
+      },
+      "valid": {
+        "expected": 1790,
+        "observed": 1790,
+        "boxes": 32102
+      }
+    },
+    "source_labels_unchanged": true
+  },
+  "gpu_training": "NOT_RUN",
+  "model_evaluation": "NOT_RUN",
+  "environment": {
+    "python": "3.11.14",
+    "ultralytics": "8.4.155",
+    "numpy": "2.3.5",
+    "pillow": "12.3.0"
+  },
+  "sdk_functions_sha256": {
+    "verify_image_label": "e27353a30ddea3e70331a86a41d052e3b930eb48e6dc820c87135fbeed8fd923",
+    "segments2boxes": "9834bd620f2cb3f2fc0b70c3a86c97d1589733097e5f0e112956b44a2562aa26"
+  }
+}

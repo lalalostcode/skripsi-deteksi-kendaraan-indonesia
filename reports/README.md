@@ -14,7 +14,7 @@ tidak dipindahkan; tautan navigasi mengikuti lokasi laporan saat ini.
 | KD MGD | [Implementasi MGD YOLO26s → YOLO26n](kd/mgd/mgd_yolo26n_implementation.md), protokol Native/CrossKD dan verifikasi lokal. |
 | Pruning | [Indeks LAMP YOLO26n/YOLO26s](pruning/README.md), dipisahkan menurut model dan versi metode. |
 | Bukti eksperimen | [Indeks Kaggle dan verifikasi Colab](experiments/README.md), [smoke MGD CPU dengan teacher v62 aktual](experiments/local/mgd_cpu_smoke_20261031.md). |
-| Engineering | [Multi-seed serial](engineering/serial_multiseed_implementation.md), [penataan notebook](engineering/notebook_reorganization_20261022.json), [manifest migrasi laporan](engineering/report_reorganization_20261022.json). |
+| Engineering | [Multi-seed serial](engineering/serial_multiseed_implementation.md), [penataan notebook](engineering/notebook_reorganization_20261022.json), [manifest migrasi laporan](engineering/report_reorganization_20261022.json), [audit loader label campuran MGD FILKOM](engineering/filkom_mgd_mixed_label_loader_20261112.json). |
 
 Manifest migrasi memuat 65 file asal, pemetaan lokasi lama ke baru, SHA-256 sebelum/sesudah,
 dan perubahan href Markdown. Sebanyak 62 file dipertahankan identik; pada tiga Markdown
