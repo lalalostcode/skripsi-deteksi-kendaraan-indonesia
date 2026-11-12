@@ -64,7 +64,7 @@ def test_filkom_mgd_research_configuration_and_protocol_match_kaggle():
     assert filkom["SEED"] == 0
     assert filkom["STUDENT_INPUTS"] == ["yolo26s-lamp-su1.20x-seed0-raw:v1"]
     kaggle = configuration("mgd", platform="kaggle", STUDENT_INPUTS=filkom["STUDENT_INPUTS"])
-    deployment = {"PLATFORM", "WORKSPACE_ROOT", "REPO_ROOT", "DATASET_ROOT", "DATA_YAML", "OUTPUT_DIR"}
+    deployment = {"PLATFORM", "WORKSPACE_ROOT", "REPO_ROOT", "DATASET_ROOT", "DATA_YAML", "OUTPUT_DIR", "DATASET_ID"}
     names = {name for name in filkom.keys() | kaggle.keys() if name.isupper()} - deployment
     assert {name: filkom[name] for name in names} == {name: kaggle[name] for name in names}
     assert filkom["PLATFORM"] == "filkom" and filkom["RECOVERY_METHOD"] == "mgd"
@@ -76,12 +76,42 @@ def test_filkom_mgd_research_configuration_and_protocol_match_kaggle():
         assert filkom["fine_tuned_val_args"]("data.yaml") == kaggle["fine_tuned_val_args"]("data.yaml")
     books = [build_notebook(platform, "mgd") for platform in ("filkom", "kaggle")]
     # All loss, trainer, teacher/student handling, evaluation and EDA code stays identical.
-    for tag in ("runtime", "protocol", "selection", "run", "display", "group-display"):
+    for tag in ("runtime", "protocol", "selection", "display", "group-display"):
         sources = [next("".join(c["source"]) for c in book["cells"]
                         if tag in c.get("metadata", {}).get("tags", [])) for book in books]
         sources = ["\n".join(line for line in source.splitlines() if not line.startswith("IMPLEMENTATION_SHA256 ="))
                    for source in sources]
+        if tag == "runtime":
+            policy = (Path(__file__).resolve().parents[1] / "scripts/filkom_mgd_dataset_source.py").read_text(encoding="utf-8").strip()
+            assert sources[0].count(policy) == 1 and policy not in sources[1]
+            sources[0] = sources[0].replace("\n\n" + policy, "")
         assert sources[0] == sources[1]
+
+
+@pytest.mark.parametrize("status", ["PASS", "FAIL", "PARTIAL", "NOT_RUN"])
+def test_filkom_mgd_run_surfaces_failure_without_retrying_or_changing_result(status, tmp_path, capsys):
+    source = next("".join(c["source"]) for c in build_notebook("filkom", "mgd")["cells"]
+                  if "run" in c.get("metadata", {}).get("tags", []))
+    result = {"status": status, "reason": "Dataset manifest tidak tersedia.",
+              "errors": [{"stage": "input", "error": "Dataset manifest tidak tersedia."}]}
+    original = json.loads(json.dumps(result))
+    calls = []
+
+    def execute(folder):
+        calls.append(folder)
+        return result
+
+    scope = {"MODE": "full_val", "SEED": 0, "EPOCHS": 100, "SMOKE_EPOCHS": 1,
+             "RUN_DIR": tmp_path, "ft_execute": execute}
+    if status == "PASS":
+        exec(source, scope)
+    else:
+        with pytest.raises(RuntimeError, match=rf"MGD {status} pada tahap input: Dataset manifest"):
+            exec(source, scope)
+    assert calls == [tmp_path] and scope["RESULT"] is result and result == original
+    output = capsys.readouterr().out
+    assert "mode=full_val | seed=0 | target_epochs=100" in output
+    assert status in output
 
 
 @pytest.mark.parametrize("version", [(3, 8, 10), (3, 10, 16)])

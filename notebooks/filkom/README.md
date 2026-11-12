@@ -61,8 +61,28 @@ dan Torch/torchvision CUDA yang sesuai sebelum mendaftarkan kernel Jupyter memak
 `python -m ipykernel install` seperti contoh di atas. Bootstrap mempertahankan
 Torch/torchvision yang telah tersedia; kedua paket tersebut harus dipasang di
 environment kernel, termasuk ketika Python sudah 3.11. Seed aktif MGD FILKOM tetap
-0 dari raw terpilih; loss, teacher, hyperparameter dan protokol evaluasi sama dengan
-MGD recovery Kaggle untuk input raw/seed yang sama.
+0 dari raw terpilih; loss, teacher, hyperparameter dan parameter evaluasi sama dengan
+MGD recovery Kaggle untuk input raw/seed yang sama. Kebijakan dataset MGD FILKOM
+memakai data lokal dan mencatat fingerprint tanpa mengharuskan cocok dengan raw pruning.
+
+Jika MGD 05 selesai tanpa terlihat training, periksa sel `RESULT = ft_execute(RUN_DIR)`
+dan `RUN_DIR / "kd_manifest.json"`: `status`, `reason`, serta `errors` memuat tahap dan
+alasan kegagalan. Runtime menyimpan kegagalan sebagai `FAIL/PARTIAL`; sel eksekusi MGD
+FILKOM kini memunculkan error agar Run All berhenti pada kegagalan tersebut. Pesan
+`Halaman W&B: NOT_RUN` hanya menyatakan tautan EDA belum tersedia, dan
+`LOAD_GROUP_RESULTS` hanya mengatur pembacaan ringkasan grup, bukan memulai training.
+MGD FILKOM menerima fingerprint train maupun validation yang berbeda dari raw.
+Dataset lokal memakai identitas `filkom/roboflow-poltrada-v3`; fingerprint aktual
+tetap dihitung, tanpa mengklaim kesamaan dengan snapshot asal. `dataset_manifest.json`
+memuat `matches_raw_dataset`, `raw_dataset_reference`, dan `comparability_to_raw_training`.
+Urutan kelas, keberadaan file, integritas checkpoint, serta larangan kebocoran konten
+train/validation tetap diperiksa. Baseline, raw dan student hasil MGD dievaluasi ulang
+pada validation lokal yang sama. Metadata W&B serta kontrak resume memakai fingerprint
+aktual; penyaring ringkasan grup juga mengikat fingerprint train dan validation aktual.
+Hasil pada dataset berbeda memerlukan pembanding yang dievaluasi pada dataset sama.
+Kebijakan baru berlaku khusus MGD FILKOM; notebook platform/metode lain tetap memakai
+kontraknya. Mulai run baru dengan `RESUME_RUN_DIR=None` dan `RESUME_SNAPSHOT_REF=None`
+setelah memperbarui notebook; kontrak resume lama tidak ditulis ulang.
 
 Sediakan `WANDB_API_KEY` di environment proses Jupyter atau isi prompt tersembunyi ketika notebook meminta login. Pastikan akun dapat membaca raw `:vN` serta teacher `:vN` yang dipakai dan menulis ke project penelitian. File notebook cukup menyimpan referensi artefak dan hash. Panduan menjalankan pruning, menyiapkan input recovery, dan meneruskan suite ada di [panduan eksperimen](../../docs/lamp_gflops_recovery_workflow.md).
 

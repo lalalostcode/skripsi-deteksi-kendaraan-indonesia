@@ -21,6 +21,7 @@ FILKOM_MGD_PATHS = '''WORKSPACE_ROOT = Path(os.environ.get("SKRIPSI_ROOT", Path.
 REPO_ROOT = Path(os.environ.get("SKRIPSI_REPO_ROOT", WORKSPACE_ROOT / "repo")).expanduser()
 DATASET_ROOT = Path(os.environ.get("SKRIPSI_DATASET_ROOT", WORKSPACE_ROOT / "datasets/roboflow-poltrada-v3")).expanduser()
 DATA_YAML = Path(os.environ.get("SKRIPSI_DATA_YAML", DATASET_ROOT / "data.yaml")).expanduser()
+DATASET_ID = "filkom/roboflow-poltrada-v3"
 # Base output only: RECOVERY_METHOD is appended once below.
 OUTPUT_DIR = Path(os.environ.get("SKRIPSI_OUTPUT_DIR", WORKSPACE_ROOT / "outputs/filkom/recovery/selected/yolo26s")).expanduser()'''
 
@@ -126,9 +127,27 @@ def fine_tuned_val_args(DATA):
         base.definitions("source_matched_kd_source.py", "source_matched_teacher"),
         (base.SCRIPTS / "pruned_kd_selected_source.py").read_text(encoding="utf-8")))
     put(by_tag["runtime"], source + "\n\n" + extra)
+    if (platform, method) == ("filkom", "mgd"):
+        dataset_policy = (base.SCRIPTS / "filkom_mgd_dataset_source.py").read_text(encoding="utf-8").strip()
+        put(by_tag["runtime"], "".join(by_tag["runtime"]["source"]) + "\n\n" + dataset_policy)
     for tag in ("display", "run"):
         put(by_tag[tag], "".join(by_tag[tag]["source"]).replace("fine_tuned_manifest.json", "kd_manifest.json")
             .replace("finetuning_registry", "kd_registry"))
+    if (platform, method) == ("filkom", "mgd"):
+        put(by_tag["run"], '''print(
+    f"MGD | mode={MODE} | seed={SEED} | target_epochs={SMOKE_EPOCHS if MODE == 'smoke' else EPOCHS} | run={RUN_DIR}",
+    flush=True,
+)
+RESULT = ft_execute(RUN_DIR)
+print(RESULT["status"], RESULT.get("reason", ""), "|", RUN_DIR, flush=True)
+if RESULT.get("status") != "PASS":
+    errors = RESULT.get("errors") or []
+    failed_stage = errors[-1].get("stage", "unknown") if errors else "unknown"
+    reason = RESULT.get("reason") or "Baca errors pada kd_manifest.json untuk detail."
+    raise RuntimeError(
+        f"MGD {RESULT.get('status', 'UNKNOWN')} pada tahap {failed_stage}: {reason} "
+        f"Manifest: {RUN_DIR / 'kd_manifest.json'}"
+    )''')
     put(by_tag["group-display"], '''if LOAD_GROUP_RESULTS:
     group_frame = pd.DataFrame(ft_group_results())
     columns = ["method", "seed", "target_speedup", "actual_gflops_speedup", "platform", "gpu",
@@ -176,6 +195,13 @@ LOAD_GROUP_RESULTS membaca hasil terkonfirmasi dari tiga metode × lima seed. Ta
 ketersediaan parsial, tabel per seed, dan mean/std tiap metode. Platform, perangkat latency,
 teacher, serta konfigurasi training harus sebanding. Hasil smoke berada pada grup terpisah.''',
     ]
+    if (platform, method) == ("filkom", "mgd"):
+        descriptions[2] += '''
+
+Dataset memakai path lokal FILKOM. Fingerprint train/validation dicatat tanpa kewajiban sama
+dengan dataset asal raw pruning. Urutan kelas dan pemisahan train/validation tetap diperiksa.
+Baseline, raw, dan hasil MGD dievaluasi ulang pada validation lokal yang sama. Perbedaan dataset
+asal ditandai pada manifest; ringkasan lintas run hanya memilih fingerprint lokal yang cocok.'''
     for cell, text in zip(markdown, descriptions, strict=True):
         put(cell, text)
     if (platform, method) == ("filkom", "mgd"):
