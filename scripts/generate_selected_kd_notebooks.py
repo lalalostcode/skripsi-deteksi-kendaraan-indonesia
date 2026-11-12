@@ -15,6 +15,27 @@ else:
 
 METHODS = ("native", "crosskd", "mgd")
 
+# This deployment override applies only to FILKOM MGD. Keep shared templates and
+# the other generated notebooks byte-identical to their existing contracts.
+FILKOM_MGD_PATHS = '''WORKSPACE_ROOT = Path(os.environ.get("SKRIPSI_ROOT", Path.home() / "skripsi-kd")).expanduser()
+REPO_ROOT = Path(os.environ.get("SKRIPSI_REPO_ROOT", WORKSPACE_ROOT / "repo")).expanduser()
+DATASET_ROOT = Path(os.environ.get("SKRIPSI_DATASET_ROOT", WORKSPACE_ROOT / "datasets/roboflow-poltrada-v3")).expanduser()
+DATA_YAML = Path(os.environ.get("SKRIPSI_DATA_YAML", DATASET_ROOT / "data.yaml")).expanduser()
+# Base output only: RECOVERY_METHOD is appended once below.
+OUTPUT_DIR = Path(os.environ.get("SKRIPSI_OUTPUT_DIR", WORKSPACE_ROOT / "outputs/filkom/recovery/selected/yolo26s")).expanduser()'''
+
+FILKOM_MGD_PREFLIGHT = '''import sys
+
+if sys.version_info < (3, 11):
+    raise RuntimeError(
+        "MGD YOLO26s memerlukan Python >=3.11 sesuai pyproject.toml; "
+        f"kernel aktif memakai Python {sys.version.split()[0]} ({sys.executable}). "
+        "Aktifkan environment HPC dengan Python >=3.11 dan Torch/torchvision CUDA yang sesuai, "
+        "daftarkan environment tersebut sebagai kernel Jupyter, lalu pilih kernel itu dan Run All ulang. "
+        "Mengganti import datetime saja tidak membuat proyek mendukung Python 3.8."
+    )
+'''
+
 
 def selected_pins():
     original = {key: value for key, value in base.STUDENT_PINS.items() if value["target"] == 1.2}
@@ -58,8 +79,12 @@ def build_notebook(platform, method):
     source = "".join(by_tag["config"]["source"])
     source = source.replace('RECOVERY_METHOD = "finetune"', f"RECOVERY_METHOD = {method!r}")
     source = re.sub(r"SOURCE_NOTEBOOK = .*", f"SOURCE_NOTEBOOK = {base.METHOD_NOTEBOOKS[method][1].relative_to(base.ROOT).as_posix()!r}", source)
+    if (platform, method) == ("filkom", "mgd"):
+        source = re.sub(r"DATASET_ROOT = .*\nDATA_YAML = .*\nOUTPUT_DIR = .*", FILKOM_MGD_PATHS, source)
+    # The checked-in FILKOM MGD notebook selects seed 0; regeneration must retain it.
+    selected_seed = 0 if (platform, method) == ("filkom", "mgd") else 42
     choices = "STUDENT_INPUTS = [\n" + "\n".join(
-        f'    {"# " if index else ""}"{name}",' for index, name in enumerate(pins)) + "\n]"
+        f'    {"" if pin["seed"] == selected_seed else "# "}"{name}",' for name, pin in pins.items()) + "\n]"
     source = re.sub(r"STUDENT_INPUTS = \[.*?\n\]", choices, source, flags=re.DOTALL)
     for key, value in config.items():
         if re.search(rf"^{key} = ", source, re.MULTILINE):
@@ -86,6 +111,9 @@ def fine_tuned_val_args(DATA):
 ''')
     bootstrap = "".join(by_tag["bootstrap"]["source"])
     bootstrap = bootstrap.replace('STUDENT_INPUTS[0].split(":")[0] + f"_', 'STUDENT_INPUTS[0].split(":")[0] + "-" + RECOVERY_METHOD + f"_')
+    if (platform, method) == ("filkom", "mgd"):
+        # Fail before output creation, dependency inspection/install, or model imports.
+        bootstrap = FILKOM_MGD_PREFLIGHT + "\n" + bootstrap
     put(by_tag["bootstrap"], bootstrap)
     source = "".join(by_tag["runtime"]["source"]).split("\nIMPLEMENTATION_SHA256 =")[0]
     source = source.replace("selected-raw-finetune-v2", "selected-raw-kd-v1")
@@ -150,6 +178,18 @@ teacher, serta konfigurasi training harus sebanding. Hasil smoke berada pada gru
     ]
     for cell, text in zip(markdown, descriptions, strict=True):
         put(cell, text)
+    if (platform, method) == ("filkom", "mgd"):
+        # The shared bootstrap and recovery training helper both import datetime.UTC.
+        # Normalize the embedded copies only, preserving the other platform/methods.
+        for cell in book["cells"]:
+            if cell["cell_type"] == "code":
+                source = "".join(cell["source"])
+                portable = source.replace("from datetime import UTC, datetime",
+                                          "from datetime import datetime, timezone\nUTC = timezone.utc")
+                portable = portable.replace("from datetime import UTC as _RECOVERY_UTC",
+                                            "from datetime import timezone as _RecoveryTimezone\n_RECOVERY_UTC = _RecoveryTimezone.utc")
+                if portable != source:
+                    put(cell, portable)
     implementation = hashlib.sha256("\n".join("".join(c["source"]) for c in book["cells"]
         if c["cell_type"] == "code" and c["metadata"]["tags"][0] not in {"run", "display", "group-display"}).encode()).hexdigest()
     put(by_tag["runtime"], "".join(by_tag["runtime"]["source"]) + f"\nIMPLEMENTATION_SHA256 = {implementation!r}")
