@@ -114,7 +114,8 @@ def fine_tuned_val_args(DATA):
     bootstrap = bootstrap.replace('STUDENT_INPUTS[0].split(":")[0] + f"_', 'STUDENT_INPUTS[0].split(":")[0] + "-" + RECOVERY_METHOD + f"_')
     if (platform, method) == ("filkom", "mgd"):
         # Fail before output creation, dependency inspection/install, or model imports.
-        bootstrap = FILKOM_MGD_PREFLIGHT + "\n" + bootstrap
+        auth = (base.SCRIPTS / "filkom_mgd_auth_source.py").read_text(encoding="utf-8").strip()
+        bootstrap = FILKOM_MGD_PREFLIGHT + "\n" + auth + "\n\n" + bootstrap
     put(by_tag["bootstrap"], bootstrap)
     source = "".join(by_tag["runtime"]["source"]).split("\nIMPLEMENTATION_SHA256 =")[0]
     source = source.replace("selected-raw-finetune-v2", "selected-raw-kd-v1")
@@ -196,6 +197,9 @@ ketersediaan parsial, tabel per seed, dan mean/std tiap metode. Platform, perang
 teacher, serta konfigurasi training harus sebanding. Hasil smoke berada pada grup terpisah.''',
     ]
     if (platform, method) == ("filkom", "mgd"):
+        descriptions[1] = descriptions[1].replace(
+            "WANDB_API_KEY memakai environment atau Kaggle Secret.",
+            "WANDB_API_KEY memakai environment atau REPO_ROOT/.env yang dibaca saat bootstrap.")
         descriptions[2] += '''
 
 Dataset memakai path lokal FILKOM. Fingerprint train/validation dicatat tanpa kewajiban sama

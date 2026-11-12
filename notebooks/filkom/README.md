@@ -84,7 +84,17 @@ Kebijakan baru berlaku khusus MGD FILKOM; notebook platform/metode lain tetap me
 kontraknya. Mulai run baru dengan `RESUME_RUN_DIR=None` dan `RESUME_SNAPSHOT_REF=None`
 setelah memperbarui notebook; kontrak resume lama tidak ditulis ulang.
 
-Sediakan `WANDB_API_KEY` di environment proses Jupyter atau isi prompt tersembunyi ketika notebook meminta login. Pastikan akun dapat membaca raw `:vN` serta teacher `:vN` yang dipakai dan menulis ke project penelitian. File notebook cukup menyimpan referensi artefak dan hash. Panduan menjalankan pruning, menyiapkan input recovery, dan meneruskan suite ada di [panduan eksperimen](../../docs/lamp_gflops_recovery_workflow.md).
+MGD 05 memuat `WANDB_API_KEY` pada bootstrap: environment proses Jupyter mempunyai
+prioritas, lalu `REPO_ROOT / ".env"` (default `~/skripsi-kd/repo/.env`). Hanya key
+tersebut yang dibaca dari file; isi file dan key tidak dicetak atau ditulis ulang.
+Bootstrap mencetak `W&B credential: ready` ketika key tersedia, dan berhenti sebelum
+unduhan artefak jika tracking aktif tetapi key belum tersedia. Memuat key pada sel
+setelah `RESULT = ft_execute(RUN_DIR)` tidak mengulang proses yang sudah gagal.
+Salin notebook terbaru secara utuh ke server, Restart Kernel lalu Run All; pesan
+`Dataset FILKOM | fingerprint policy=record-only` menunjukkan kebijakan dataset lokal
+sudah aktif. Hindari mencampur sel runtime dari versi notebook berbeda.
+
+Pastikan akun dapat membaca raw `:vN` serta teacher `:vN` yang dipakai dan menulis ke project penelitian. File notebook cukup menyimpan referensi artefak dan hash. Panduan menjalankan pruning, menyiapkan input recovery, dan meneruskan suite ada di [panduan eksperimen](../../docs/lamp_gflops_recovery_workflow.md).
 
 ## Teacher YOLO26m lima seed
 
