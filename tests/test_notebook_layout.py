@@ -14,6 +14,7 @@ from IPython.core.inputtransformer2 import TransformerManager
 
 from scripts.notebook_paths import (
     GFLOPS_PRUNING,
+    KD_ABLATION,
     MULTISEED_PRUNING,
     MULTISEED_TEACHER,
     NOTEBOOK_CATEGORIES,
@@ -29,9 +30,9 @@ def test_complete_inventory_without_duplicates_or_old_copies():
     expected = {path for platform in NOTEBOOK_LOCATIONS for path in notebook_paths(platform)}
     actual = {path for path in NOTEBOOK_ROOT.rglob("*.ipynb") if "archieve" not in path.parts}
     assert actual == expected
-    assert len(expected) == 62
+    assert len(expected) == 64
     assert {platform: len(notebook_paths(platform)) for platform in NOTEBOOK_LOCATIONS} == {
-        "kaggle": 33, "filkom": 9, "colab": 17, "amd": 1, "local": 2,
+        "kaggle": 33, "filkom": 11, "colab": 17, "amd": 1, "local": 2,
     }
     assert len(list((NOTEBOOK_ROOT / "archieve").rglob("*.ipynb"))) == 10
     assert not (NOTEBOOK_ROOT / "yolo26-kd-indotraffic").exists()
@@ -100,7 +101,7 @@ def test_supervised_sources_and_platform_specific_workflows_are_not_duplicated()
     assert "pruning" not in NOTEBOOK_CATEGORIES["colab"]
     assert NOTEBOOK_CATEGORIES["filkom"]["pruning"] == GFLOPS_PRUNING
     assert NOTEBOOK_CATEGORIES["kaggle"]["pruning"][4:] == (*GFLOPS_PRUNING, MULTISEED_PRUNING)
-    assert NOTEBOOK_CATEGORIES["filkom"]["recovery"] == NOTEBOOK_CATEGORIES["kaggle"]["recovery"]
+    assert NOTEBOOK_CATEGORIES["filkom"]["recovery"] == (*NOTEBOOK_CATEGORIES["kaggle"]["recovery"], *KD_ABLATION)
     assert NOTEBOOK_CATEGORIES["filkom"]["fine-tunned"] == NOTEBOOK_CATEGORIES["kaggle"]["baseline/fine-tunned"]
 
 

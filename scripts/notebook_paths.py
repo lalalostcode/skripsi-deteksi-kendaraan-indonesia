@@ -14,6 +14,7 @@ RAW_PRUNED_RECOVERY = (
     "01_yolo26n_standard_finetuning.ipynb", "02_yolo26s_standard_finetuning.ipynb",
     "03_yolo26ns_native_kd.ipynb", "04_yolo26ns_crosskd.ipynb", "05_yolo26ns_mgd_kd.ipynb",
 )
+KD_ABLATION = ("06_yolo26s_crosskd_kdscale_ablation.ipynb", "07_yolo26s_mgd_alpha_ablation.ipynb")
 
 # Teacher roles are taken from experiment configuration, not the student filename.
 NOTEBOOK_CATEGORIES = {
@@ -37,7 +38,7 @@ NOTEBOOK_CATEGORIES = {
         "recovery": RAW_PRUNED_RECOVERY,
         "baseline/fine-tunned": (PRUNED_FINE_TUNED,),
     },
-    "filkom": {"teacher": (MULTISEED_TEACHER,), "pruning": GFLOPS_PRUNING, "recovery": RAW_PRUNED_RECOVERY,
+    "filkom": {"teacher": (MULTISEED_TEACHER,), "pruning": GFLOPS_PRUNING, "recovery": (*RAW_PRUNED_RECOVERY, *KD_ABLATION),
                "fine-tunned": (PRUNED_FINE_TUNED,)},
     "colab": {
         "eda": ("00_eda_poltrada_v3.ipynb",),

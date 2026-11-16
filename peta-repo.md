@@ -22,6 +22,7 @@ Lihat tabel [dokumen skripsi lokal](#dokumen-skripsi-lokal) untuk naskah, revisi
 | Audit LAMP target GFLOPs | Audit P5 dan seleksi student YOLO26n/S | Telusuri bukti historis, metode, dan batas klaim notebook 05/06. | [Laporan audit](reports/pruning/lamp_gflops_audit.md) |
 | Pruning dan recovery per metode | Workflow YOLO26n/S pada Poltrada V3 | Jalankan grid target GFLOPs dan feasibility per model, lalu gunakan raw yang sama untuk fine-tuning, Native KD, CrossKD, serta MGD. | [Panduan bersama Kaggle/Filkom](docs/lamp_gflops_recovery_workflow.md) |
 | Recovery YOLO26s | Fine-tuning, Native KD, CrossKD dan MGD dengan konfigurasi asal | Mulai semua metode dari raw yang sama. | [Panduan recovery](docs/lamp_gflops_recovery_workflow.md#3-pilih-notebook-recovery-per-metode) |
+| Ablation KD FILKOM | CrossKD scale dan MGD alpha pada seed 42 | Pilih satu nilai per sesi, ikuti environment MGD FILKOM dan rekap validation tiga kandidat. | [Panduan ablation](docs/filkom_kd_ablation.md) |
 | Indeks notebook | Indeks Notebook Penelitian YOLO26 | Bandingkan susunan notebook antarplatform dan status arsip. | [notebooks/README.md](notebooks/README.md) |
 | Panduan Kaggle | YOLO26 — Panduan Notebook Kaggle | Cari konfigurasi penelitian, dataset, artifact teacher, dan aturan eksekusi Kaggle. | [notebooks/kaggle/README.md](notebooks/kaggle/README.md) |
 | Panduan Filkom | Notebook YOLO26 pada GPU Filkom UB | Siapkan kernel Jupyter lewat SSH serta path dataset, checkpoint, output, dan W&B. | [notebooks/filkom/README.md](notebooks/filkom/README.md) |
@@ -74,7 +75,7 @@ Ada 17 dokumen dan simpanan web di `Jurnal/`. Folder ini diabaikan Git. Simpanan
 
 ## Notebook
 
-Ada 62 notebook aktif dan 10 notebook arsip. Lihat [indeks notebook](notebooks/README.md) dan panduan [Filkom](notebooks/filkom/README.md), [Kaggle](notebooks/kaggle/README.md), atau [Colab](notebooks/colab/README.md) untuk cara menjalankannya. Gunakan metode dan pasangan model untuk mencari padanannya.
+Ada 64 notebook aktif dan 10 notebook arsip. Lihat [indeks notebook](notebooks/README.md) dan panduan [Filkom](notebooks/filkom/README.md), [Kaggle](notebooks/kaggle/README.md), atau [Colab](notebooks/colab/README.md) untuk cara menjalankannya. Gunakan metode dan pasangan model untuk mencari padanannya.
 
 ### Kaggle
 
@@ -114,6 +115,8 @@ Ada 62 notebook aktif dan 10 notebook arsip. Lihat [indeks notebook](notebooks/R
 | Teacher supervised lima seed | — | YOLO26m | [teacher/02_teacher_yolo26m_multiseed.ipynb](notebooks/kaggle/teacher/02_teacher_yolo26m_multiseed.ipynb) |
 
 ### Filkom
+
+Untuk ablation seed 42, gunakan [CrossKD scale 06](notebooks/filkom/recovery/06_yolo26s_crosskd_kdscale_ablation.ipynb) atau [MGD alpha 07](notebooks/filkom/recovery/07_yolo26s_mgd_alpha_ablation.ipynb). [Panduan, registry dan batas bukti](docs/filkom_kd_ablation.md); sumber mandiri dibangun oleh [generator ablation](scripts/generate_kd_ablation_notebooks.py), dengan [runtime orchestration](scripts/kd_ablation_source.py) dan [verifier CPU](scripts/verify_kd_ablation_cpu.py).
 
 Untuk melatih teacher dengan lima seed, gunakan [teacher/02_teacher_yolo26m_multiseed.ipynb](notebooks/filkom/teacher/02_teacher_yolo26m_multiseed.ipynb). Untuk eksperimen pruning, jalankan notebook `pruning/05` atau `06`, lalu pilih `recovery/01`–`05` sesuai metode. [Matriks pruning dan recovery Filkom](docs/lamp_gflops_recovery_workflow.md) · [Setup SSH dan Jupyter Server](notebooks/filkom/README.md)
 

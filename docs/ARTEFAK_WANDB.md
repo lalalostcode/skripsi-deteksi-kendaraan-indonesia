@@ -403,3 +403,201 @@ Keempat run pengguna berikut tetap mempunyai 100 epoch unik. Tabel sumber versi 
 | [`yolo26s-lamp-su1.10x-seed42-ft-checkpoints:v0`](https://wandb.ai/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.10x-seed42-ft-checkpoints/v0) | `e9f72915d7d2b60636c3c68d12ff5795ecb468f8e639f7b5ff2804dad4ecf61d` | `411e708215e2128b15a9e9040dfde73561576ad43ca280b85064dc67cfe55828` |
 
 Buka [indeks EDA recovery](https://wandb.ai/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/reports/EDA--VmlldzoxODI3MDUxNg==) atau `custom_eda_report_url` pada Summary tiap run. Lima Native KD penelitian yang masih aktif hanya diberi report/tautan melalui API; tidak ada sesi training kedua. Batang final yang belum diukur tetap `NOT_RUN`. Source dan batas bukti tersedia pada [audit empat run selesai](../reports/pruning/recovery/finished_recovery_eda_audit_20261108.json).
+
+## YOLO26s LAMP Experiments
+
+### Experiment Overview
+
+Registry ini ditambahkan pada 16 November 2026 dari referensi yang diberikan pengguna. Model YOLO26s memakai kompresi LAMP dengan empat metode recovery, yaitu MGD, CrossKD, FT (fine-tuning), dan Native. Eksperimen utama mencakup konfigurasi `su1.20x` pada seed `0`, `7`, `42`, `2024`, dan `3407`. Dua eksperimen FT tambahan memakai seed 42 dengan konfigurasi `su1.10x` dan `su1.70x`.
+
+Entity adalah `ilhamrafiqin-brawijaya-university`, project `yolom26-kd-indotraffic`, dan jenis artifact `model`. Identitas konfigurasi `su...` mengikuti nama artifact. Speed-up aktual perlu diperiksa pada hasil pengukuran.
+
+Referensi dan metadata baru di bagian ini bersumber dari pengguna. Status akses API, ketersediaan file unduhan, dan integritas checkpoint menunggu verifikasi langsung. Cakupan registry permintaan ini adalah **28 artefak**, terdiri atas **6 teacher/baseline historis** di bagian 2 dan **22 artefak eksperimen baru** di bawah. Entri raw, EDA, serta smoke pada bagian historis mempunyai cakupan tersendiri.
+
+### Artifact Registry
+
+| No | Method | Seed | LAMP Config | Version | Artifact Name | W&B Link | Best Epoch | Best Checkpoint |
+|---:|---|---:|---|---|---|---|---|---|
+| 1 | MGD | 0 | `su1.20x` | `v37` | `yolo26s-lamp-su1.20x-seed0-mgd-resume:v37` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed0-mgd-resume/v37) | Belum diverifikasi | Belum diverifikasi |
+| 2 | MGD | 7 | `su1.20x` | `v19` | `yolo26s-lamp-su1.20x-seed7-mgd-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed7-mgd-resume/v19) | 56 (Provided by user) | `checkpoints/best-056-7f733312.pt` (Provided by user) |
+| 3 | MGD | 42 | `su1.20x` | `v19` | `yolo26s-lamp-su1.20x-seed42-mgd-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed42-mgd-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+| 4 | MGD | 2024 | `su1.20x` | `v19` | `yolo26s-lamp-su1.20x-seed2024-mgd-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed2024-mgd-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+| 5 | MGD | 3407 | `su1.20x` | `v19` | `yolo26s-lamp-su1.20x-seed3407-mgd-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed3407-mgd-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+| 6 | CrossKD | 0 | `su1.20x` | `v19` | `yolo26s-lamp-su1.20x-seed0-crosskd-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed0-crosskd-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+| 7 | CrossKD | 7 | `su1.20x` | `v19` | `yolo26s-lamp-su1.20x-seed7-crosskd-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed7-crosskd-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+| 8 | CrossKD | 42 | `su1.20x` | `v19` | `yolo26s-lamp-su1.20x-seed42-crosskd-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed42-crosskd-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+| 9 | CrossKD | 2024 | `su1.20x` | `v19` | `yolo26s-lamp-su1.20x-seed2024-crosskd-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed2024-crosskd-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+| 10 | CrossKD | 3407 | `su1.20x` | `v19` | `yolo26s-lamp-su1.20x-seed3407-crosskd-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed3407-crosskd-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+| 11 | FT | 0 | `su1.20x` | `v19` | `yolo26s-lamp-su1.20x-seed0-ft-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed0-ft-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+| 12 | FT | 7 | `su1.20x` | `v19` | `yolo26s-lamp-su1.20x-seed7-ft-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed7-ft-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+| 13 | FT | 42 | `su1.20x` | `v19` | `yolo26s-lamp-su1.20x-seed42-ft-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed42-ft-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+| 14 | FT | 2024 | `su1.20x` | `v19` | `yolo26s-lamp-su1.20x-seed2024-ft-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed2024-ft-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+| 15 | FT | 3407 | `su1.20x` | `v19` | `yolo26s-lamp-su1.20x-seed3407-ft-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed3407-ft-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+| 16 | Native | 0 | `su1.20x` | `v19` | `yolo26s-lamp-su1.20x-seed0-native-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed0-native-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+| 17 | Native | 7 | `su1.20x` | `v19` | `yolo26s-lamp-su1.20x-seed7-native-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed7-native-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+| 18 | Native | 42 | `su1.20x` | `v19` | `yolo26s-lamp-su1.20x-seed42-native-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed42-native-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+| 19 | Native | 2024 | `su1.20x` | `v19` | `yolo26s-lamp-su1.20x-seed2024-native-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed2024-native-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+| 20 | Native | 3407 | `su1.20x` | `v19` | `yolo26s-lamp-su1.20x-seed3407-native-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.20x-seed3407-native-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+| 21 | FT | 42 | `su1.10x` | `v19` | `yolo26s-lamp-su1.10x-seed42-ft-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.10x-seed42-ft-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+| 22 | FT | 42 | `su1.70x` | `v19` | `yolo26s-lamp-su1.70x-seed42-ft-resume:v19` | [W&B](https://forge.coreweave.com/wandb/ilhamrafiqin-brawijaya-university/yolom26-kd-indotraffic/artifacts/model/yolo26s-lamp-su1.70x-seed42-ft-resume/v19) | Belum diverifikasi | Belum diverifikasi |
+
+### Experiment Matrix
+
+Konfigurasi utama `su1.20x` mencakup 20 kombinasi. Angka pada matriks merujuk nomor baris registry.
+
+| Method | Seed 0 | Seed 7 | Seed 42 | Seed 2024 | Seed 3407 |
+|---|---:|---:|---:|---:|---:|
+| MGD | 1 | 2 | 3 | 4 | 5 |
+| CrossKD | 6 | 7 | 8 | 9 | 10 |
+| FT | 11 | 12 | 13 | 14 | 15 |
+| Native | 16 | 17 | 18 | 19 | 20 |
+
+FT seed 42 pada `su1.10x` dan `su1.70x` terdapat pada baris 21 dan 22.
+
+### Best Checkpoint Selection Rules
+
+1. Unduh artifact dengan referensi versi eksplisit, termasuk `:v19` atau `:v37`.
+2. Cari tepat satu file `latest_state.json` dalam hasil unduhan dan parse sebagai JSON. Metadata yang hilang atau ambigu diberi status **Belum diverifikasi** sampai layout aktual diperiksa.
+3. Baca `state["best"]`, termasuk `epoch`, `fitness`, `relative_path`, `sha256`, dan `optimizer_steps`.
+4. Catat juga training state tingkat atas, yaitu `epoch`, `relative_path`, `sha256`, `optimizer_steps`, dan `training_finished`.
+5. Resolusikan `best.relative_path` dari direktori root artifact. Periksa bahwa path berada dalam root dan menunjuk file checkpoint yang tersedia.
+6. Hitung dan cocokkan SHA-256 best checkpoint jika hash tersedia. Status integritas dicatat eksplisit jika hash belum tersedia.
+7. Gunakan best checkpoint yang teresolusi untuk final evaluation. Pilih checkpoint dengan validation dan evaluasi akhir pada test independen apabila tersedia. Simpan identitas split yang digunakan.
+
+Resume checkpoint tingkat atas menunjuk state kelanjutan training. Pemakaiannya sebagai best memerlukan kecocokan yang ditunjukkan oleh metadata `best`. Nomor versi artifact dan epoch training mempunyai fungsi berbeda. Sebagai contoh, `:v19` dan `:v37` memerlukan pembacaan manifest untuk mengetahui best epoch.
+
+```text
+W&B Artifact
+    |
+    v
+Download artifact
+    |
+    v
+Find latest_state.json
+    |
+    v
+Read state["best"]
+    |
+    v
+Resolve best.relative_path
+    |
+    v
+Verify checkpoint and SHA-256
+    |
+    v
+Use best checkpoint for evaluation
+```
+
+### Known Checkpoint Metadata
+
+**Provided by user.** Metadata berikut milik MGD seed 7, konfigurasi `su1.20x`, versi `v19` (baris 2). Best epoch **56**, fitness **0.55437**, dan best optimizer steps **6236**. Training state mencatat epoch terakhir **100**, total optimizer steps **10900**, serta `training_finished=true`. Best checkpoint adalah `checkpoints/best-056-7f733312.pt`; resume checkpoint adalah `checkpoints/resume-100-f07ea7d9.pt`. Status ini mencatat isi manifest yang diberikan pengguna. Verifikasi unduhan/API dan kecocokan SHA-256 masih diperlukan.
+
+```json
+{
+  "epoch": 100,
+  "relative_path": "checkpoints/resume-100-f07ea7d9.pt",
+  "sha256": "67ff5f7bf2c0558360aedc4c7ae51e3dee19f239a331cdad62e50ee77961bed1",
+  "best": {
+    "epoch": 56,
+    "fitness": 0.55437,
+    "sha256": "0d555249d0fca2720114fafaf43b7b8ad2b76b6114304ab868cdc34b7a8701ca",
+    "optimizer_steps": 6236,
+    "relative_path": "checkpoints/best-056-7f733312.pt"
+  },
+  "optimizer_steps": 10900,
+  "training_finished": true
+}
+```
+
+Best epoch, fitness, dan path best checkpoint untuk 21 artefak lainnya berstatus **Belum diverifikasi**.
+
+### Download and Checkpoint Resolution
+
+Gunakan Python 3.10+ dan paket `wandb`. Ikuti persiapan autentikasi host pada bagian 3. Contoh ini mengunduh referensi versi eksplisit MGD seed 7 (baris 2), membaca manifest aktual, memeriksa path dan SHA-256, lalu menampilkan checkpoint untuk evaluasi. Ubah `ARTIFACT` sesuai referensi lengkap beserta versinya pada registry.
+
+Path relatif checkpoint diasumsikan berakar pada direktori artifact. Bila layout aktual berbeda, periksa struktur unduhan dan sesuaikan basis path dengan bukti manifest. Pertahankan pemeriksaan containment dan integritas saat menyesuaikan layout.
+
+```python
+import hashlib
+import json
+from pathlib import Path
+
+import wandb
+
+ENTITY = "ilhamrafiqin-brawijaya-university"
+PROJECT = "yolom26-kd-indotraffic"
+ARTIFACT = "yolo26s-lamp-su1.20x-seed7-mgd-resume:v19"
+
+with wandb.init(
+    entity=ENTITY,
+    project=PROJECT,
+    job_type="artifact-download",
+) as run:
+    artifact = run.use_artifact(
+        f"{ENTITY}/{PROJECT}/{ARTIFACT}",
+        type="model",
+    )
+    root = Path(artifact.download()).resolve()
+    manifests = list(root.rglob("latest_state.json"))
+    if len(manifests) != 1:
+        raise RuntimeError(
+            f"Belum diverifikasi. Expected one manifest, found {len(manifests)}"
+        )
+
+    state = json.loads(manifests[0].read_text(encoding="utf-8"))
+    best = state.get("best")
+    if not isinstance(best, dict):
+        raise RuntimeError("Belum diverifikasi. Metadata best tidak tersedia.")
+
+    relative_path = best.get("relative_path")
+    if not isinstance(relative_path, str) or not relative_path.strip():
+        raise RuntimeError("Belum diverifikasi. Best checkpoint path tidak tersedia.")
+    if Path(relative_path).is_absolute():
+        raise ValueError("Best checkpoint path must be relative to artifact root")
+    best_path = (root / relative_path).resolve()
+    if not best_path.is_relative_to(root):
+        raise ValueError("Checkpoint path escapes artifact root")
+    if not best_path.is_file():
+        raise FileNotFoundError(best_path)
+
+    expected_sha = best.get("sha256")
+    if expected_sha is not None:
+        if not isinstance(expected_sha, str) or len(expected_sha) != 64:
+            raise ValueError("Invalid expected SHA-256")
+        try:
+            int(expected_sha, 16)
+        except ValueError as error:
+            raise ValueError("Invalid expected SHA-256") from error
+        sha = hashlib.sha256()
+        with best_path.open("rb") as stream:
+            for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+                sha.update(chunk)
+        if sha.hexdigest() != expected_sha.lower():
+            raise ValueError("SHA-256 mismatch")
+        integrity = "SHA-256 verified"
+    else:
+        integrity = "Belum diverifikasi. SHA-256 tidak tersedia."
+
+    print("Artifact:", f"{ENTITY}/{PROJECT}/{ARTIFACT}")
+    print("Best Epoch:", best.get("epoch", "Belum diverifikasi"))
+    print("Best Fitness:", best.get("fitness", "Belum diverifikasi"))
+    print("Best Checkpoint:", best_path)
+    print("Best SHA-256:", expected_sha)
+    print("Best Optimizer Steps:", best.get("optimizer_steps", "Belum diverifikasi"))
+    print("Integrity:", integrity)
+    for field in (
+        "epoch", "relative_path", "sha256", "optimizer_steps", "training_finished"
+    ):
+        print(f"Training {field}:", state.get(field, "Belum diverifikasi"))
+
+    # Gunakan best_path sebagai checkpoint pada evaluator penelitian.
+```
+
+### Reproducibility Notes
+
+- Catat versi artifact dan epoch training sebagai dua informasi terpisah. Gunakan versi eksplisit saat mengambil checkpoint.
+- Simpan identitas method, model, seed, konfigurasi LAMP, URI lengkap artifact, best epoch/fitness, langkah optimizer, dan hash checkpoint bersama hasil evaluasi.
+- Validasi integritas checkpoint dari manifest. Laporkan metadata atau hash yang belum tersedia dengan status **Belum diverifikasi**.
+- Bandingkan empat metode `su1.20x` pada dataset, split, seed, serta protokol yang sebanding. Analisis FT `su1.10x` dan `su1.70x` harus memperhitungkan perbedaan konfigurasi secara eksplisit.
+- Enam teacher/baseline historis di bagian 2 tetap menjadi referensi dengan versi aslinya.
+- Nilai MGD seed 7 di atas berstatus **Provided by user**. Tabel baru mencatat referensi pengguna, sementara verifikasi langsung API/unduhan belum dilakukan.

@@ -1,5 +1,11 @@
 # Bukti LAMP dengan recovery fine-tuning
 
+[Ablation CrossKD scale / MGD alpha FILKOM — 16 November 2026](filkom_kd_ablation_verification_20261116.json)
+mencatat enam smoke CPU pada raw seed 42 dan teacher M v50 asli, reload/validation fixture/EDA,
+serta resume dua epoch yang identik pada kedua metode. Dua notebook baru mengikuti environment
+MGD FILKOM; 72 notebook sebelumnya dipertahankan. Ini verifikasi kompatibilitas, bukan hasil
+100 epoch atau akurasi Poltrada. [Cara menjalankan dan registry](../../../docs/filkom_kd_ablation.md).
+
 [Pembersihan smoke dan proteksi input — 8 November 2026](smoke_cleanup_20261108/)
 memuat inventaris sebelum penghapusan, SHA-256 setiap salinan biner lokal yang dibersihkan,
 receipt W&B, dan pemeriksaan raw/baseline/teacher yang dipertahankan. Referensi smoke pada bukti

@@ -18,7 +18,7 @@ Notebook KD dari baseline dikelompokkan menurut teacher. Notebook KD dari raw pr
 
 Notebook Kaggle, Colab, dan Filkom memuat helper runtime sendiri. Registry path hanya digunakan generator dan tes.
 
-62 notebook terdaftar dan 10 notebook arsip. Gunakan `recovery/02`–`05` untuk YOLO26s dengan konfigurasi asal. Salinan `fine-tunned/` adalah rujukan historis. [Matriks notebook dan protokol bersama](../docs/lamp_gflops_recovery_workflow.md)
+64 notebook terdaftar dan 10 notebook arsip. Gunakan `recovery/02`–`05` untuk YOLO26s dengan konfigurasi asal dan [ablation FILKOM 06–07](../docs/filkom_kd_ablation.md) untuk sensitivitas bobot KD seed 42. Salinan `fine-tunned/` adalah rujukan historis. [Matriks notebook dan protokol bersama](../docs/lamp_gflops_recovery_workflow.md)
 
 Petunjuk platform tersedia untuk [Filkom](filkom/README.md), [Kaggle](kaggle/README.md), dan [Colab](colab/README.md). Lihat juga panduan LAMP historis [YOLO26n](../docs/lamp_yolo26n_no_recovery.md) dan [YOLO26s](../docs/lamp_yolo26s_no_recovery.md).
 
@@ -76,6 +76,8 @@ Petunjuk platform tersedia untuk [Filkom](filkom/README.md), [Kaggle](kaggle/REA
 | [filkom/recovery/03_yolo26ns_native_kd.ipynb](filkom/recovery/03_yolo26ns_native_kd.ipynb) | Native KD dari raw pruned | YOLO26m v50 | YOLO26s |
 | [filkom/recovery/04_yolo26ns_crosskd.ipynb](filkom/recovery/04_yolo26ns_crosskd.ipynb) | CrossKD dari raw pruned | YOLO26m v50 | YOLO26s |
 | [filkom/recovery/05_yolo26ns_mgd_kd.ipynb](filkom/recovery/05_yolo26ns_mgd_kd.ipynb) | MGD dari raw pruned | YOLO26m v50 | YOLO26s |
+| [filkom/recovery/06_yolo26s_crosskd_kdscale_ablation.ipynb](filkom/recovery/06_yolo26s_crosskd_kdscale_ablation.ipynb) | Ablation skala CrossKD, seed 42 | YOLO26m v50 | YOLO26s raw 1,20× |
+| [filkom/recovery/07_yolo26s_mgd_alpha_ablation.ipynb](filkom/recovery/07_yolo26s_mgd_alpha_ablation.ipynb) | Ablation alpha MGD, seed 42 | YOLO26m v50 | YOLO26s raw 1,20× |
 | [filkom/fine-tunned/01_yolo26s_pruned_fine_tuned.ipynb](filkom/fine-tunned/01_yolo26s_pruned_fine_tuned.ipynb) | Rujukan historis fine-tuning baseline | — | YOLO26s |
 
 ## Google Colab
